@@ -1,0 +1,13 @@
+---
+// A code block with a file name or a caption above it.
+import Icon from "../Icon.astro";
+interface Props {
+  name: string;
+  icon?: string;
+}
+const { name, icon = "file-text" } = Astro.props;
+---
+<div class="code-frame titled">
+  <div class="code-title"><Icon name={icon} />{name}</div>
+  <slot />
+</div>

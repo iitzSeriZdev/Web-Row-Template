@@ -1,0 +1,107 @@
+---
+title: بررسی سلامت نصب
+nav: Verify
+description: row-template verify چه چیزهایی را بررسی می‌کند، هر خطی که چاپ می‌کند چه معنایی دارد، و کدام نتیجه‌ها خطا هستند و کدام فقط هشدار.
+---
+
+```bash
+row-template verify
+```
+
+`verify` **فقط‌خواندنی** است — هرگز چیزی را تغییر نمی‌دهد، پس اجرای آن همیشه بی‌خطر است. آن را پس از نصب، پس از هر تغییر و پیش از گزارش مشکل اجرا کنید. با root اجرایش کنید: با کاربر دیگر نمی‌تواند `config.env` یا پایگاه‌دادهٔ پنل را بخواند.
+
+## خواندن نتیجه
+
+هر بررسی یک خط چاپ می‌کند:
+
+- `ok` — بررسی موفق بود.
+- `warn` — ارزش رسیدگی دارد، اما صفحه کار می‌کند. هشدارها هرگز فرمان را ناموفق نمی‌کنند.
+- `FAIL` — یک مشکل جدی. فرمان با `verification FAILED (…)` تمام می‌شود و با کد `1` خارج می‌شود.
+- خطی بدون برچسب، اطلاع‌رسانی است؛ مثلاً بررسی‌ای که اینجا قابل انجام نبود.
+
+خط آخر جمع‌بندی است:
+
+```text
+  ok   verification passed with no warnings.
+  warn verification passed with 2 warning(s).
+  FAIL verification FAILED (1 hard issue(s), 2 warning(s)).
+```
+
+## همهٔ بررسی‌ها
+
+### فایل‌ها و یکپارچگی
+
+| نتیجه | خط | چه کنید |
+|---|---|---|
+| ok | `Install root present: …` | — |
+| FAIL | `install root missing or is a symlink: …` | نصب‌کننده را دوباره اجرا کنید. پوشهٔ نصب باید یک پوشهٔ واقعی باشد. |
+| ok | `Canonical artifact integrity verified.` | — |
+| FAIL | `canonical artifact missing checksum or does not match it.` | طرح نصب‌شده تغییر کرده یا خراب شده است. با `row-template update` دوباره نصبش کنید. |
+| FAIL | `canonical artifact missing or unreadable: …` | `row-template update` را اجرا کنید یا نصب‌کننده را دوباره اجرا کنید. |
+| ok | `Live template is structurally valid and readable.` | — |
+| FAIL | `live template failed structural validation.` / `live template missing or unreadable: …` | آن را دوباره بسازید: `row-template update`، یا برای تعمیر نصب‌کننده را دوباره اجرا کنید. |
+| ok | `VERSION present: …` | — |
+| FAIL | `VERSION file missing or empty.` | برای تعمیر، نصب‌کننده را دوباره اجرا کنید. |
+
+### طرح‌ها
+
+| نتیجه | خط | چه کنید |
+|---|---|---|
+| ok | `Template store verified (15 design(s)).` | — |
+| FAIL | `a template in the store does not match its checksum.` | یک فایل طرح تغییر کرده است. با `row-template update` مخزن را دوباره نصب کنید. |
+| ok | `Template: …` | طرح انتخاب‌شده. |
+| ok | `Canonical artifact matches the selected template.` | — |
+| FAIL | `canonical artifact does not match the selected template (…).` | انتخاب ذخیره‌شده و طرح نصب‌شده با هم نمی‌خوانند. `row-template config` را اجرا کنید و در همهٔ پرسش‌ها Enter بزنید — طرح نصب‌شده را با انتخاب ذخیره‌شده هماهنگ می‌کند — یا `row-template update` را اجرا کنید. |
+| FAIL | `selected template '…' is missing from the template store.` | `row-template update` را اجرا کنید. |
+| FAIL | `template store missing or empty; run 'row-template update' to install it.` | پس از اولین به‌روزرسانی از 1.1.0 طبیعی است — [دوباره اجرایش کنید](/docs/management/updating/). |
+
+### پیکربندی و ابزارها
+
+| نتیجه | خط | چه کنید |
+|---|---|---|
+| ok | `Config present and readable.` | — |
+| — | `No config.env (white-label defaults).` | کاری لازم نیست: برندینگی تنظیم نشده است. |
+| warn | `config present but not readable.` | `verify` را با root اجرا کنید. |
+| warn | `config.env is other-writable (mode …); tighten to 640.` | `chmod 640 /etc/3x-ui/sub_templates/row-template/config.env` |
+| ok | `Management library present.` | — |
+| warn | `management library not found under the install root.` | برای تعمیر، نصب‌کننده را دوباره اجرا کنید. |
+| ok | `Installer components present.` | — |
+| warn | `installer components are missing (lib/transaction.sh, panels/), …` | `row-template update` را اجرا کنید. |
+| ok | `CLI present: /usr/local/bin/row-template` | — |
+| warn | `CLI not found or not executable at …` | برای تعمیر، نصب‌کننده را دوباره اجرا کنید. |
+
+### پنل
+
+| نتیجه | خط | چه کنید |
+|---|---|---|
+| ok | `3x-ui … meets the minimum 3.6.0.` | — |
+| FAIL | `3x-ui … is below the minimum 3.6.0.` | 3X-UI را به‌روز کنید. |
+| warn | `could not determine the 3x-ui version.` / `3x-ui installation was not detected.` | [مرجع خطاها](/docs/help/errors/) را ببینید. |
+| ok | `Panel subThemeDir points at Row-Template.` | — |
+| warn | `panel subThemeDir is empty; set it to …` | [فعال کنید](/docs/installation/activation/). |
+| warn | `panel subThemeDir does not point at Row-Template.` | [فعال کنید](/docs/installation/activation/) — یا اگر عمداً از پوستهٔ دیگری استفاده می‌کنید، رهایش کنید. |
+| — | `subThemeDir not checked (sqlite3/DB unavailable).` | برای انجام این بررسی `sqlite3` را نصب کنید. |
+| warn | `leftover staging files found under the install root (possible interrupted update).` | پایین‌تر را ببینید. |
+
+### بررسی‌های زنده
+
+وقتی `sqlite3` بتواند اشتراک یک کلاینت را برای آزمایش پیدا کند، `verify` دو بار آن را به‌صورت محلی درخواست می‌کند — یک بار مانند مرورگر و یک بار مانند اپ VPN.
+
+| نتیجه | خط | چه کنید |
+|---|---|---|
+| ok | `Live render check: a browser receives Row-Template.` | — |
+| warn | `live render check: the panel served its built-in page.` | پنل هنوز Row-Template را ارائه نمی‌کند — فعال‌سازی را بررسی کنید و پنل را ری‌استارت کنید. |
+| warn | `live render check: the subscription endpoint was unreachable.` | پورت اشتراک به‌صورت محلی پاسخ نداد. در حال اجرا بودن پنل و فعال بودن سرویس اشتراک را بررسی کنید. |
+| — | `Live render check skipped (no test URL available).` | کاری لازم نیست. |
+| ok | `VPN-client check: normal subscription content is served.` | — |
+| warn | `VPN-client check: HTML was returned instead of subscription content.` | اپ‌های VPN به‌جای پیکربندی، صفحه را دریافت می‌کنند. مطمئن شوید پراکسی یا CDNی که جلوی پنل است درخواست را تغییر نمی‌دهد. |
+
+## فایل‌های موقت باقی‌مانده
+
+هر فایلی که Row-Template جایگزین می‌کند اول با نامی موقت که با `.stage.` یا `.live.` شروع می‌شود نوشته و سپس با تغییر نام سر جایش گذاشته می‌شود. اگر فرمانی نیمه‌کاره بماند — برق سرور برود یا پردازه کشته شود — ممکن است یکی از آن‌ها باقی بماند. این فایل‌ها هرگز استفاده نمی‌شوند. وقتی هیچ فرمان `row-template` در حال اجرا نیست، حذفشان بی‌خطر است:
+
+```bash
+find /etc/3x-ui/sub_templates/row-template -maxdepth 2 \( -name '.stage.*' -o -name '.live.*' \) -print -delete
+```
+
+سپس `row-template verify` را دوباره اجرا کنید.

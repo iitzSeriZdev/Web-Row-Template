@@ -1,0 +1,52 @@
+---
+title: Security Model
+nav: Security
+description: How Row-Template protects your server, your subscribers and your branding input — and how to report a vulnerability.
+---
+
+Row-Template runs as root on a server that holds your panel, and it serves a page that shows your subscribers' data. It is built to fail closed: when something is not exactly as expected, it stops and says why rather than guessing.
+
+## Getting the release
+
+- **HTTPS only.** Downloads use `curl` pinned to HTTPS and TLS 1.2 or newer, so a redirect cannot downgrade the connection. Plain HTTP needs an explicit testing switch (`RT_ALLOW_INSECURE_URL`) and never applies to the default source.
+- **Mandatory SHA-256.** The release archive must match `SHA256SUMS` before anything is extracted. There is no flag or variable that skips it.
+- **Defence in depth.** After extraction, the library checks the page against the archive's own checksum list, validates its structure, verifies every design against its checksum, and refuses a release whose installer files are incomplete.
+- **Safe extraction.** Absolute paths, `..` traversal, symlinks, hard links and special files are refused before extraction, and the archive cannot set file owners or permissions.
+- **Data, not code.** An update never runs a script it downloaded: only the already-installed, trusted code performs the update, and the downloaded archive is treated as verified data.
+
+What a checksum does and does not prove is explained in [Release verification](/docs/reference/releases/).
+
+## Your input
+
+- **Branding is data.** It is stored base64-encoded in `config.env`, which is read with plain text tools and never sourced or executed. The file is mode `640`.
+- **Strictly validated.** Service names are limited to 120 characters with no control characters; support links must use `https`, `http`, `tg` or `mailto`, so `javascript:`, `data:` or `file:` links are refused at the door.
+- **Safely injected.** Values enter the page as JSON-escaped strings inside one fixed block, escaped so they cannot end the script, and the page inserts them as text, never as HTML. A value with a control character stops generation instead of being passed through.
+- **Logos by content.** A logo is accepted only if its first bytes identify it as PNG, JPEG or WebP — SVG, GIF, HTML and anything else are refused, whatever the file is called. It is capped at 256 KiB, and symlinks are refused, including one swapped in after the check.
+
+## Changing files
+
+- **Atomic writes.** Every file is written to a temporary name beside its target and renamed into place, so readers see the whole old file or the whole new one.
+- **Validate before swap.** A new page is generated and structurally validated before it replaces the live one. A failure leaves the live page untouched.
+- **Automatic restore.** Updates, template switches, branding changes and rollbacks snapshot the current state first and restore it if a later step fails.
+- **No writes through symlinks.** Row-Template refuses to write to, or delete, a path that is a symbolic link.
+- **Contained deletes.** Old backups are removed only from strictly inside the backups folder, never the folder itself. Uninstall first confirms the directory is a Row-Template installation and refuses system paths outright; it removes the `row-template` command only if the file is Row-Template's own launcher.
+
+## Your panel
+
+- **Fail-closed checks.** Installation refuses a 3X-UI below 3.6.0, or one whose version cannot be read.
+- **No guessing the database.** If the first panel database found is not a real SQLite file, it is refused rather than replaced by another candidate that might belong to a different installation.
+- **One setting.** Only `subThemeDir` is ever written, with the service stopped and the result read back.
+- **No secrets in output.** The live checks read one client's subscription ID to build a local test request; it is never printed, logged or stored. The manager's info screen shows only whether a support link is set, not the link.
+
+## The served page
+
+- No third-party requests of any kind; everything is inlined in one file.
+- Subscriber links in the Configuration Explorer stay masked until opened and are never written to the console.
+- The page asks not to be indexed and sends no referrer.
+- Live refresh accepts only a response carrying the page's own fields.
+
+## Reporting a vulnerability
+
+Please report security problems **privately**, not in a public issue. On the repository, open **Security → Report a vulnerability** and include the affected version (`row-template version`), your 3X-UI version and operating system, and clear steps to reproduce. Security fixes are released for the latest stable version.
+
+If private reporting is unavailable to you, open a minimal public issue asking a maintainer to enable it — with no exploit details.

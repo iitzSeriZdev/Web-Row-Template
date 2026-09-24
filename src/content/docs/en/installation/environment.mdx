@@ -1,0 +1,67 @@
+---
+title: Environment Variables
+description: Every variable the installer and the row-template command read — for unattended installs, offline sources and automation.
+---
+
+Row-Template has no configuration file for the installer itself. Anything you would answer at a prompt, or any choice about where the release comes from, can be given as an environment variable on the command line. A variable applies only to the command it prefixes; nothing is remembered between runs.
+
+```bash
+RT_ASSUME_NONINTERACTIVE=1 RT_TEMPLATE=prism bash install.sh
+```
+
+## Choices and branding
+
+| Variable | Read by | Effect |
+|---|---|---|
+| `RT_TEMPLATE` | installer | The design to install, by ID (for example `editorial`). Checked strictly: an ID this release does not ship stops the install. Used when there is no interactive design chooser — an unattended install, or a repair. |
+| `RT_SERVICE_NAME` | installer, `config` | The service name. Up to 120 characters, no control characters. Set it to an empty value to clear the name. |
+| `RT_SUPPORT_URL` | installer, `config` | The support link: `https://`, `http://`, `tg://` or `mailto:`. Empty clears it. |
+| `RT_LOGO_PATH` | installer, `config` | Path to a PNG, JPEG or WebP logo, at most 256 KiB, identified by its content. Symlinks are refused. |
+| `RT_LOGO_REMOVE` | installer, `config` | Any non-empty value removes the logo. Takes precedence over `RT_LOGO_PATH`. |
+
+When one of these is set, the matching question is not asked. The installer reads the branding variables only on a **first** install; a repair keeps the existing configuration. To change branding later, use them with `row-template config`:
+
+```bash
+RT_ASSUME_NONINTERACTIVE=1 RT_SERVICE_NAME="Aurora VPN" row-template config
+```
+
+Values you do not set keep their current value.
+
+## Prompts and confirmation
+
+| Variable | Read by | Effect |
+|---|---|---|
+| `RT_ASSUME_NONINTERACTIVE` | installer, `config`, `row-template` | Any non-empty value turns off every prompt, as if there were no terminal. The installer then skips the welcome and design chooser, takes branding from the variables above, and activates the panel automatically when it can. `row-template` with no arguments prints help instead of opening the menu. |
+| `RT_ASSUME_YES` | installer, `uninstall` | Any non-empty value confirms two actions that otherwise need a terminal: **repairing** an existing install from a script, and **uninstalling** without the `[y/N]` question. |
+
+## Release source
+
+By default the release comes from `https://github.com/iitzSeriZdev/Row-Template/releases/latest/download`. These override it for the installer, `row-template update`, and the manager's update check:
+
+| Variable | Effect |
+|---|---|
+| `RT_RELEASE_DIR` | A local folder holding `manifest.txt`, `SHA256SUMS` and the tarball. Takes precedence over `RT_RELEASE_URL`. See [Manual installation](/docs/installation/manual/). |
+| `RT_RELEASE_URL` | An HTTPS base URL serving the same files — your own mirror. |
+| `RT_ALLOW_INSECURE_URL` | Allows an `http://` value in `RT_RELEASE_URL`, with a warning. For local testing only; it never affects the default HTTPS source. |
+
+Whatever the source, the SHA-256 check is always performed. There is no variable that disables it.
+
+## Panel and terminal
+
+| Variable | Effect |
+|---|---|
+| `XUI_DB_FOLDER` | The folder holding the panel's `x-ui.db`, when it is not in a default location. If a database file is there, it is the only one considered — it is never skipped in favour of another. |
+| `NO_COLOR` | Any non-empty value turns off coloured output. Colour is also off whenever output is not a terminal. |
+
+## A complete unattended install
+
+```bash
+RT_ASSUME_NONINTERACTIVE=1 \
+RT_TEMPLATE=signature \
+RT_SERVICE_NAME="Aurora VPN" \
+RT_SUPPORT_URL="mailto:support@example.com" \
+RT_LOGO_PATH=/root/logo.webp \
+bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
+```
+
+The exit status is `0` on success and non-zero on any failure, so it can be checked by provisioning tools. Follow it with `row-template verify`, which exits non-zero only when a hard check fails.

@@ -1,0 +1,30 @@
+---
+// The documentation navigation. Rendered twice per page: in the desktop
+// sidebar and inside the mobile menu.
+import { NAV } from "../lib/nav";
+import { docHref, type Locale } from "../lib/i18n";
+import { pages } from "../lib/pages";
+
+interface Props {
+  locale: Locale;
+  current?: string;
+}
+const { locale, current } = Astro.props;
+const info = await pages(locale);
+---
+<nav aria-label={locale === "fa" ? "مستندات" : "Documentation"}>
+  {NAV.map((group) => (
+    <div class="sidebar-group">
+      <h4>{group.label[locale]}</h4>
+      <ul>
+        {group.slugs.filter((s) => info.has(s)).map((slug) => (
+          <li>
+            <a href={docHref(locale, slug)} aria-current={slug === current ? "page" : undefined}>
+              {info.get(slug)!.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</nav>

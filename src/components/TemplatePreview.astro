@@ -1,0 +1,87 @@
+---
+// A live template in a device frame. The frame loads the real template file,
+// rendered by Row-Template's fixture renderer from its placeholder data; the
+// toolbar switches the frame size and the template's own language and theme
+// (the template reads them from localStorage, which it shares with this page).
+import Icon from "./Icon.astro";
+import { withBase, type Locale } from "../lib/i18n";
+import type { Template } from "../lib/templates";
+
+interface Props {
+  tpl: Template;
+  locale: Locale;
+}
+const { tpl, locale } = Astro.props;
+const fa = locale === "fa";
+const src = withBase(`/live/${tpl.id}/`);
+const langs = [
+  ["en", "English"], ["fa", "فارسی"], ["ar", "العربية"], ["ru", "Русский"], ["zh", "中文"],
+];
+---
+<div class="preview" data-preview data-device="mobile" data-pagefind-ignore>
+  <div class="preview-bar">
+    <div class="tab-list" role="group" aria-label={fa ? "اندازهٔ صفحه" : "Viewport"}>
+      <button type="button" aria-selected="true" data-device-btn="mobile"><Icon name="smartphone" />{fa ? "موبایل" : "Mobile"}</button>
+      <button type="button" aria-selected="false" data-device-btn="desktop"><Icon name="monitor" />{fa ? "دسکتاپ" : "Desktop"}</button>
+    </div>
+    <div class="preview-actions">
+      <label class="select">
+        <span class="sr-only">{fa ? "زبان تمپلیت" : "Template language"}</span>
+        <Icon name="languages" />
+        <select data-preview-lang>
+          <option value="">{fa ? "زبان مرورگر" : "Browser language"}</option>
+          {langs.map(([v, l]) => <option value={v}>{l}</option>)}
+        </select>
+      </label>
+      <label class="select">
+        <span class="sr-only">{fa ? "پوستهٔ تمپلیت" : "Template theme"}</span>
+        <Icon name="sun-moon" />
+        <select data-preview-theme>
+          <option value="system">{fa ? "پوستهٔ سیستم" : "System theme"}</option>
+          <option value="light">{fa ? "روشن" : "Light"}</option>
+          <option value="dark">{fa ? "تیره" : "Dark"}</option>
+        </select>
+      </label>
+      <button class="btn btn-ghost btn-icon btn-sm" type="button" data-preview-reload title={fa ? "بارگذاری دوباره" : "Reload"}>
+        <Icon name="rotate-cw" /><span class="sr-only">{fa ? "بارگذاری دوباره" : "Reload"}</span>
+      </button>
+      <a class="btn btn-ghost btn-icon btn-sm" href={src} target="_blank" rel="noopener" title={fa ? "باز کردن در زبانهٔ جدید" : "Open in a new tab"}>
+        <Icon name="external-link" /><span class="sr-only">{fa ? "باز کردن در زبانهٔ جدید" : "Open in a new tab"}</span>
+      </a>
+    </div>
+  </div>
+  <div class="preview-stage">
+    <div class="preview-frame">
+      <iframe src={src} title={`${tpl.name} — ${fa ? "پیش‌نمایش زنده" : "live preview"}`} loading="lazy"></iframe>
+    </div>
+  </div>
+  <p class="preview-note">
+    {fa
+      ? "این خود فایل تمپلیت است که با داده‌های نمونهٔ پروژه ساخته شده؛ دکمه‌ها و بخش‌ها کار می‌کنند، اما هیچ اشتراک واقعی‌ای پشت آن نیست."
+      : "This is the template file itself, rendered from the project's placeholder data: controls and sections work, but no real subscription is behind it."}
+  </p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-preview]").forEach((box) => {
+    const frame = box.querySelector("iframe")!;
+    const lang = box.querySelector<HTMLSelectElement>("[data-preview-lang]")!;
+    const theme = box.querySelector<HTMLSelectElement>("[data-preview-theme]")!;
+    const get = (k: string) => { try { return localStorage.getItem(k); } catch { return null; } };
+    const set = (k: string, v: string | null) => {
+      try { v ? localStorage.setItem(k, v) : localStorage.removeItem(k); } catch { /* private mode */ }
+    };
+    lang.value = get("row.lang") ?? "";
+    theme.value = get("row.theme") ?? "system";
+    const reload = () => { try { frame.contentWindow?.location.reload(); } catch { frame.src = frame.src; } };
+    box.querySelectorAll<HTMLButtonElement>("[data-device-btn]").forEach((b) => {
+      b.addEventListener("click", () => {
+        box.dataset.device = b.dataset.deviceBtn;
+        box.querySelectorAll("[data-device-btn]").forEach((o) => o.setAttribute("aria-selected", String(o === b)));
+      });
+    });
+    lang.addEventListener("change", () => { set("row.lang", lang.value || null); reload(); });
+    theme.addEventListener("change", () => { set("row.theme", theme.value === "system" ? null : theme.value); reload(); });
+    box.querySelector("[data-preview-reload]")?.addEventListener("click", reload);
+  });
+</script>

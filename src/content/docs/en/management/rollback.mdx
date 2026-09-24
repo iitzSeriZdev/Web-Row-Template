@@ -1,0 +1,99 @@
+---
+title: Backups & Rollback
+nav: Backups & Rollback
+description: When backups are taken, what they contain, how long they are kept, and how to restore one — including the limits of rolling back across versions.
+---
+
+Every change that replaces the page first takes a **backup** of the current state, and `row-template rollback` restores one. Rollback restores the page **version**; it always keeps your **current** branding.
+
+## When backups are taken
+
+| Action | Backup |
+|---|---|
+| `row-template update` | Before anything is replaced. If it cannot be taken, the update stops. |
+| Switching template | Before the switch. If it cannot be taken, the switch stops. |
+| Re-running the installer on an existing install (repair) | Before the files are replaced. |
+| `row-template rollback` | A **safety snapshot** of the current version, before restoring the older one. |
+
+After a successful install, update or template switch, backups are pruned to the **two newest valid ones**. Folders that are not valid backups are left alone.
+
+## Where they are
+
+```text
+/etc/3x-ui/sub_templates/row-template/backups/
+├── 20260924T101500Z__1.1.0/
+└── 20260924T102210Z__1.2.0/
+```
+
+Each folder is named `<UTC time>__<version>` and is readable only by root. It holds:
+
+| File | Content |
+|---|---|
+| `template.html` | The design that was installed, pristine |
+| `template.html.sha256` | Its checksum — a backup whose page no longer matches is ignored |
+| `VERSION` | The version that was installed |
+| `config.env` | The branding at that time — kept for reference; rollback does not restore it |
+| `meta` | When it was taken, the version and the design, for people to read |
+
+## Roll back
+
+```bash
+row-template rollback
+```
+
+Restores the newest valid backup — after an update, that is the version you had before it. `--auto` means the same thing.
+
+To choose a backup, name its folder (or give its full path):
+
+```bash
+ls /etc/3x-ui/sub_templates/row-template/backups/
+row-template rollback --to 20260924T101500Z__1.1.0
+```
+
+Only folders inside `backups/` are accepted, and only when the page in them still matches its checksum.
+
+**What happens:**
+
+<Steps>
+
+### A safety snapshot is taken
+
+The current version is backed up first, so it is never lost.
+
+### The backup is staged
+
+Its page becomes the installed design and its `VERSION` is restored. Which design it is, is worked out from the page itself by comparing it with the designs in the template store, and your selection is updated to match.
+
+### The live page is regenerated
+
+From the restored design **and your current branding**, then validated and swapped in.
+
+### If that fails, the current version comes back
+
+The safety snapshot is restored and you see `restored the previously-running version; nothing changed.`
+
+</Steps>
+
+### Undoing a rollback
+
+The safety snapshot is now the newest backup, so running `row-template rollback` again returns you to the version you rolled back from.
+
+## Rolling back across versions
+
+A backup can be restored only when its page is byte-identical to one of the designs in the **current** template store — that is how Row-Template knows which design it is. In practice:
+
+- Backups made by **1.2.0** of any of its designs restore normally.
+- A backup made by **1.1.0 or earlier** holds that version's page, which differs from every 1.2.0 design. Restoring it is refused, and nothing changes:
+
+```text
+  FAIL backup artifact matches no installed template; the template store may be damaged
+  FAIL could not stage the backup; the running template is unchanged.
+```
+
+<Callout type="warning" title="Returning to 1.1.0">
+  `rollback` in 1.2.0 cannot take you back to 1.1.0. If you must return to it, uninstall Row-Template and install 1.1.0 from a local folder holding the v1.1.0 release files — see [Manual installation](/docs/installation/manual/). You will be asked for your branding again, so note your service name and support link and keep your logo file first.
+</Callout>
+
+## Backups and uninstall
+
+Backups live inside the install directory, so `row-template uninstall` removes them together with everything else.

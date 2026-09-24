@@ -1,0 +1,72 @@
+---
+import "../styles/globals.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SearchDialog from "../components/SearchDialog.astro";
+import { t, switchLocale, withBase, LOCALE_META, LOCALES, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  section?: "home" | "docs" | "templates" | "errors" | "changelog";
+  current?: string;
+  noindex?: boolean;
+  /** The same page in the other language, when it is not at the mirrored path. */
+  alternate?: string;
+}
+const { locale, title, description, section, current, noindex, alternate } = Astro.props;
+const s = t(locale);
+const meta = LOCALE_META[locale];
+const fullTitle = title ? `${title} – ${s.siteTitle}` : `${s.siteTitle} – ${locale === "fa" ? "مستندات" : "Documentation"}`;
+const desc = description ?? s.siteDescription;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+<!doctype html>
+<html lang={meta.lang} dir={meta.dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+    {!alternate && LOCALES.map((l) => (
+      <link rel="alternate" hreflang={l} href={new URL(switchLocale(Astro.url.pathname, l), Astro.site).href} />
+    ))}
+    {!alternate && <link rel="alternate" hreflang="x-default" href={new URL(switchLocale(Astro.url.pathname, "en"), Astro.site).href} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Row-Template" />
+    <meta property="og:title" content={title ?? s.siteTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={locale === "fa" ? "fa_IR" : "en_US"} />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0a" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <script is:inline>
+      (function () {
+        var theme = null;
+        try { theme = localStorage.getItem("theme"); } catch (e) {}
+        var dark = theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.classList.toggle("dark", dark);
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">{s.skipToContent}</a>
+    <Header locale={locale} section={section} current={current} alternate={alternate} />
+    <slot />
+    <Footer locale={locale} />
+    <SearchDialog locale={locale} />
+    <template id="copy-button">
+      <button class="copy-btn" type="button" aria-label={s.copy} data-label-copied={s.copied}>
+        <svg class="icon icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+        <svg class="icon icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+      </button>
+    </template>
+    <script>
+      import "../scripts/site";
+    </script>
+  </body>
+</html>

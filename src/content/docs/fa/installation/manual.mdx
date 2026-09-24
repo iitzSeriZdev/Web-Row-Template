@@ -1,0 +1,205 @@
+---
+title: نصب دستی
+nav: نصب دستی، مرحله به مرحله
+description: نسخه را خودتان دانلود کنید، دستی بررسی کنید و از یک پوشهٔ محلی نصب کنید — روش نصب روی سرورهایی که به GitHub دسترسی ندارند، یا وقتی نمی‌خواهید اسکریپتی را مستقیم از اینترنت اجرا کنید.
+---
+
+نصب‌کنندهٔ یک‌خطی نسخه را برایتان دانلود و بررسی می‌کند. هر چیزی که دانلود می‌کند به‌صورت فایل‌های معمولی نسخه هم منتشر شده است؛ پس می‌توانید این مراحل را خودتان انجام دهید: دانلود، بررسی، مشاهدهٔ محتوا، و سپس اجرای نصب‌کننده روی پوشه‌ای که آماده کرده‌اید. نصب‌کننده پیش از هر تغییری باز هم همه چیز را بررسی می‌کند.
+
+از این صفحه وقتی استفاده کنید که:
+
+- سرور **به GitHub دسترسی ندارد** (بدون اینترنت، فیلتر، یا پشت فایروال سخت‌گیر)؛
+- می‌خواهید پیش از اجرای هر چیزی با root، **نسخه را بخوانید و بررسی کنید**؛
+- به‌جای آخرین نسخه، **نسخهٔ مشخصی** را نصب می‌کنید.
+
+## روش الف — نصب از پوشهٔ محلی (پیشنهادی)
+
+<Steps>
+
+### چهار فایل نسخه را دانلود کنید
+
+روی هر دستگاهی که به اینترنت دسترسی دارد، این فایل‌ها را از [صفحهٔ نسخه](https://github.com/iitzSeriZdev/Row-Template/releases/latest) در یک پوشهٔ خالی دانلود کنید:
+
+| فایل | چیست |
+|---|---|
+| `row-template-1.2.0.tar.gz` | خود نسخه: همهٔ طرح‌ها، کتابخانهٔ مدیریتی و فرمان `row-template` |
+| `SHA256SUMS` | چک‌سام SHA-256 فایل tarball |
+| `manifest.txt` | اطلاعات متنی ساده: `name`، `version`، `artifact`، `min_xui`، `created` |
+| `install.sh` | نصب‌کننده |
+
+از ترمینال:
+
+```bash
+mkdir row-template-1.2.0-release && cd row-template-1.2.0-release
+base=https://github.com/iitzSeriZdev/Row-Template/releases/download/v1.2.0
+for f in row-template-1.2.0.tar.gz SHA256SUMS manifest.txt install.sh; do
+  curl -fLO "$base/$f"
+done
+```
+
+### چک‌سام را بررسی کنید
+
+در همان پوشه:
+
+```bash
+sha256sum -c SHA256SUMS
+```
+
+باید این را ببینید:
+
+```text
+row-template-1.2.0.tar.gz: OK
+```
+
+هر چیز دیگری — `FAILED` یا هشدار نبودن فایل — یعنی دانلود ناقص است یا فایل منتشرشده نیست. دوباره دانلود کنید و ادامه ندهید. در macOS از `shasum -a 256 -c SHA256SUMS` استفاده کنید.
+
+<Callout type="info" title="چک‌سامِ منطبق چه چیزی را ثابت می‌کند">
+  ثابت می‌کند tarball دقیقاً همان فایلی است که در `SHA256SUMS` نام برده شده و در مسیر خراب نشده است. به‌تنهایی ثابت نمی‌کند چه کسی آن را منتشر کرده — برای آن به دانلود از طریق HTTPS از مخزن رسمی تکیه کنید. [بررسی نسخه](/docs/reference/releases/) مدل اعتماد و بررسی اختیاری تگ امضاشده را توضیح می‌دهد.
+</Callout>
+
+### manifest را بررسی کنید
+
+```bash
+cat manifest.txt
+```
+
+```text
+name=row-template
+version=1.2.0
+artifact=row-template-1.2.0.tar.gz
+min_xui=3.6.0
+created=…
+```
+
+`artifact` باید نام همان tarballی باشد که بررسی کردید — نصب‌کننده آن را می‌خواند تا بداند کدام فایل را باز کند.
+
+<div id="inspect-the-contents-optional" />
+
+### محتوا را ببینید (اختیاری)
+
+tarball فهرست چک‌سام همهٔ فایل‌های داخلش را هم همراه دارد:
+
+```bash
+tar -xzf row-template-1.2.0.tar.gz
+cd row-template-1.2.0
+sha256sum -c SHA256SUMS --quiet && echo "all files OK"
+cd ..
+```
+
+<FileTree tree={`
+row-template-1.2.0/
+├── template.html          # the Row design
+├── templates/<id>/        # all fifteen designs, each with template.html.sha256
+├── lib/row-template.sh    # the management library
+├── lib/transaction.sh     # installer component
+├── panels/                # installer components
+├── bin/row-template       # the row-template command
+├── shells/                # research files for other panels — never installed
+├── install.sh
+├── VERSION
+└── SHA256SUMS             # checksums of every file above
+`} />
+
+پس از آن می‌توانید پوشهٔ استخراج‌شده را حذف کنید؛ نصب‌کننده فقط به همان چهار فایل اصلی نیاز دارد.
+
+### پوشه را به سرور کپی کنید
+
+```bash
+scp -r row-template-1.2.0-release root@your-server:/root/
+```
+
+هر روشی کار می‌کند — `scp`، `rsync` یا فلش USB. فقط هر چهار فایل را کنار هم در یک پوشه نگه دارید.
+
+### نصب‌کننده را روی پوشه اجرا کنید
+
+روی سرور، در پوستهٔ root:
+
+```bash
+RT_RELEASE_DIR=/root/row-template-1.2.0-release bash /root/row-template-1.2.0-release/install.sh
+```
+
+`RT_RELEASE_DIR` به نصب‌کننده می‌گوید `manifest.txt`، `SHA256SUMS` و tarball را به‌جای دانلود، از همین پوشه بخواند. به `curl` هم نیازی نیست. از اینجا به بعد نصب دقیقاً مثل نصب معمولی است: چک‌سام دوباره بررسی می‌شود، آرشیو بررسی و استخراج می‌شود و [همان سؤال‌ها](/docs/installation/installer/) پرسیده می‌شوند.
+
+برای نصب بدون پرسش، همان متغیرهای [نصب بدون پرسش](/docs/installation/installer/) را اضافه کنید:
+
+```bash
+RT_ASSUME_NONINTERACTIVE=1 RT_TEMPLATE=row \
+RT_RELEASE_DIR=/root/row-template-1.2.0-release bash /root/row-template-1.2.0-release/install.sh
+```
+
+### فعال کنید و بررسی کنید
+
+اگر نصب‌کننده نتوانست پنل را برایتان تنظیم کند، **Panel Settings → Subscription → Sub Theme Directory** را روی `/etc/3x-ui/sub_templates/row-template` بگذارید و ذخیره کنید. سپس:
+
+```bash
+row-template verify
+```
+
+برای جزئیات [فعال‌سازی](/docs/installation/activation/) را ببینید.
+
+</Steps>
+
+<div id="updating-an-offline-server" />
+
+### به‌روزرسانی سرور بدون اینترنت
+
+`row-template update` هم همین متغیر را می‌خواند؛ پس سرور بدون اینترنت به همین شکل به‌روز می‌شود — پوشه‌ای با چهار فایل نسخهٔ جدید آماده کنید، بررسی‌شان کنید، به سرور کپی کنید و سپس:
+
+```bash
+RT_RELEASE_DIR=/root/row-template-X.Y.Z-release row-template update
+```
+
+متغیر فقط برای همان فرمانی اعمال می‌شود که پیش از آن آمده؛ چیزی به خاطر سپرده نمی‌شود.
+
+### استفاده از آینهٔ خودتان
+
+اگر چهار فایل را روی سرور HTTPS خودتان میزبانی می‌کنید، به‌جای آن نصب‌کننده را به نشانی آن پوشه ارجاع دهید:
+
+```bash
+RT_RELEASE_URL=https://mirror.example.com/row-template/1.2.0 bash install.sh
+```
+
+نشانی باید `https://` باشد. `http://` ساده رد می‌شود مگر اینکه `RT_ALLOW_INSECURE_URL=1` را هم تنظیم کنید، که فقط برای آزمایش محلی است.
+
+## روش ب — بدون نصب‌کننده (پیشرفته)
+
+می‌توان یک طرح را کاملاً بدون نصب‌کننده ارائه کرد: صفحه یک فایل واحد است که 3X-UI آن را با نام `sub.html` از Sub Theme Directory می‌خواند.
+
+<Callout type="warning" title="چه چیزهایی را از دست می‌دهید">
+  بدون نصب‌کننده، **برندینگ ندارید** (صفحه بدون برند می‌ماند)، **فرمان `row-template` ندارید** و در نتیجه `verify`، `update`، `rollback` و تعویض تمپلیت هم ندارید. بررسی‌های ایمنی نصب‌کننده هم اجرا نمی‌شوند. مگر اینکه دلیلی داشته باشید، از روش الف استفاده کنید.
+</Callout>
+
+<Steps>
+
+### دانلود، بررسی و استخراج
+
+روش الف را تا مرحلهٔ «محتوا را ببینید» (با خود آن) دنبال کنید و در پوشهٔ استخراج‌شدهٔ `row-template-1.2.0` بمانید.
+
+### طرح دلخواه را بررسی کنید
+
+هر طرح چک‌سام خودش را دارد. مثلاً برای Editorial:
+
+```bash
+sha256sum -c templates/editorial/template.html.sha256
+```
+
+```text
+templates/editorial/template.html: OK
+```
+
+شناسهٔ طرح‌ها در [گالری تمپلیت‌ها](/docs/templates/choosing/) آمده است.
+
+### آن را سر جایش بگذارید
+
+```bash
+install -d -m 755 /etc/3x-ui/sub_templates/row-template
+install -m 644 templates/editorial/template.html /etc/3x-ui/sub_templates/row-template/sub.html
+```
+
+### پنل را به آن متصل کنید
+
+در پنل، **Panel Settings → Subscription → Sub Theme Directory** را روی `/etc/3x-ui/sub_templates/row-template` بگذارید و ذخیره کنید. برای اطمینان، یک لینک اشتراک را در مرورگر باز کنید.
+
+</Steps>
+
+اگر بعداً خواستید به نصب مدیریت‌شده بروید، نصب‌کننده را به‌طور معمول اجرا کنید. پوشه فایل `VERSION` ندارد، پس نصب تازه در نظر گرفته می‌شود و `sub.html` با نسخهٔ خود نصب‌کننده جایگزین می‌شود.

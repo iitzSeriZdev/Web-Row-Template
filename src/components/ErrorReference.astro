@@ -1,0 +1,125 @@
+---
+// The error reference: every message the installer can print, grouped, with a
+// translation (Persian pages), what it means and how to fix it. The filter at
+// the top narrows the list as you type; without JavaScript everything shows.
+import Icon from "./Icon.astro";
+import { ENTRIES, GROUPS, pieces, entryId, prefixesOf, contextsOf, CONTEXT_LABEL } from "../lib/errors";
+import { md } from "../lib/md";
+import { localeOf } from "../lib/pages";
+
+const locale = localeOf(Astro.url);
+const fa = locale === "fa";
+const L = fa
+  ? { filter: "جستجو در پیام‌ها…", all: "همه", fail: "خطا", warn: "هشدار", shown: "پیام", what: "معنی", fix: "راه حل", seen: "کجا دیده می‌شود", tr: "ترجمه", empty: "هیچ پیامی با این جستجو پیدا نشد.", link: "پیوند به این پیام" }
+  : { filter: "Filter messages…", all: "All", fail: "FAIL", warn: "warn", shown: "messages", what: "What it means", fix: "How to fix it", seen: "Seen in", tr: "Translation", empty: "No message matches this filter.", link: "Link to this message" };
+
+const groupId = (en: string) => en.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const total = ENTRIES.reduce((n, e) => n + e.texts.length, 0);
+
+function levelsOf(texts: string[]): string[] {
+  const set = new Set<string>();
+  for (const t of texts) for (const p of prefixesOf(t)) set.add(p === "warn" ? "warn" : "fail");
+  return [...set];
+}
+function haystack(e: (typeof ENTRIES)[number]): string {
+  const parts = [...e.texts, e.en.what, ...e.en.fix];
+  if (fa) parts.push(e.fa.tr, e.fa.what, ...e.fa.fix);
+  return parts.join(" ").toLowerCase();
+}
+---
+<div class="err-tools" data-err-tools data-pagefind-ignore>
+  <input type="search" placeholder={L.filter} aria-label={L.filter} data-err-filter autocomplete="off" spellcheck="false" />
+  <div class="err-filter" role="group">
+    <button type="button" aria-pressed="true" data-err-level="">{L.all}</button>
+    <button type="button" aria-pressed="false" data-err-level="fail">{L.fail}</button>
+    <button type="button" aria-pressed="false" data-err-level="warn">{L.warn}</button>
+  </div>
+  <span class="count" data-err-count data-total={ENTRIES.length}>{total} {L.shown}</span>
+</div>
+
+{GROUPS.map((g) => {
+  const list = ENTRIES.filter((e) => e.group === g.key);
+  if (!list.length) return null;
+  return (
+    <section class="err-group" data-err-group>
+      <h2 id={groupId(g.en)}><Icon name={g.icon} />{fa ? g.fa : g.en}</h2>
+      <div class="err-list">
+        {list.map((e) => {
+          const id = entryId(e);
+          const text = fa ? e.fa : e.en;
+          return (
+            <article class="err" data-level={levelsOf(e.texts).join(" ")} data-search={haystack(e)}>
+              <div class="err-head">
+                <div class="err-badges" data-pagefind-ignore>
+                  {[...new Set(e.texts.flatMap(prefixesOf))].map((p) => (
+                    <span class:list={["badge", p === "warn" ? "warn" : p === "FAIL" ? "fail" : "muted"]}>{p}</span>
+                  ))}
+                </div>
+                <h3 class="err-msg" id={id}>
+                  {e.texts.map((t) => (
+                    <span class="line">{pieces(t, locale).map((p) => (p.ph ? <span class="ph">‹{p.text}›</span> : p.text))}</span>
+                  ))}
+                </h3>
+                <a class="err-anchor" href={`#${id}`} aria-label={L.link} data-pagefind-ignore><Icon name="link" /></a>
+              </div>
+              <div class="err-body">
+                {fa && <p class="tr" lang="fa"><span class="tr-label">{L.tr}:</span> <Fragment set:html={md(e.fa.tr, locale)} /></p>}
+                <div>
+                  <h4>{L.what}</h4>
+                  <p set:html={md(text.what, locale)} />
+                </div>
+                <div>
+                  <h4>{L.fix}</h4>
+                  {text.fix.length === 1
+                    ? <p set:html={md(text.fix[0], locale)} />
+                    : <ol>{text.fix.map((f) => <li set:html={md(f, locale)} />)}</ol>}
+                </div>
+                <div class="err-where" data-pagefind-ignore>
+                  <span class="label">{L.seen}:</span>
+                  {contextsOf(e).map((c) => <span class="badge muted">{CONTEXT_LABEL[c]?.[locale] ?? c}</span>)}
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+})}
+<p class="err-empty" hidden data-err-empty>{L.empty}</p>
+
+<script>
+  const tools = document.querySelector<HTMLElement>("[data-err-tools]");
+  if (tools) {
+    const input = tools.querySelector<HTMLInputElement>("[data-err-filter]")!;
+    const count = tools.querySelector<HTMLElement>("[data-err-count]")!;
+    const empty = document.querySelector<HTMLElement>("[data-err-empty]");
+    const items = [...document.querySelectorAll<HTMLElement>(".err")];
+    const groups = [...document.querySelectorAll<HTMLElement>("[data-err-group]")];
+    const label = count.textContent!.replace(/^\d+\s*/, "");
+    let level = "";
+    const apply = () => {
+      const words = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+      let shown = 0;
+      for (const el of items) {
+        const hay = el.dataset.search ?? "";
+        const ok = (!level || (el.dataset.level ?? "").split(" ").includes(level)) && words.every((w) => hay.includes(w));
+        el.hidden = !ok;
+        if (ok) shown += el.querySelectorAll(".err-msg .line").length;
+      }
+      for (const g of groups) g.hidden = !g.querySelector(".err:not([hidden])");
+      count.textContent = `${shown} ${label}`;
+      if (empty) empty.hidden = shown > 0;
+    };
+    input.addEventListener("input", apply);
+    tools.querySelectorAll<HTMLButtonElement>("[data-err-level]").forEach((b) => {
+      b.addEventListener("click", () => {
+        level = b.dataset.errLevel ?? "";
+        tools.querySelectorAll("[data-err-level]").forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
+        apply();
+      });
+    });
+    const q = new URLSearchParams(location.search).get("q");
+    if (q) { input.value = q; apply(); }
+  }
+</script>

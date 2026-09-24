@@ -1,0 +1,83 @@
+---
+title: The Interactive Manager
+nav: Interactive Manager
+description: The row-template menu — what the dashboard shows, what each option does, and how it differs from the direct commands.
+---
+
+Run `row-template` with no arguments, as root, in a terminal:
+
+```bash
+row-template
+```
+
+```text
+  Row-Template / by iitzSeriZdev
+  ------------------------------------------------------------
+  Version         1.2.0
+  3X-UI           3.7.0
+  Status          Installed / Active
+  Template        Row
+  Theme           Row-Template (active)
+  Service         x-ui (running)
+
+  1  Update
+  2  Reconfigure branding
+  3  Verify installation
+  4  Rollback
+  5  Activate / Re-apply theme
+  6  Installation info
+  7  Uninstall
+  0  Exit
+  Select [0-7]:
+```
+
+Every option runs the same tested code as the matching command. A failed action returns you to the menu instead of closing it.
+
+## The dashboard
+
+The status is decided from evidence — the files on disk and the panel's actual `subThemeDir` — never from file presence alone.
+
+| Status | Meaning |
+|---|---|
+| **Installed / Active** | Installed, and the panel's `subThemeDir` points at Row-Template. |
+| **Installed / Not active** | Installed, but the panel serves another theme directory or none. Use option **5**. |
+| **Installed / Activation unverified** | Installed; the panel setting cannot be read here (no `sqlite3` or no database found). |
+| **Installation damaged** | Files are missing or the live page fails validation. Run **3 — Verify**, then repair by re-running the installer. |
+
+**Service** shows whether the `x-ui` service is running, or `not detected`.
+
+## The options
+
+| Option | What it does |
+|---|---|
+| **1 — Update** | Checks the release source for the latest version and compares it with yours. If it is newer, asks `Update <current> -> <latest> now?`. If you are up to date, offers to re-install anyway. If this installation came from 1.1.0 and is missing installer components, offers to re-install to complete it. If the source cannot be reached, says so and changes nothing. |
+| **2 — Reconfigure branding** | Opens the submenu below. |
+| **3 — Verify installation** | Runs [`row-template verify`](/docs/management/verify/). |
+| **4 — Rollback** | Restores the newest valid backup, like `row-template rollback`. To pick a specific backup, use `row-template rollback --to` from the shell. |
+| **5 — Activate / Re-apply theme** | Shows the panel's current theme directory and offers to point it at Row-Template, then runs the live checks. Nothing is written unless you confirm. [Activation →](/docs/installation/activation/) |
+| **6 — Installation info** | Version, developer, GitHub, 3X-UI version, install directory, template, theme status, service, and whether a custom logo and a support URL are set. Never shows subscription links, IDs, credentials or your support URL itself. |
+| **7 — Uninstall** | Runs [`row-template uninstall`](/docs/management/uninstall/), which asks for confirmation first. |
+| **0 — Exit** | Leaves the manager. |
+
+## Reconfigure branding
+
+```text
+  1  Service name
+  2  Support URL
+  3  Logo
+  4  Template
+  5  Reset branding
+  6  Reconfigure everything
+  0  Back
+```
+
+Each item changes one thing and regenerates the page safely — see [Branding](/docs/configuration/branding/) and [Switching templates](/docs/templates/choosing/#switch-an-existing-install).
+
+## Manager or commands?
+
+They share one implementation, with one difference worth knowing:
+
+- **Update** in the manager compares versions first and asks before doing anything.
+- `row-template update` on the command line **always** downloads and applies the latest stable release, even if it is the version you already have. That makes it a reliable way to repair or complete an installation.
+
+Invalid input is simply asked again (`Invalid option. Choose a number 0-7.`). When there is no terminal to read from, the manager treats end of input as **0 — Exit**, so it can never hang a script.

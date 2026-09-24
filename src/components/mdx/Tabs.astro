@@ -1,0 +1,17 @@
+---
+// <Tabs labels={["A", "B"]} sync="os"> <Tab>…</Tab> <Tab>…</Tab> </Tabs>
+// Tabs sharing a `sync` key follow each other, and the choice is remembered.
+interface Props {
+  labels: string[];
+  sync?: string;
+}
+const { labels, sync } = Astro.props;
+---
+<div class="tabs" data-sync={sync}>
+  <div class="tab-list" role="tablist">
+    {labels.map((label, i) => (
+      <button type="button" role="tab" aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>{label}</button>
+    ))}
+  </div>
+  <slot />
+</div>

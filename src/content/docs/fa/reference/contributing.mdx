@@ -1,0 +1,50 @@
+---
+title: مشارکت
+description: گزارش خطا، بهبود ترجمه، کار روی خود Row-Template یا بهبود همین سایت مستندات.
+---
+
+گزارش خطا، ترجمه و اصلاح مستندات همه خوشایندند. لطفاً [`CONTRIBUTING.md`](https://github.com/iitzSeriZdev/Row-Template/blob/main/CONTRIBUTING.md) را بخوانید و از [آیین‌نامهٔ رفتاری](https://github.com/iitzSeriZdev/Row-Template/blob/main/CODE_OF_CONDUCT.md) پیروی کنید.
+
+## گزارش خطا
+
+در [github.com/iitzSeriZdev/Row-Template/issues](https://github.com/iitzSeriZdev/Row-Template/issues) یک issue باز کنید و این‌ها را بیاورید:
+
+- خروجی `row-template version` و `row-template verify`؛
+- سیستم‌عامل، نسخهٔ آن و معماری پردازنده؛
+- مراحل دقیق بازتولید، چیزی که انتظار داشتید و اتفاقی که افتاد.
+
+**هرگز اطلاعات محرمانه نفرستید** — لینک‌های اشتراک، مقادیر `subId`، UUID کلاینت‌ها، اطلاعات ورود پنل، کوکی‌ها، توکن‌ها، `webBasePath`، کلیدهای TLS یا نشانی واقعی سرورها. مشکلات امنیتی از طریق [گزارش خصوصی](/docs/reference/security/#reporting-a-vulnerability) ارسال می‌شوند، نه issue.
+
+## کار روی Row-Template
+
+به Node.js نسخهٔ 22 یا جدیدتر، و برای اجرای آزمون‌ها به Go نسخهٔ 1.22 یا جدیدتر نیاز دارید.
+
+```bash
+git clone https://github.com/iitzSeriZdev/Row-Template
+cd Row-Template
+npm run build          # regenerate template/index.html from src/
+npm run verify         # check the built page against the safety gates
+npm test               # render every design's fixture pages, then run every suite
+npm run lint:sh        # ShellCheck every shell script
+npm run preview        # preview the fixture pages at http://127.0.0.1:8787
+```
+
+صفحه از منابع خوانای پوشهٔ `src/` ساخته می‌شود؛ هر طرح در `src/templates/<id>/` قرار دارد. ساخت قطعی است و `npm run verify` هر صفحه‌ای را که چیزی از راه دور بارگذاری کند یا ساختار ممنوعی داشته باشد رد می‌کند.
+
+## بهبود این سایت
+
+این مستندات در مخزن جداگانهٔ خودش قرار دارد: [iitzSeriZdev/Web-Row-Template](https://github.com/iitzSeriZdev/Web-Row-Template). پایین هر صفحه پیوند **ویرایش این صفحه در GitHub** هست.
+
+```bash
+git clone https://github.com/iitzSeriZdev/Web-Row-Template
+cd Web-Row-Template
+npm install
+npm run dev            # http://localhost:4321/Web-Row-Template/
+```
+
+- صفحه‌ها فایل‌های MDX در `src/content/docs/en/` و `src/content/docs/fa/` هستند؛ برای هر زبان یک فایل با مسیر یکسان.
+- کاتالوگ تمپلیت‌ها، تصویرها و پیش‌نمایش‌های زنده **از Row-Template کپی می‌شوند** و هرگز اینجا ویرایش نمی‌شوند. برای به‌روز کردن آن‌ها، در یک نسخه از Row-Template پیش‌نمایش‌ها را بسازید (`npm run fixtures:all`) و `npm run sync -- ../Row-Template` را اجرا کنید.
+- همان همگام‌سازی، همهٔ خطاها و هشدارهایی را که نصب‌کننده ممکن است چاپ کند ثبت می‌کند. `npm run check` اگر یکی از آن‌ها در [مرجع خطاها](/docs/help/errors/) نباشد، یا مرجع پیامی را فهرست کند که نصب‌کننده دیگر چاپ نمی‌کند، شکست می‌خورد — پس هیچ پیام جدیدی از نصب‌کننده بی‌توضیح نمی‌ماند.
+- `npm run build` سایت و نمایهٔ جست‌وجوی آن را در `dist/` می‌سازد.
+
+وقتی صفحه‌ای را تغییر می‌دهید، آن را در هر دو زبان تغییر دهید. هر فرمان، مسیر و پیام باید دقیقاً همان‌طور بماند که نصب‌کننده چاپ می‌کند.

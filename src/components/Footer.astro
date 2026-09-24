@@ -1,0 +1,18 @@
+---
+import { type Locale } from "../lib/i18n";
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const fa = locale === "fa";
+---
+<footer class="site-footer">
+  <div class="container">
+    <p>
+      {fa ? "ساخته‌شده برای " : "Built for "}
+      <a href="https://github.com/iitzSeriZdev/Row-Template" target="_blank" rel="noreferrer">Row-Template</a>
+      {fa ? ". کد منبع این سایت در " : ". The source for this site is on "}
+      <a href="https://github.com/iitzSeriZdev/Web-Row-Template" target="_blank" rel="noreferrer">GitHub</a>
+      {fa ? " در دسترس است." : "."}
+    </p>
+    <p>{fa ? "منتشرشده با مجوز MIT." : "Released under the MIT License."}</p>
+  </div>
+</footer>

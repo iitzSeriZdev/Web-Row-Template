@@ -1,0 +1,65 @@
+---
+title: Frequently Asked Questions
+nav: FAQ
+description: Short answers to the questions people ask before and after installing Row-Template.
+---
+
+## Does Row-Template change or patch 3X-UI?
+
+No. It installs into its own directory and changes exactly one panel setting, `subThemeDir`. It never edits 3X-UI's files, and never touches inbounds, clients, users or certificates.
+
+## Will my subscribers' VPN apps keep working?
+
+Yes. The page is served only to browsers; when a VPN app fetches the same link, 3X-UI returns normal subscription content. `row-template verify` checks this for you.
+
+## Which panels are supported?
+
+3X-UI (MHSanaei) version 3.6.0 or newer — and only 3X-UI. PasarGuard and Rebecca are research targets with no installation path. See [Compatibility](/docs/reference/compatibility/).
+
+## Does the page send data anywhere?
+
+No. It makes no third-party requests — no CDNs, web fonts, analytics, or external QR and geolocation services. Its only request is the status refresh to the panel it was served from.
+
+## Do I need sqlite3?
+
+No. Without it, you set Sub Theme Directory in the panel yourself, once. With it, Row-Template can do that for you and `verify` can check it.
+
+## Can I switch designs later?
+
+Yes, as often as you like: `row-template` → **2 — Reconfigure branding** → **4 — Template**. Your branding stays. [Choosing a template →](/docs/templates/choosing/)
+
+## Do updates keep my branding and design?
+
+Yes. Branding is never touched by an update, and your design is kept as long as the new release ships it.
+
+## Why does `row-template update` reinstall the version I already have?
+
+On the command line, `update` always applies the latest release — that makes it a reliable repair. The manager's **1 — Update** compares versions first and asks. [Updating →](/docs/management/updating/)
+
+## Can I use my own design?
+
+Not in 1.2.0: only the fifteen shipped designs can be installed, each verified by its checksum. A proposal for custom templates is recorded in the project's design notes.
+
+## Can I use it behind a reverse proxy or CDN?
+
+Yes, if the proxy passes requests through unchanged: the page requests its own address with `?format=info` for live status, and 3X-UI needs the original request headers to tell browsers from VPN apps. `verify` checks both from the server.
+
+## How much disk space does it use?
+
+A few megabytes: the release archive is under 5 MB, and each design is a single file under 200 KiB.
+
+## Is there a log file?
+
+No. Every command reports to the terminal. `row-template verify` is the place to look for the current state.
+
+## Can I run it without root?
+
+`row-template version` and `row-template help` work for any user. Installing and every command that changes something need root.
+
+## Can I go back to 1.1.0?
+
+Not with `rollback` — see [Rolling back across versions](/docs/management/rollback/#rolling-back-across-versions).
+
+## Is it free?
+
+Yes. Row-Template is open source under the MIT License.

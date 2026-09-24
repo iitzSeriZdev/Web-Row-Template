@@ -1,0 +1,145 @@
+---
+// The home page, in either language.
+import Base from "../layouts/Base.astro";
+import Icon from "./Icon.astro";
+import { TEMPLATES } from "../lib/templates";
+import { docHref, withBase, type Locale } from "../lib/i18n";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const fa = locale === "fa";
+const install = "bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)";
+
+const T = fa
+  ? {
+      pill: "Row-Template 1.2.0 — پانزده طرح",
+      title: "صفحهٔ اشتراک 3X-UI، همان‌طور که باید باشد.",
+      lead: "Row-Template صفحهٔ داخلی پنل را با صفحه‌ای سریع، خصوصی و بدون برند جایگزین می‌کند — پانزده طرح، پنج زبان، و نصب با یک فرمان.",
+      start: "شروع کنید",
+      browse: "دیدن تمپلیت‌ها",
+      installNote: "با root روی سرور پنل اجرا کنید. [روش نصب دستی ←]",
+      showcase: "هر پانزده طرح، زنده",
+      showcaseSub: "روی هر طرح بزنید تا آن را با داده‌های نمونه در اندازهٔ موبایل و دسکتاپ امتحان کنید.",
+      all: "همهٔ تمپلیت‌ها",
+      features: "برای مشترکان شما ساخته شده، برای شما امن",
+      featuresSub: "هر چیزی که مشترک لازم دارد در یک فایل؛ هر تغییری روی سرور، بررسی‌شده و برگشت‌پذیر.",
+      docs: "مستندات",
+      docsSub: "از نصب تا عیب‌یابی، به فارسی و انگلیسی.",
+    }
+  : {
+      pill: "Row-Template 1.2.0 — fifteen designs",
+      title: "The 3X-UI subscription page, done properly.",
+      lead: "Row-Template replaces the panel's built-in page with a fast, private, white-label one — fifteen designs, five languages, installed with one command.",
+      start: "Get Started",
+      browse: "Browse Templates",
+      installNote: "Run as root on the panel's server. [Prefer to install by hand? →]",
+      showcase: "All fifteen designs, live",
+      showcaseSub: "Open any design to try it with sample data at phone and desktop sizes.",
+      all: "All templates",
+      features: "Built for your subscribers, safe for you",
+      featuresSub: "Everything a subscriber needs in one file; every change on your server verified and reversible.",
+      docs: "Documentation",
+      docsSub: "From installation to troubleshooting, in English and Persian.",
+    };
+
+const features = fa
+  ? [
+      ["shield-check", "بدون درخواست بیرونی", "نه CDN، نه فونت وب، نه آمارگیری، نه سرویس بیرونی QR. تنها درخواست صفحه، به‌روزرسانی وضعیت از پنل خود شماست."],
+      ["badge-check", "بدون برند", "نام سرویس، لینک پشتیبانی و لوگوی شما — ذخیره‌شده به‌صورت داده و قرارگرفته به‌صورت متن، هرگز اجرا نمی‌شود."],
+      ["smartphone", "افزودن یک‌لمسی", "v2rayNG، Happ، sing-box، Streisand، V2Box، Shadowrocket، Clash Verge Rev و… بر اساس پلتفرم مشترک."],
+      ["languages", "پنج زبان، راست‌به‌چپ", "انگلیسی، فارسی، عربی، روسی و چینی، با چیدمان کامل راست‌به‌چپ و پوستهٔ روشن و تیره."],
+      ["lock", "چک‌سام اجباری", "هر دانلود با SHA-256 بررسی می‌شود و راهی برای رد شدن از آن نیست. هر طرح چک‌سام خودش را دارد."],
+      ["history", "برگشت‌پذیر", "فعال‌سازی اتمی، بازگردانی خودکار هنگام خطا و بازگشت به نسخهٔ قبل با یک فرمان."],
+    ]
+  : [
+      ["shield-check", "No third-party requests", "No CDNs, web fonts, analytics or external QR services. The page's only request is its status refresh, from your own panel."],
+      ["badge-check", "Genuinely white-label", "Your service name, support link and logo — stored as data and inserted as text, never executed."],
+      ["smartphone", "One-tap import", "v2rayNG, Happ, sing-box, Streisand, V2Box, Shadowrocket, Clash Verge Rev and more, chosen by the subscriber's platform."],
+      ["languages", "Five languages, RTL", "English, Persian, Arabic, Russian and Chinese, with full right-to-left layout and light and dark themes."],
+      ["lock", "Mandatory checksums", "Every download is verified with SHA-256, with no way to skip it. Every design carries its own checksum."],
+      ["history", "Reversible", "Atomic activation, automatic restore on failure, and one-command rollback."],
+    ];
+
+const docs = fa
+  ? [
+      ["zap", "شروع سریع", "", "نصب، فعال‌سازی و بررسی در سه مرحله.", "quick-start"],
+      ["list-ordered", "نصب دستی", "", "دانلود، بررسی و نصب مرحله به مرحله — حتی بدون اینترنت.", "installation/manual"],
+      ["circle-alert", "مرجع خطاها", "", "همهٔ پیام‌های نصب‌کننده، ترجمه‌شده، با معنی و راه حل.", "help/errors"],
+      ["terminal", "مرجع فرمان‌ها", "", "همهٔ فرمان‌های row-template و منوی مدیریت.", "management/cli"],
+    ]
+  : [
+      ["zap", "Quick start", "", "Install, activate and verify in three steps.", "quick-start"],
+      ["list-ordered", "Manual installation", "", "Download, verify and install step by step — even offline.", "installation/manual"],
+      ["circle-alert", "Error reference", "", "Every installer message, with what it means and how to fix it.", "help/errors"],
+      ["terminal", "Command reference", "", "Every row-template command and the interactive manager.", "management/cli"],
+    ];
+const [noteText, noteLink] = T.installNote.split(" [");
+---
+<Base locale={locale} section="home">
+  <main id="content">
+    <section class="hero container">
+      <a class="pill" href={docHref(locale, "reference/changelog")}>
+        <Icon name="sparkles" />
+        <span>{T.pill}</span>
+        <span class="sep" aria-hidden="true"></span>
+        <Icon name="arrow-right" class="flip-rtl" />
+      </a>
+      <h1>{T.title}</h1>
+      <p class="lead">{T.lead}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href={docHref(locale, "quick-start")}>{T.start}</a>
+        <a class="btn btn-outline" href={docHref(locale, "templates")}>{T.browse}</a>
+      </div>
+      <div class="install-line">
+        <div class="code-frame titled">
+          <div class="code-title"><Icon name="terminal" />install.sh</div>
+          <pre data-copy class="landing-pre"><code>{install}</code></pre>
+        </div>
+        <p class="install-note">{noteText} <a href={docHref(locale, "installation/manual")}>{noteLink.replace(/\]$/, "")}</a></p>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>{T.showcase}</h2>
+      <p class="sub">{T.showcaseSub}</p>
+      <div class="showcase">
+        {TEMPLATES.map((tpl) => (
+          <a href={docHref(locale, `templates/${tpl.id}`)}>
+            <figure>
+              <img src={withBase(`/previews/${tpl.id}-mobile.webp`)} alt={tpl.name} width="390" height="844" loading="lazy" decoding="async" />
+              <figcaption><span>{tpl.name}</span><Icon name="arrow-up-right" class="flip-rtl" /></figcaption>
+            </figure>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>{T.features}</h2>
+      <p class="sub">{T.featuresSub}</p>
+      <div class="feature-grid">
+        {features.map(([icon, title, text]) => (
+          <div class="card">
+            <span class="card-icon"><Icon name={icon} /></span>
+            <p class="card-title">{title}</p>
+            <p>{text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2>{T.docs}</h2>
+      <p class="sub">{T.docsSub}</p>
+      <div class="feature-grid">
+        {docs.map(([icon, title, , text, slug]) => (
+          <a class="card" href={docHref(locale, slug)}>
+            <span class="card-icon"><Icon name={icon} /></span>
+            <p class="card-title">{title}</p>
+            <p>{text}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+</Base>

@@ -1,0 +1,93 @@
+---
+title: Troubleshooting
+description: Symptoms, their usual causes and the fix — from a page that does not appear to a logo that is refused. Start with row-template verify.
+---
+
+Most problems show up in one command. Run it first, as root:
+
+```bash
+row-template verify
+```
+
+Every line it prints is explained in [Verifying an installation](/docs/management/verify/), and every error message in the [error reference](/docs/help/errors/). This page starts from what you **see** instead.
+
+<Callout type="warning" title="Refusals are deliberate">
+  Many messages are the installer **refusing** to do something unsafe — a checksum that does not match, a symlink where a file should be, an unknown panel database. Fix the cause they name. Never work around a refusal.
+</Callout>
+
+## Subscribers still see the panel's built-in page
+
+1. **Check the setting.** In **Panel Settings → Subscription**, **Sub Theme Directory** must be exactly `/etc/3x-ui/sub_templates/row-template` — no trailing slash or spaces.
+2. **Restart the panel** after changing it, from the panel or with `systemctl restart x-ui`.
+3. **Open the link in a browser.** VPN apps are meant to keep receiving normal subscription content.
+4. **Run `row-template verify`.** `Panel subThemeDir points at Row-Template` and `Live render check: a browser receives Row-Template` confirm it from the server's side.
+
+If `verify` passes but your browser still shows the old page, something between you and the panel — a CDN or caching proxy — may be serving a stored copy.
+
+## VPN apps receive HTML instead of their configuration
+
+`verify` reports `VPN-client check: HTML was returned instead of subscription content.` 3X-UI decides what to send from the request, so something in front of the panel is changing it — typically a proxy or CDN that rewrites or drops the `User-Agent` or `Accept` headers. Let those requests through to the panel unchanged.
+
+## The page shows, but the figures never update
+
+The page refreshes by requesting its own address with `?format=info` from your panel. If a reverse proxy strips the query string or blocks that request, the page keeps the figures it was served with. A response the page does not recognise stops refreshing on purpose; reloading the page starts it again.
+
+## The installer says no 3X-UI was found
+
+`no 3x-ui installation was detected on this host.` The installer looks for `/usr/local/x-ui/x-ui`, `/usr/local/bin/x-ui`, an `x-ui` command on the `PATH`, or a systemd unit named `x-ui.service`. Row-Template must be installed on the same server as the panel; a panel in a container or under another name is not detected.
+
+## Automatic activation is unavailable
+
+`Automatic activation is unavailable here (sqlite3 is not installed).` Either install `sqlite3` and use the manager's **5 — Activate / Re-apply theme**, or set Sub Theme Directory in the panel by hand. Both are equally good. See [Activation](/docs/installation/activation/).
+
+If `sqlite3` is installed but the database is not found — for example because it lives somewhere unusual — tell Row-Template where it is:
+
+```bash
+XUI_DB_FOLDER=/opt/x-ui/db row-template
+```
+
+## The panel database was refused
+
+`panel database is not an SQLite database: … (not falling back to another database; …)`. The first database file Row-Template found is not a valid SQLite file, and it will not guess another one. Point it at the right folder with `XUI_DB_FOLDER`, or remove the stale file if you are sure it is not in use. Until then, activate by hand.
+
+## The server cannot reach GitHub
+
+`cannot fetch manifest.txt from the release source.` or `could not obtain a verified release.` Check `curl -I https://github.com` from the server. If GitHub is blocked, [install or update from a local folder](/docs/installation/manual/).
+
+## Only Row is available after updating from 1.1.0
+
+Expected after the **first** update from 1.1.0, which is carried out by 1.1.0's own updater. Run `row-template update` once more. [Why →](/docs/management/updating/#upgrading-from-110)
+
+## A branding change does not show
+
+The page is regenerated as soon as the command reports success. Reload the subscription page in the browser, bypassing its cache. If the old page persists, restart the panel.
+
+## The logo is refused
+
+- `unsupported image: only PNG, JPEG or WebP by content` — the file's content is another format; renaming it does not help. Convert it, for example with ImageMagick: `convert logo.svg -resize 256x256 logo.png`.
+- `logo too large: … bytes (max 262144)` — the file is over 256 KiB. Resize it or save it as WebP.
+- `logo path is a symlink; refusing to read it` — give the path of the real file.
+
+## Flags show as two letters on Windows
+
+Windows does not display flag emoji, so Chromium-based browsers show a country code such as `DE`. Row-Template draws six common flags itself (Germany, France, the Netherlands, Japan, Sweden, the United States); the rest fall back to letters. This is a platform limitation, not a fault.
+
+## `row-template: command not found`
+
+The command lives at `/usr/local/bin/row-template`. If `/usr/local/bin` is not on your `PATH`, call it by its full path. If the file is missing, re-run the installer: it repairs the installation in place and keeps your configuration.
+
+## The manager says “Installation damaged”
+
+Files are missing or the live page failed validation. Run **3 — Verify** to see which, then repair by re-running the installer or with `row-template update`.
+
+## Asking for help
+
+Open an issue at [github.com/iitzSeriZdev/Row-Template/issues](https://github.com/iitzSeriZdev/Row-Template/issues) with:
+
+- `row-template version` and `row-template verify` output;
+- your operating system, version and CPU architecture;
+- what you did, what you expected, and what happened.
+
+<Callout type="danger" title="Never include secrets">
+  Do not paste subscription links, `subId` values, client UUIDs, panel usernames or passwords, cookies, tokens, the panel's `webBasePath`, TLS keys or real server addresses. `verify` and `version` never print any of these, but other logs may — redact them.
+</Callout>

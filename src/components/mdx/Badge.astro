@@ -1,0 +1,5 @@
+---
+interface Props { variant?: "fail" | "warn" | "muted" | "solid" }
+const { variant = "muted" } = Astro.props;
+---
+<span class:list={["badge", variant]}><slot /></span>

@@ -1,0 +1,89 @@
+---
+title: Command Reference
+nav: CLI Reference
+description: Every row-template command, its options, whether it needs root, what it prints and how it exits.
+---
+
+The installer puts one command on your server, `/usr/local/bin/row-template`. It is a thin launcher for the management library in the install directory.
+
+```bash
+row-template <command> [options]
+```
+
+Run it with **no arguments** in a terminal to open the [interactive manager](/docs/management/manager/). Without a terminal — in a script, cron, CI, or `curl | bash` — it prints the help instead, so it never waits for input.
+
+## Commands
+
+| Command | What it does | Root |
+|---|---|---|
+| `row-template config` | Change the service name, support URL or logo, then regenerate the page. [Branding →](/docs/configuration/branding/) | Yes |
+| `row-template update` | Download, verify and activate the latest stable release. [Updating →](/docs/management/updating/) | Yes |
+| `row-template rollback` | Restore a previous version from a backup. Options: `--auto`, `--to <backup>`. [Rollback →](/docs/management/rollback/) | Yes |
+| `row-template verify` | Check the installation, the panel wiring and the live page. Read-only. [Verify →](/docs/management/verify/) | Recommended |
+| `row-template version` | Show the installed version, the minimum supported 3X-UI and the detected 3X-UI. Aliases: `-v`, `--version`. | No |
+| `row-template uninstall` | Remove Row-Template and revert the panel to its built-in page. [Uninstall →](/docs/management/uninstall/) | Yes |
+| `row-template menu` | Open the interactive manager explicitly. Alias: `manager`. | Yes |
+| `row-template help` | Show usage. Aliases: `-h`, `--help`. | No |
+
+Commands that change the system refuse to run without root:
+
+```text
+  FAIL this operation must run as root (e.g. sudo row-template ...)
+```
+
+`verify` does not insist on root, but as another user it cannot read `config.env` or the panel database, so it reports less.
+
+## version
+
+```bash
+row-template version
+```
+
+```text
+Row-Template 1.2.0
+Supported 3x-ui minimum: 3.6.0
+Detected 3x-ui: 3.7.0
+```
+
+`unknown` means the value could not be read. Include this output in bug reports.
+
+## rollback options
+
+| Form | Restores |
+|---|---|
+| `row-template rollback` | The newest valid backup. |
+| `row-template rollback --auto` | The same, stated explicitly. |
+| `row-template rollback --to <backup>` | A specific backup: its full path, or just its folder name under `backups/`. |
+
+## Output
+
+Every command prints short status lines:
+
+```text
+  ok   Canonical artifact integrity verified.
+  warn panel subThemeDir is empty; set it to /etc/3x-ui/sub_templates/row-template.
+  FAIL verification FAILED (1 hard issue(s), 1 warning(s)).
+```
+
+`ok` lines go to standard output; `warn` and `FAIL` lines go to standard error. Colour is used only on a terminal, and never when `NO_COLOR` is set. Every `warn` and `FAIL` message is explained in the [error reference](/docs/help/errors/).
+
+## Exit status
+
+| Status | Meaning |
+|---|---|
+| `0` | Success. For `verify`: no hard failures (warnings allowed). |
+| `1` | The command failed, or `verify` found a hard failure. |
+| `2` | Unknown command — the help is printed after the error. |
+
+Commands that change the system work as transactions: when one fails part-way, it restores the previous state before it exits and says so. If it ever cannot, it tells you to run `row-template rollback`.
+
+## When the command itself is broken
+
+If the management library is missing, the launcher cannot load anything and prints:
+
+```text
+row-template: management library not found at /etc/3x-ui/sub_templates/row-template/lib/row-template.sh
+row-template: the install may be damaged; re-run the installer.
+```
+
+Re-running the installer repairs the installation in place and keeps your configuration.

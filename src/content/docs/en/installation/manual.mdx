@@ -1,0 +1,201 @@
+---
+title: Manual Installation
+nav: Manual, Step by Step
+description: Download the release yourself, verify it by hand, and install it from a local folder — the way to install on servers that cannot reach GitHub, or when you do not want to run a script straight from the network.
+---
+
+The one-command installer downloads and verifies the release for you. Everything it downloads is also published as ordinary release files, so you can do those steps yourself: download, check, inspect, then run the installer against the folder you prepared. The installer still verifies everything again before it changes anything.
+
+Use this page when:
+
+- the server **cannot reach GitHub** (air-gapped, filtered, or behind a restrictive firewall);
+- you want to **read and verify the release** before anything runs as root;
+- you are installing **a specific version** rather than the latest.
+
+## Method A — Install from a local folder (recommended)
+
+<Steps>
+
+### Download the four release files
+
+On any machine with internet access, download these files from the [release page](https://github.com/iitzSeriZdev/Row-Template/releases/latest) into one empty folder:
+
+| File | What it is |
+|---|---|
+| `row-template-1.2.0.tar.gz` | The release itself: every design, the management library, the `row-template` command |
+| `SHA256SUMS` | The SHA-256 checksum of the tarball |
+| `manifest.txt` | Plain-text metadata: `name`, `version`, `artifact`, `min_xui`, `created` |
+| `install.sh` | The installer |
+
+From a terminal:
+
+```bash
+mkdir row-template-1.2.0-release && cd row-template-1.2.0-release
+base=https://github.com/iitzSeriZdev/Row-Template/releases/download/v1.2.0
+for f in row-template-1.2.0.tar.gz SHA256SUMS manifest.txt install.sh; do
+  curl -fLO "$base/$f"
+done
+```
+
+### Verify the checksum
+
+In the same folder:
+
+```bash
+sha256sum -c SHA256SUMS
+```
+
+You must see:
+
+```text
+row-template-1.2.0.tar.gz: OK
+```
+
+Anything else — `FAILED`, or a missing-file warning — means the download is incomplete or is not the published file. Download it again; do not continue. On macOS use `shasum -a 256 -c SHA256SUMS`.
+
+<Callout type="info" title="What a matching checksum proves">
+  It proves the tarball is exactly the file named in `SHA256SUMS`, with no corruption in transit. It does not by itself prove who published it — for that, rely on downloading over HTTPS from the official repository. [Release verification](/docs/reference/releases/) explains the trust model and the optional signed-tag check.
+</Callout>
+
+### Check the manifest
+
+```bash
+cat manifest.txt
+```
+
+```text
+name=row-template
+version=1.2.0
+artifact=row-template-1.2.0.tar.gz
+min_xui=3.6.0
+created=…
+```
+
+`artifact` must name the tarball you verified — the installer reads it to decide which file to open.
+
+### Inspect the contents (optional)
+
+The tarball carries its own list of checksums for every file inside it:
+
+```bash
+tar -xzf row-template-1.2.0.tar.gz
+cd row-template-1.2.0
+sha256sum -c SHA256SUMS --quiet && echo "all files OK"
+cd ..
+```
+
+<FileTree tree={`
+row-template-1.2.0/
+├── template.html          # the Row design
+├── templates/<id>/        # all fifteen designs, each with template.html.sha256
+├── lib/row-template.sh    # the management library
+├── lib/transaction.sh     # installer component
+├── panels/                # installer components
+├── bin/row-template       # the row-template command
+├── shells/                # research files for other panels — never installed
+├── install.sh
+├── VERSION
+└── SHA256SUMS             # checksums of every file above
+`} />
+
+You can delete the extracted folder afterwards; the installer only needs the four original files.
+
+### Copy the folder to the server
+
+```bash
+scp -r row-template-1.2.0-release root@your-server:/root/
+```
+
+Any method works — `scp`, `rsync`, a USB drive. Keep the four files together in one folder.
+
+### Run the installer against the folder
+
+On the server, in a root shell:
+
+```bash
+RT_RELEASE_DIR=/root/row-template-1.2.0-release bash /root/row-template-1.2.0-release/install.sh
+```
+
+`RT_RELEASE_DIR` tells the installer to read `manifest.txt`, `SHA256SUMS` and the tarball from that folder instead of downloading them. `curl` is not needed. From here on the installation is identical to the normal one: the checksum is verified again, the archive is screened and extracted, and you get [the same questions](/docs/installation/installer/#the-questions-it-asks).
+
+To install without questions, add the same variables as an [unattended install](/docs/installation/installer/#unattended-install):
+
+```bash
+RT_ASSUME_NONINTERACTIVE=1 RT_TEMPLATE=row \
+RT_RELEASE_DIR=/root/row-template-1.2.0-release bash /root/row-template-1.2.0-release/install.sh
+```
+
+### Activate and verify
+
+If the installer could not set the panel for you, set **Panel Settings → Subscription → Sub Theme Directory** to `/etc/3x-ui/sub_templates/row-template` and save. Then:
+
+```bash
+row-template verify
+```
+
+See [Activation](/docs/installation/activation/) for details.
+
+</Steps>
+
+### Updating an offline server
+
+`row-template update` reads the same variable, so an offline server updates the same way — prepare a folder with the new release's four files, verify them, copy them over, then:
+
+```bash
+RT_RELEASE_DIR=/root/row-template-X.Y.Z-release row-template update
+```
+
+The variable applies only to the command you prefix it with; nothing is remembered.
+
+### Using your own mirror
+
+If you host the four files on your own HTTPS server, point the installer at that folder's URL instead:
+
+```bash
+RT_RELEASE_URL=https://mirror.example.com/row-template/1.2.0 bash install.sh
+```
+
+The URL must use `https://`. Plain `http://` is refused unless you also set `RT_ALLOW_INSECURE_URL=1`, which exists for local testing only.
+
+## Method B — Without the installer (advanced)
+
+It is possible to serve a design with no installer at all: the page is a single file that 3X-UI reads from the Sub Theme Directory as `sub.html`.
+
+<Callout type="warning" title="What you give up">
+  Without the installer there is **no branding** (the page stays unbranded), **no `row-template` command**, and so no `verify`, `update`, `rollback` or template switching. The installer's safety checks do not run either. Use Method A unless you have a reason not to.
+</Callout>
+
+<Steps>
+
+### Download, verify and extract
+
+Follow Method A up to and including [Inspect the contents](#inspect-the-contents-optional). Stay in the extracted `row-template-1.2.0` folder.
+
+### Check the design you want
+
+Every design carries its own checksum. For example, for Editorial:
+
+```bash
+sha256sum -c templates/editorial/template.html.sha256
+```
+
+```text
+templates/editorial/template.html: OK
+```
+
+The design IDs are listed in the [template gallery](/docs/templates/choosing/#compare-them).
+
+### Copy it into place
+
+```bash
+install -d -m 755 /etc/3x-ui/sub_templates/row-template
+install -m 644 templates/editorial/template.html /etc/3x-ui/sub_templates/row-template/sub.html
+```
+
+### Point the panel at it
+
+In the panel, set **Panel Settings → Subscription → Sub Theme Directory** to `/etc/3x-ui/sub_templates/row-template` and save. Open a subscription link in a browser to confirm.
+
+</Steps>
+
+To move to a managed installation later, run the installer normally. The folder has no `VERSION` file, so it is treated as a fresh install and `sub.html` is replaced by the installer's own.

@@ -1,0 +1,78 @@
+---
+title: Activation
+description: How Row-Template becomes the page your subscribers see — the one panel setting involved, setting it automatically or by hand, and confirming it worked.
+---
+
+Installing Row-Template puts the page on disk. **Activation** tells 3X-UI to serve it. It is one panel setting — the subscription theme directory, stored as `subThemeDir` — set to:
+
+```text
+/etc/3x-ui/sub_templates/row-template
+```
+
+3X-UI then serves `sub.html` from that directory to browsers that open a subscription link, filling in each subscriber's own data. VPN apps that fetch the same link keep receiving normal subscription content.
+
+## Automatic activation
+
+When `sqlite3` is installed and the panel database is found (see [Requirements](/docs/requirements/#where-the-panel-database-is-found)), the installer can set `subThemeDir` itself. It:
+
+1. stops the `x-ui` service if it is running, so the panel cannot write an old value back over the change;
+2. writes `subThemeDir` in the panel database — nothing else;
+3. starts the service again, if it was running;
+4. reads the value back and only reports success if it matches.
+
+On an interactive install it shows the current value and asks first: `Make Row-Template the active 3X-UI subscription theme now? [Y/n]`. An unattended install does it without asking. Your panel is unavailable for the few seconds between stop and start.
+
+If any step fails, the installer makes sure the service is running again and prints the manual step instead.
+
+## Manual activation
+
+Without `sqlite3` — or if you prefer to do it yourself:
+
+<Steps>
+
+### Open the subscription settings
+
+In the 3X-UI web panel, open **Panel Settings → Subscription**.
+
+### Set the Sub Theme Directory
+
+Enter exactly this absolute path in **Sub Theme Directory** — no trailing slash, no spaces:
+
+```text
+/etc/3x-ui/sub_templates/row-template
+```
+
+### Save
+
+Save the settings, then restart the panel so it picks up the new directory — from the panel itself, or with `systemctl restart x-ui`.
+
+</Steps>
+
+## Activating later
+
+The interactive manager can check and set it at any time: run `row-template`, then choose **5 — Activate / Re-apply theme**. It shows the current value, asks before changing it, and runs the live checks afterwards.
+
+## Confirm it works
+
+Open any client's subscription link in a browser. You should see the Row-Template page, not the panel's built-in one. Then run:
+
+```bash
+row-template verify
+```
+
+Among its checks:
+
+| Line | Meaning |
+|---|---|
+| `ok   Panel subThemeDir points at Row-Template.` | Activation is in place. |
+| `warn panel subThemeDir is empty; set it to …` | Not activated yet — use one of the methods above. |
+| `warn panel subThemeDir does not point at Row-Template.` | The panel serves another theme directory. |
+| `ok   Live render check: a browser receives Row-Template.` | A real request returned the page. |
+| `warn live render check: the panel served its built-in page.` | The setting is not active yet — restart the panel, or check the path. |
+| `ok   VPN-client check: normal subscription content is served.` | VPN apps are unaffected. |
+
+The `subThemeDir` and live checks need `sqlite3` to find a subscription to test with; without it they are skipped, not failed. [All verify checks →](/docs/management/verify/)
+
+## Deactivating
+
+Clear **Sub Theme Directory** in the panel and save: 3X-UI goes back to its built-in page, and Row-Template stays installed. `row-template uninstall` clears it for you — but only when it still points at Row-Template.

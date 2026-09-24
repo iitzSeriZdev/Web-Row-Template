@@ -1,0 +1,23 @@
+---
+// Every template, as a card linking to its page.
+import { TEMPLATES, TEMPLATE_META, valueLabel } from "../lib/templates";
+import { docHref, withBase } from "../lib/i18n";
+import { localeOf } from "../lib/pages";
+const locale = localeOf(Astro.url);
+---
+<div class="gallery">
+  {TEMPLATES.map((tpl) => (
+    <a class="tpl-card" href={docHref(locale, `templates/${tpl.id}`)}>
+      <div class="thumb">
+        <img src={withBase(`/previews/${tpl.id}-mobile.webp`)} alt="" width="390" height="844" loading="lazy" decoding="async" />
+      </div>
+      <div class="meta">
+        <span class="name">
+          {tpl.name}
+          {tpl.id === TEMPLATE_META.default && <span class="badge solid">{locale === "fa" ? "پیش‌فرض" : "Default"}</span>}
+        </span>
+        <span class="attrs">{valueLabel(tpl.family, locale)} · {valueLabel(tpl.density, locale)} · {valueLabel(tpl.radius, locale)}</span>
+      </div>
+    </a>
+  ))}
+</div>

@@ -1,0 +1,50 @@
+---
+title: Contributing
+description: Report a bug, improve a translation, work on Row-Template itself, or improve this documentation site.
+---
+
+Bug reports, translations and documentation fixes are all welcome. Please read [`CONTRIBUTING.md`](https://github.com/iitzSeriZdev/Row-Template/blob/main/CONTRIBUTING.md) and follow the [Code of Conduct](https://github.com/iitzSeriZdev/Row-Template/blob/main/CODE_OF_CONDUCT.md).
+
+## Reporting a bug
+
+Open an issue at [github.com/iitzSeriZdev/Row-Template/issues](https://github.com/iitzSeriZdev/Row-Template/issues) and include:
+
+- `row-template version` and `row-template verify` output;
+- the operating system, its version and the CPU architecture;
+- clear steps to reproduce, what you expected and what happened.
+
+**Never include secrets** — subscription links, `subId` values, client UUIDs, panel credentials, cookies, tokens, `webBasePath`, TLS keys or real server addresses. Security problems go through [private reporting](/docs/reference/security/#reporting-a-vulnerability), not issues.
+
+## Working on Row-Template
+
+You need Node.js 22 or newer, and Go 1.22 or newer to run the tests.
+
+```bash
+git clone https://github.com/iitzSeriZdev/Row-Template
+cd Row-Template
+npm run build          # regenerate template/index.html from src/
+npm run verify         # check the built page against the safety gates
+npm test               # render every design's fixture pages, then run every suite
+npm run lint:sh        # ShellCheck every shell script
+npm run preview        # preview the fixture pages at http://127.0.0.1:8787
+```
+
+The page is built from readable sources in `src/`; each design lives in `src/templates/<id>/`. The build is deterministic, and `npm run verify` rejects any page that loads something remote or carries a forbidden construct.
+
+## Improving this site
+
+This documentation lives in its own repository, [iitzSeriZdev/Web-Row-Template](https://github.com/iitzSeriZdev/Web-Row-Template). Every page has an **Edit this page on GitHub** link at the bottom.
+
+```bash
+git clone https://github.com/iitzSeriZdev/Web-Row-Template
+cd Web-Row-Template
+npm install
+npm run dev            # http://localhost:4321/Web-Row-Template/
+```
+
+- Pages are MDX files in `src/content/docs/en/` and `src/content/docs/fa/`, one per language with the same path.
+- The template catalogue, the screenshots and the live previews are **copied from Row-Template**, never edited here. To refresh them, render the fixtures in a Row-Template checkout (`npm run fixtures:all`) and run `npm run sync -- ../Row-Template`.
+- The same sync records every error and warning the installer can print. `npm run check` fails if one of them is missing from the [error reference](/docs/help/errors/) or if the reference lists one the installer no longer prints — so a new installer message cannot go undocumented.
+- `npm run build` builds the site and its search index into `dist/`.
+
+When you change a page, change it in both languages. Every command, path and message must stay exactly as the installer prints it.

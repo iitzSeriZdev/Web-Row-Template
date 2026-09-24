@@ -1,0 +1,71 @@
+---
+import Icon from "./Icon.astro";
+import Sidebar from "./Sidebar.astro";
+import { t, docHref, homeHref, switchLocale, LOCALE_META, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+  section?: "home" | "docs" | "templates" | "errors" | "changelog";
+  current?: string;
+  alternate?: string;
+}
+const { locale, section, current, alternate } = Astro.props;
+const s = t(locale);
+const other: Locale = locale === "fa" ? "en" : "fa";
+const links = [
+  { key: "docs", href: docHref(locale, ""), label: s.docs },
+  { key: "templates", href: docHref(locale, "templates"), label: s.templates },
+  { key: "errors", href: docHref(locale, "help/errors"), label: s.errors },
+  { key: "changelog", href: docHref(locale, "reference/changelog"), label: s.changelog },
+];
+const repo = "https://github.com/iitzSeriZdev/Row-Template";
+---
+<header class="site-header">
+  <div class="container">
+    <button class="btn btn-ghost btn-icon menu-trigger" type="button" aria-controls="mobile-nav" aria-expanded="false" data-menu-toggle>
+      <Icon name="menu" class="when-closed" />
+      <Icon name="x" class="when-open" />
+      <span class="sr-only">{s.toggleMenu}</span>
+    </button>
+    <a class="brand" href={homeHref(locale)}>
+      <span class="brand-mark"><Icon name="rows-3" /></span>
+      <span>Row-Template</span>
+    </a>
+    <nav class="main-nav" aria-label="Main">
+      {links.map((l) => (
+        <a href={l.href} aria-current={section === l.key ? "page" : undefined}>{l.label}</a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" type="button" data-search-open aria-haspopup="dialog">
+        <Icon name="search" />
+        <span class="label">{s.searchPlaceholder}</span>
+        <kbd><span data-mod>Ctrl</span> K</kbd>
+        <span class="sr-only">{s.searchShort}</span>
+      </button>
+      <a class="btn btn-ghost btn-icon" href={repo} target="_blank" rel="noreferrer">
+        <Icon name="github" />
+        <span class="sr-only">{s.github}</span>
+      </a>
+      <a class="btn btn-ghost btn-icon lang-switch" href={alternate ?? switchLocale(Astro.url.pathname, other)} hreflang={other} lang={other} data-lang-switch title={LOCALE_META[other].label}>
+        <span aria-hidden="true">{LOCALE_META[other].short}</span>
+        <span class="sr-only">{s.language}: {LOCALE_META[other].label}</span>
+      </a>
+      <button class="btn btn-ghost btn-icon" type="button" data-theme-toggle>
+        <Icon name="sun" class="when-dark" />
+        <Icon name="moon" class="when-light" />
+        <span class="sr-only">{s.toggleTheme}</span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="mobile-nav" id="mobile-nav" hidden>
+  <nav class="main-links" aria-label="Main">
+    {links.map((l) => (
+      <a href={l.href} aria-current={section === l.key ? "page" : undefined}>{l.label}</a>
+    ))}
+  </nav>
+  <div class="sidebar-mobile">
+    <Sidebar locale={locale} current={current} />
+  </div>
+</div>

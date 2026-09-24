@@ -1,0 +1,76 @@
+---
+title: Quick Start
+description: Install Row-Template on a 3X-UI server, make it the active subscription page, and confirm it works — in three steps.
+---
+
+This page is the short path. Every step links to the full explanation if you want it.
+
+<Steps>
+
+### Become root on the panel's server
+
+Log in to the server that runs your 3X-UI panel and open a root shell:
+
+```bash
+sudo -i
+```
+
+<Callout type="warning">
+  Use a real root shell. `sudo bash <(curl …)` does not work: `sudo` closes the file descriptor that `<(…)` creates, so bash cannot read the script.
+</Callout>
+
+Check the panel version — it must be **3.6.0 or newer**:
+
+```bash
+/usr/local/x-ui/x-ui -v
+```
+
+See [Requirements](/docs/requirements/) for everything the installer needs.
+
+### Run the installer
+
+```bash
+bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
+```
+
+The installer verifies the download, then asks you a few questions:
+
+- **Continue installation?** — press Enter.
+- **Choose your Row-Template design** — type a number, or press Enter for Row. You can [preview every design](/docs/templates/) first.
+- **Service name, support URL, logo** — all optional. Press Enter to skip any of them.
+- **Install with these settings?** — press Enter.
+- **Make Row-Template the active 3X-UI subscription theme now?** — press Enter.
+
+The last question only appears when `sqlite3` is installed and the panel's database was found. Otherwise you set one field in the panel yourself — see the next step. [The installer, prompt by prompt →](/docs/installation/installer/)
+
+### Activate and verify
+
+If the installer activated Row-Template for you, skip to `verify`. Otherwise, in the 3X-UI panel open **Panel Settings → Subscription**, set **Sub Theme Directory** to exactly this path, and save:
+
+```text
+/etc/3x-ui/sub_templates/row-template
+```
+
+Then check the whole installation:
+
+```bash
+row-template verify
+```
+
+Open any client's subscription link in a browser. You should see the Row-Template page instead of the panel's built-in one. [More on activation →](/docs/installation/activation/)
+
+</Steps>
+
+## Next steps
+
+<Cards>
+  <Card title="Branding" href="/docs/configuration/branding/" icon="palette">
+    Change your service name, support link and logo at any time.
+  </Card>
+  <Card title="Switch design" href="/docs/templates/choosing/" icon="panels-top-left">
+    Compare the fifteen designs and switch safely.
+  </Card>
+  <Card title="The manager" href="/docs/management/manager/" icon="terminal">
+    Run `row-template` for an interactive menu.
+  </Card>
+</Cards>
