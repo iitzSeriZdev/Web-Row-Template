@@ -1,0 +1,89 @@
+---
+import Base from "./Base.astro";
+import Sidebar from "../components/Sidebar.astro";
+import Toc from "../components/Toc.astro";
+import Icon from "../components/Icon.astro";
+import { ORDER, groupOf } from "../lib/nav";
+import { t, docHref, type Locale } from "../lib/i18n";
+import { pages } from "../lib/pages";
+
+interface Props {
+  locale: Locale;
+  slug: string;
+  title: string;
+  description: string;
+  headings?: { depth: number; slug: string; text: string }[];
+  editPath?: string;
+  wide?: boolean;
+}
+const { locale, slug, title, description, headings = [], editPath, wide } = Astro.props;
+const s = t(locale);
+const info = await pages(locale);
+const order = ORDER.filter((x) => info.has(x));
+const at = order.indexOf(slug);
+const prev = at > 0 ? info.get(order[at - 1]) : undefined;
+const next = at >= 0 && at < order.length - 1 ? info.get(order[at + 1]) : undefined;
+const group = groupOf(slug);
+const section =
+  slug === "help/errors" ? "errors" :
+  slug === "reference/changelog" ? "changelog" :
+  slug.startsWith("templates") ? "templates" : "docs";
+const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const hasToc = !wide && tocItems.length > 1;
+---
+<Base locale={locale} title={title} description={description} section={section} current={slug}>
+  <div class="container docs-shell">
+    <aside class="sidebar">
+      <Sidebar locale={locale} current={slug} />
+    </aside>
+    <main id="content" class:list={["docs-main", { "has-toc": hasToc, wide }]}>
+      <article class="article" data-pagefind-body>
+        <div class="page-head">
+          <div>
+            {group && <p class="page-kicker" data-pagefind-ignore>{group.label[locale]}</p>}
+            <h1 class="page-title">{title}</h1>
+            <p class="page-desc">{description}</p>
+          </div>
+          <div class="page-arrows" data-pagefind-ignore>
+            {prev && (
+              <a class="btn btn-outline" href={docHref(locale, prev.slug)} title={prev.label} aria-label={`${s.previous}: ${prev.label}`}>
+                <Icon name="arrow-left" class="flip-rtl" />
+              </a>
+            )}
+            {next && (
+              <a class="btn btn-outline" href={docHref(locale, next.slug)} title={next.label} aria-label={`${s.next}: ${next.label}`}>
+                <Icon name="arrow-right" class="flip-rtl" />
+              </a>
+            )}
+          </div>
+        </div>
+        <div class="prose">
+          <slot />
+        </div>
+        <nav class="pager" aria-label={`${s.previous} / ${s.next}`} data-pagefind-ignore>
+          {prev && (
+            <a class="prev" href={docHref(locale, prev.slug)}>
+              <small><Icon name="chevron-left" class="flip-rtl" />{s.previous}</small>
+              <span>{prev.label}</span>
+            </a>
+          )}
+          {next && (
+            <a class="next" href={docHref(locale, next.slug)}>
+              <small>{s.next}<Icon name="chevron-right" class="flip-rtl" /></small>
+              <span>{next.label}</span>
+            </a>
+          )}
+        </nav>
+        <div class="page-foot" data-pagefind-ignore>
+          {editPath && (
+            <a href={`https://github.com/iitzSeriZdev/Web-Row-Template/blob/main/${editPath}`} target="_blank" rel="noreferrer">
+              <Icon name="square-pen" />{s.editPage}
+            </a>
+          )}
+          <span>{s.appliesTo}</span>
+        </div>
+      </article>
+      {hasToc && <Toc locale={locale} headings={headings} />}
+    </main>
+  </div>
+</Base>

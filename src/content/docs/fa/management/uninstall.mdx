@@ -1,0 +1,82 @@
+---
+title: حذف
+description: حذف Row-Template و بازگرداندن پنل به صفحهٔ داخلی خودش — چه چیزهایی حذف می‌شوند، به چه چیزهایی هرگز دست زده نمی‌شود، و پاک‌سازی دستی.
+---
+
+```bash
+row-template uninstall
+```
+
+با root. اول می‌پرسد:
+
+```text
+  Remove Row-Template from /etc/3x-ui/sub_templates/row-template and revert the panel to its built-in page? [y/N]:
+```
+
+`y` را وارد کنید. هر پاسخ دیگری عملیات را لغو می‌کند. از داخل اسکریپت، که ترمینالی برای پرسیدن ندارد، با یک متغیر تأیید کنید:
+
+```bash
+RT_ASSUME_YES=1 row-template uninstall
+```
+
+گزینهٔ **7 — Uninstall** در منوی مدیریت هم همین کار را می‌کند.
+
+## چه کارهایی انجام می‌دهد
+
+<Steps>
+
+### پنل را برمی‌گرداند — فقط اگر به Row-Template اشاره کند
+
+وقتی `sqlite3` بتواند `subThemeDir` پنل را بخواند:
+
+- اگر به Row-Template اشاره کند، پاک می‌شود (سرویس پنل متوقف، مقدار نوشته، سرویس راه‌اندازی و مقدار بررسی می‌شود) و پنل به صفحهٔ داخلی خودش برمی‌گردد؛
+- اگر به جای دیگری اشاره کند، دقیقاً همان‌طور که هست رها می‌شود.
+
+بدون `sqlite3` مقدار خوانده نمی‌شود، پس از شما خواسته می‌شود خودتان بررسی کنید:
+
+```text
+  warn could not read subThemeDir (sqlite3/DB unavailable). If it points at /etc/3x-ui/sub_templates/row-template, clear it in the panel.
+```
+
+### فایل‌های Row-Template را حذف می‌کند
+
+پوشهٔ نصب حذف می‌شود — صفحه، همهٔ طرح‌ها، برندینگ شما در `config.env`، کتابخانهٔ مدیریتی و **همهٔ پشتیبان‌ها**. پیش از حذف تأیید می‌کند که پوشه واقعاً نصب Row-Template است، و حذف مسیرهای سیستمی مثل `/etc`، `/usr/local` یا `/etc/x-ui` را قاطعانه رد می‌کند.
+
+### فرمان را حذف می‌کند
+
+`/usr/local/bin/row-template` فقط وقتی حذف می‌شود که راه‌انداز خود Row-Template باشد. فایل دیگری با همین نام هرگز حذف نمی‌شود.
+
+</Steps>
+
+```text
+  ok   Cleared subThemeDir; the panel reverts to its built-in page.
+  ok   Removed Row-Template files from /etc/3x-ui/sub_templates/row-template.
+  3x-ui, its database, inbounds, clients and certificates were left untouched.
+```
+
+## چیزهایی که هرگز دست نمی‌خورند
+
+خود 3X-UI، پایگاه‌دادهٔ آن (جز پاک کردن `subThemeDir` به شکلی که گفته شد)، اینباندها، کلاینت‌ها، کاربران، داده‌های ترافیک و گواهی‌ها.
+
+<div id="if-uninstall-cannot-run" />
+
+## اگر حذف اجرا نشود
+
+اگر فرمان `row-template` وجود ندارد یا خراب است، Row-Template را دستی حذف کنید:
+
+<Steps>
+
+### تنظیم پنل را پاک کنید
+
+در پنل، **Panel Settings → Subscription** را باز کنید، **Sub Theme Directory** را خالی کنید، ذخیره کنید و پنل را ری‌استارت کنید.
+
+### فایل‌ها را حذف کنید
+
+```bash
+rm -rf /etc/3x-ui/sub_templates/row-template
+rm -f /usr/local/bin/row-template
+```
+
+</Steps>
+
+تنظیم پنل را **اول** پاک کنید: تا وقتی به پوشه‌ای اشاره می‌کند که دیگر وجود ندارد، ممکن است مشترکانی که لینکشان را در مرورگر باز می‌کنند به‌جای صفحه خطا ببینند.

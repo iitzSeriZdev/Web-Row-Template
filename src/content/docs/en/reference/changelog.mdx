@@ -1,0 +1,53 @@
+---
+title: Changelog
+description: What changed in each Row-Template release, with the notes that matter when you upgrade.
+---
+
+The full changelog, including internal and development changes, is [`CHANGELOG.md`](https://github.com/iitzSeriZdev/Row-Template/blob/main/CHANGELOG.md) in the repository.
+
+## 1.2.0
+
+<Badge variant="solid">Latest</Badge> *Released 24 September 2026.* Row-Template becomes a collection of designs. Row stays the default, and 3X-UI 3.6.0 or newer stays the only supported panel.
+
+### Added
+
+- **Fifteen designs** — Row, Editorial, Canvas, Prism, Terminal, Pulse, Brutal, Arcade, Sketch, Signature, Saffron, Pulse Nova, Prism Nova, Terminal Nova and Arcade Nova — all built from the same runtime and translations. [See them →](/docs/templates/)
+- **Choosing a design:** a chooser on fresh interactive installs, `RT_TEMPLATE` for unattended ones, and **Reconfigure branding → Template** in the manager. Updates keep the choice.
+- **Checksummed designs:** each design ships with its own SHA-256, and `verify` checks all of them and confirms the live page is the selected design.
+- **Painted flags** for Germany, France, the Netherlands, Japan, Sweden and the United States, so they show on Windows too.
+- **Panel shells for research** (PasarGuard, Rebecca) packaged under `shells/`. The installer does not install them.
+
+### Changed
+
+- **Panel database detection fails closed:** the first database file found is used only if it is a real SQLite database; otherwise it is refused instead of silently trying another.
+- **Live refresh accepts only its own data:** an unexpected response stops refreshing and keeps the server-rendered figures.
+- The release now includes the installer's companion files (`lib/transaction.sh`, `panels/`), and install and update refuse a release in which they are missing.
+
+### Upgrading
+
+<Callout type="warning" title="From 1.1.0: run the update twice">
+  The first `row-template update` is performed by 1.1.0's updater and installs only Row. The second installs every design and the remaining files. `row-template verify` tells you when the second run is needed. [Details →](/docs/management/updating/#upgrading-from-110)
+</Callout>
+
+Rolling back from 1.2.0 to a backup made by 1.1.0 is not possible with `rollback`. [Details →](/docs/management/rollback/#rolling-back-across-versions)
+
+## 1.1.0
+
+*Released 30 August 2026.* The page becomes a connection and configuration hub.
+
+- **Configuration Explorer:** every server on its own row, with a flag or monogram, the name, a protocol label, and **View** (local QR and copy) and **Copy**. Search for long lists; duplicates collapsed; malformed links isolated.
+- **Protocol labels** for VLESS, VMess, Trojan, Shadowsocks, Hysteria/Hysteria2, WireGuard, AmneziaWG and Telegram MTProto.
+- **Country badges** only from a valid country code in the configuration's own label — never guessed from a host or IP.
+- Links stay masked until **View**, are never logged, and QR codes are rendered locally.
+- Updating from 1.0.0 keeps branding and a backup for rollback.
+
+## 1.0.0
+
+*Released 30 August 2026.* First stable release.
+
+- A self-contained subscription page for 3X-UI — one HTML file with everything inlined, no external requests.
+- White-label branding: service name, support link and logo, stored as data and injected safely.
+- Five languages with right-to-left support.
+- One-command installer with mandatory SHA-256 verification, safe extraction and atomic activation.
+- The `row-template` manager: `config`, `update`, `rollback`, `verify`, `version`, `uninstall` and `help`.
+- Backups and rollback that keep your branding.

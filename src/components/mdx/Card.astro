@@ -1,0 +1,21 @@
+---
+import Icon from "../Icon.astro";
+import { withBase, DEFAULT_LOCALE } from "../../lib/i18n";
+import { localeOf } from "../../lib/pages";
+interface Props {
+  title: string;
+  href?: string;
+  icon?: string;
+}
+const { title, href, icon } = Astro.props;
+const locale = localeOf(Astro.url);
+const to = href?.startsWith("/docs")
+  ? withBase(`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}${href}`)
+  : href?.startsWith("/") ? withBase(href) : href;
+const Tag = to ? "a" : "div";
+---
+<Tag class="card" href={to}>
+  {icon && <span class="card-icon"><Icon name={icon} /></span>}
+  <p class="card-title">{title}</p>
+  <div class="card-text"><slot /></div>
+</Tag>

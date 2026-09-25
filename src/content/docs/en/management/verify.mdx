@@ -1,0 +1,107 @@
+---
+title: Verifying an Installation
+nav: Verify
+description: What row-template verify checks, how to read every line it prints, and which results are failures and which are only warnings.
+---
+
+```bash
+row-template verify
+```
+
+`verify` is **read-only** — it never changes anything, so it is always safe to run. Run it after installing, after any change, and before reporting a problem. Run it as root: as another user it cannot read `config.env` or the panel database.
+
+## Reading the result
+
+Each check prints one line:
+
+- `ok` — the check passed.
+- `warn` — worth fixing, but the page works. Warnings never fail the command.
+- `FAIL` — a hard problem. The command ends with `verification FAILED (…)` and exits with status `1`.
+- A line with no tag is information, such as a check that could not run here.
+
+The last line sums it up:
+
+```text
+  ok   verification passed with no warnings.
+  warn verification passed with 2 warning(s).
+  FAIL verification FAILED (1 hard issue(s), 2 warning(s)).
+```
+
+## Every check
+
+### Files and integrity
+
+| Result | Line | What to do |
+|---|---|---|
+| ok | `Install root present: …` | — |
+| FAIL | `install root missing or is a symlink: …` | Re-run the installer. The install directory must be a real directory. |
+| ok | `Canonical artifact integrity verified.` | — |
+| FAIL | `canonical artifact missing checksum or does not match it.` | The installed design was changed or damaged. Run `row-template update` to reinstall it. |
+| FAIL | `canonical artifact missing or unreadable: …` | Run `row-template update`, or re-run the installer. |
+| ok | `Live template is structurally valid and readable.` | — |
+| FAIL | `live template failed structural validation.` / `live template missing or unreadable: …` | Regenerate it: `row-template update`, or re-run the installer to repair. |
+| ok | `VERSION present: …` | — |
+| FAIL | `VERSION file missing or empty.` | Re-run the installer to repair. |
+
+### Designs
+
+| Result | Line | What to do |
+|---|---|---|
+| ok | `Template store verified (15 design(s)).` | — |
+| FAIL | `a template in the store does not match its checksum.` | A design file was altered. Run `row-template update` to reinstall the store. |
+| ok | `Template: …` | The selected design. |
+| ok | `Canonical artifact matches the selected template.` | — |
+| FAIL | `canonical artifact does not match the selected template (…).` | The saved choice and the installed design disagree. Run `row-template config` and press Enter at each question — it realigns the installed design with the saved choice — or run `row-template update`. |
+| FAIL | `selected template '…' is missing from the template store.` | Run `row-template update`. |
+| FAIL | `template store missing or empty; run 'row-template update' to install it.` | Normal after the first update from 1.1.0 — [run it again](/docs/management/updating/#upgrading-from-110). |
+
+### Configuration and tools
+
+| Result | Line | What to do |
+|---|---|---|
+| ok | `Config present and readable.` | — |
+| — | `No config.env (white-label defaults).` | Nothing: no branding has been set. |
+| warn | `config present but not readable.` | Run `verify` as root. |
+| warn | `config.env is other-writable (mode …); tighten to 640.` | `chmod 640 /etc/3x-ui/sub_templates/row-template/config.env` |
+| ok | `Management library present.` | — |
+| warn | `management library not found under the install root.` | Re-run the installer to repair. |
+| ok | `Installer components present.` | — |
+| warn | `installer components are missing (lib/transaction.sh, panels/), …` | Run `row-template update`. |
+| ok | `CLI present: /usr/local/bin/row-template` | — |
+| warn | `CLI not found or not executable at …` | Re-run the installer to repair. |
+
+### The panel
+
+| Result | Line | What to do |
+|---|---|---|
+| ok | `3x-ui … meets the minimum 3.6.0.` | — |
+| FAIL | `3x-ui … is below the minimum 3.6.0.` | Update 3X-UI. |
+| warn | `could not determine the 3x-ui version.` / `3x-ui installation was not detected.` | See [the error reference](/docs/help/errors/). |
+| ok | `Panel subThemeDir points at Row-Template.` | — |
+| warn | `panel subThemeDir is empty; set it to …` | [Activate](/docs/installation/activation/). |
+| warn | `panel subThemeDir does not point at Row-Template.` | [Activate](/docs/installation/activation/) — or leave it, if you deliberately use another theme. |
+| — | `subThemeDir not checked (sqlite3/DB unavailable).` | Install `sqlite3` to have it checked. |
+| warn | `leftover staging files found under the install root (possible interrupted update).` | See below. |
+
+### Live checks
+
+Where `sqlite3` can find a client's subscription to test with, `verify` requests it locally twice — once as a browser, once as a VPN app.
+
+| Result | Line | What to do |
+|---|---|---|
+| ok | `Live render check: a browser receives Row-Template.` | — |
+| warn | `live render check: the panel served its built-in page.` | The panel is not serving Row-Template yet — check activation, then restart the panel. |
+| warn | `live render check: the subscription endpoint was unreachable.` | The subscription port did not answer locally. Check the panel is running and the subscription service is enabled. |
+| — | `Live render check skipped (no test URL available).` | Nothing to fix. |
+| ok | `VPN-client check: normal subscription content is served.` | — |
+| warn | `VPN-client check: HTML was returned instead of subscription content.` | VPN apps would receive the page instead of their configuration. Check any proxy or CDN in front of the panel is not rewriting the request. |
+
+## Leftover staging files
+
+Every file Row-Template replaces is first written under a temporary name starting with `.stage.` or `.live.`, then renamed into place. If a command was interrupted — the server lost power, or the process was killed — one can be left behind. They are never used. When no `row-template` command is running, it is safe to delete them:
+
+```bash
+find /etc/3x-ui/sub_templates/row-template -maxdepth 2 \( -name '.stage.*' -o -name '.live.*' \) -print -delete
+```
+
+Then run `row-template verify` again.

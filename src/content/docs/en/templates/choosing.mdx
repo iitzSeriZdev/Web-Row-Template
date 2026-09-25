@@ -1,0 +1,107 @@
+---
+title: Choosing a Template
+nav: Choosing & Switching
+description: Compare the fifteen designs by layout, density and shape, then set one at install time or switch to it later — safely, with automatic restore.
+---
+
+Because every design has the same features, choosing one is purely a matter of look and fit: how dense your subscribers like their information, how much they read on phones versus desktops, and what suits your brand.
+
+## Compare them
+
+<TemplateTable />
+
+What the columns mean:
+
+| Attribute | What it describes |
+|---|---|
+| **Layout** | The overall structure — one column, a narrow column, a wide board, a dashboard, a console, and so on. |
+| **Composition** | What leads the page: type, cards, status, a document, a grid. |
+| **Density** | How much fits on one screen, from *spacious* to *dense*. |
+| **Grouping** | How sections are separated: rules, cards, panels, bands, whitespace. |
+| **Corners** | *Square* or *soft* (rounded) corners. |
+| **Line length** | How wide text runs before it wraps. |
+
+## Set the design while installing
+
+An interactive install shows the design chooser on a **fresh** install:
+
+```text
+Choose your Row-Template design
+  1  Row
+  2  Editorial
+  …
+  15  Arcade Nova
+  Select [1-15, Enter=Row]:
+```
+
+For an unattended install, give the ID instead:
+
+```bash
+RT_ASSUME_NONINTERACTIVE=1 RT_TEMPLATE=terminal \
+bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
+```
+
+An unknown ID stops the install with the list of valid ones, rather than silently falling back to Row.
+
+## Switch an existing install
+
+<Steps>
+
+### Open the manager
+
+```bash
+row-template
+```
+
+### Choose Reconfigure branding, then Template
+
+Pick **2 — Reconfigure branding**, then **4 — Template**. The manager shows the current design and lists every design installed in the template store.
+
+### Pick and confirm
+
+Enter the number of the new design and confirm `Switch the template to …? [y/N]`.
+
+</Steps>
+
+On success you see:
+
+```text
+  ok   Template changed successfully
+  Previous        Row
+  Current         Editorial
+  Verification    Passed
+```
+
+### What a switch does
+
+The switch is a single transaction:
+
+1. The new design's checksum is verified against the template store.
+2. A trial page is generated from it **with your current branding** — if that fails, nothing has changed yet.
+3. A backup of the current state is taken.
+4. The design is staged, your choice is saved, and the live page is regenerated and validated.
+5. If any step after the backup fails, the backup is restored automatically and you are told what happened.
+
+Your branding is untouched by a switch: it belongs to you, not to the design.
+
+## Updates keep your choice
+
+`row-template update` installs the new release's copy of **your** design. If a future release no longer ships it, the update falls back to Row and says so:
+
+```text
+  warn template 'xyz' is not in this release; falling back to Row.
+```
+
+## Check which design is live
+
+```bash
+row-template verify
+```
+
+```text
+  ok   Template store verified (15 design(s)).
+  ok   Template: Editorial
+  ok   Canonical artifact matches the selected template.
+```
+
+The **Installation info** screen in the manager (option **6**) shows the current design as well.

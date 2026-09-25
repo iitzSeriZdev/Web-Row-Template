@@ -1,0 +1,76 @@
+---
+title: شروع سریع
+description: Row-Template را روی سرور 3X-UI نصب کنید، آن را صفحهٔ فعال اشتراک کنید و درستی کارش را بررسی کنید — در سه مرحله.
+---
+
+این صفحه کوتاه‌ترین مسیر است. هر مرحله به توضیح کامل آن پیوند دارد.
+
+<Steps>
+
+### روی سرور پنل root شوید
+
+وارد سروری شوید که پنل 3X-UI روی آن اجرا می‌شود و یک پوستهٔ root باز کنید:
+
+```bash
+sudo -i
+```
+
+<Callout type="warning">
+  از پوستهٔ واقعی root استفاده کنید. `sudo bash <(curl …)` کار نمی‌کند: `sudo` توصیف‌گر فایلی را که `<(…)` می‌سازد می‌بندد و bash نمی‌تواند اسکریپت را بخواند.
+</Callout>
+
+نسخهٔ پنل را بررسی کنید — باید **3.6.0 یا جدیدتر** باشد:
+
+```bash
+/usr/local/x-ui/x-ui -v
+```
+
+برای همهٔ پیش‌نیازها [پیش‌نیازها](/docs/requirements/) را ببینید.
+
+### نصب‌کننده را اجرا کنید
+
+```bash
+bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
+```
+
+نصب‌کننده دانلود را بررسی می‌کند و بعد چند سؤال می‌پرسد:
+
+- **Continue installation?** — Enter بزنید.
+- **Choose your Row-Template design** — یک شماره وارد کنید، یا برای Row کلید Enter را بزنید. می‌توانید اول [همهٔ طرح‌ها را ببینید](/docs/templates/).
+- **Service name، Support URL و Logo** — همه اختیاری‌اند. برای رد شدن از هر کدام Enter بزنید.
+- **Install with these settings?** — Enter بزنید.
+- **Make Row-Template the active 3X-UI subscription theme now?** — Enter بزنید.
+
+سؤال آخر فقط وقتی نمایش داده می‌شود که `sqlite3` نصب باشد و پایگاه‌دادهٔ پنل پیدا شود. در غیر این صورت یک فیلد را خودتان در پنل تنظیم می‌کنید — مرحلهٔ بعد را ببینید. [نصب‌کننده، سؤال به سؤال ←](/docs/installation/installer/)
+
+### فعال کنید و بررسی کنید
+
+اگر نصب‌کننده Row-Template را برایتان فعال کرده، مستقیم سراغ `verify` بروید. در غیر این صورت، در پنل 3X-UI بخش **Panel Settings → Subscription** را باز کنید، **Sub Theme Directory** را دقیقاً روی این مسیر بگذارید و ذخیره کنید:
+
+```text
+/etc/3x-ui/sub_templates/row-template
+```
+
+سپس کل نصب را بررسی کنید:
+
+```bash
+row-template verify
+```
+
+لینک اشتراک یکی از کلاینت‌ها را در مرورگر باز کنید. باید به‌جای صفحهٔ داخلی پنل، صفحهٔ Row-Template را ببینید. [بیشتر دربارهٔ فعال‌سازی ←](/docs/installation/activation/)
+
+</Steps>
+
+## قدم‌های بعدی
+
+<Cards>
+  <Card title="برندینگ" href="/docs/configuration/branding/" icon="palette">
+    نام سرویس، لینک پشتیبانی و لوگو را هر وقت خواستید تغییر دهید.
+  </Card>
+  <Card title="تعویض طرح" href="/docs/templates/choosing/" icon="panels-top-left">
+    پانزده طرح را مقایسه کنید و با خیال راحت تعویض کنید.
+  </Card>
+  <Card title="منوی مدیریت" href="/docs/management/manager/" icon="terminal">
+    با اجرای `row-template` منوی تعاملی را باز کنید.
+  </Card>
+</Cards>

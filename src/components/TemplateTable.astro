@@ -1,0 +1,28 @@
+---
+// The catalogue as a comparison table.
+import { TEMPLATES, ATTRIBUTE_KEYS, attrLabel, valueLabel } from "../lib/templates";
+import { docHref } from "../lib/i18n";
+import { localeOf } from "../lib/pages";
+const locale = localeOf(Astro.url);
+const keys = ATTRIBUTE_KEYS;
+---
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>{locale === "fa" ? "تمپلیت" : "Template"}</th>
+        <th>ID</th>
+        {keys.map((k) => <th>{attrLabel(k, locale)}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {TEMPLATES.map((tpl) => (
+        <tr>
+          <td><a href={docHref(locale, `templates/${tpl.id}`)}>{tpl.name}</a></td>
+          <td><code>{tpl.id}</code></td>
+          {keys.map((k) => <td>{valueLabel((tpl as any)[k], locale)}</td>)}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

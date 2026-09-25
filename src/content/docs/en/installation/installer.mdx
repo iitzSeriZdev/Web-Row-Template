@@ -1,0 +1,124 @@
+---
+title: Install with the Installer
+nav: With the Installer
+description: The one-command installer — what it does, every question it asks, and how to run it unattended.
+---
+
+The installer is a small bootstrap script published with every release. It downloads the release, proves it is intact, and hands the installation to Row-Template's own management library, which does the rest as one transaction.
+
+## Run it
+
+As root, on the server that runs 3X-UI:
+
+```bash
+bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
+```
+
+`releases/latest/download` always resolves to the newest **stable** release (never a draft or pre-release), over HTTPS, with no token.
+
+<Callout type="warning" title="Run it from a root shell">
+  Open one with `sudo -i` first. `sudo bash <(curl …)` fails because `sudo` closes the file descriptor that `<(…)` hands to bash.
+</Callout>
+
+## What happens, in order
+
+<Steps>
+
+### The bootstrap checks and downloads
+
+It refuses to run unless it is root, and unless `tar` and `sha256sum` (or `shasum`) are present. It then downloads `manifest.txt`, `SHA256SUMS` and the release tarball named in the manifest.
+
+### The checksum is verified — always
+
+The tarball's SHA-256 must match the value in `SHA256SUMS`. There is no option, flag or environment variable that skips this. On a mismatch the installer stops before anything is extracted.
+
+### The archive is screened, then extracted
+
+Every entry is checked before extraction: absolute paths, `..` traversal, symlinks, hard links and special files are refused. Extraction never keeps the archive's owners or permissions.
+
+### The library takes over
+
+The extracted management library re-checks the payload (the page's checksum, its structure, and that every installer file it declares is present), then looks for 3X-UI and **refuses to continue below version 3.6.0** or when the version cannot be read.
+
+### Files are installed
+
+The install tree is created at `/etc/3x-ui/sub_templates/row-template`. The page, `VERSION`, the management library and its components are installed there, and the `row-template` command at `/usr/local/bin/row-template`. Every file is written to a temporary name and renamed into place, so nothing is ever half-written.
+
+### Every design is verified
+
+All fifteen designs are copied into the install's template store, each one checked against its own checksum and validated first.
+
+### You choose a design and your branding
+
+On a first, interactive install you get the design chooser and the branding questions (below). A repair keeps your existing configuration.
+
+### The page is generated and swapped in
+
+The live page `sub.html` is generated from the chosen design and your branding, validated, and only then moved into place.
+
+### The panel is pointed at it
+
+When `sqlite3` is available, the installer can set the panel's `subThemeDir` for you (it asks first on an interactive install). Otherwise it prints the one manual step. See [Activation](/docs/installation/activation/).
+
+### A live check runs
+
+Finally, when it can find a subscription to test with (this needs `sqlite3` and the panel database), it requests your subscription endpoint as a browser would and as a VPN app would, and reports what each received.
+
+</Steps>
+
+## The questions it asks
+
+An interactive install — a terminal on both ends — asks these in order. Every default is safe: pressing Enter all the way through gives you Row, no branding, and automatic activation where possible.
+
+| Prompt | What to enter |
+|---|---|
+| `Continue installation? [Y/n]` | Enter to continue. Shown with the 3X-UI version it detected. |
+| `Choose your Row-Template design` then `Select [1-15, Enter=Row]` | A number from the list, or Enter for Row. [Preview the designs](/docs/templates/). |
+| `Service name (Enter to keep, - to clear)` | The name your subscribers should see, up to 120 characters. Empty is fine: the page stays unbranded. |
+| `Support URL, optional (Enter to keep, - to clear)` | A link starting with `https://`, `http://`, `tg://` or `mailto:`. Anything else is refused and asked again. |
+| `Logo file [none] (Enter to keep, - to remove, or a path)` | Path to a PNG, JPEG or WebP file of at most 256 KiB, or Enter for the generated monogram. |
+| `Install with these settings? [Y/n]` | Enter to install. Answer `n` to go back and change the branding. |
+| `Make Row-Template the active 3X-UI subscription theme now? [Y/n]` | Enter to let the installer set `subThemeDir`. Only shown when `sqlite3` and the panel database are available. |
+
+After you enter a service name, the installer shows a **monogram preview** — the letters used in place of a logo — for plain Latin names. For other scripts it notes that the browser computes the monogram.
+
+When it finishes you get a summary: service, version, template, install directory, and whether the theme is **Active** or needs **manual activation**.
+
+## Running it again
+
+Running the installer on a server that already has Row-Template does not reinstall blindly. Interactively, it offers:
+
+```text
+  1  Open the manager
+  2  Reconfigure branding
+  3  Update
+  4  Repair / Verify
+  0  Exit
+```
+
+**Repair** re-installs the release's files in place. A backup of the current install is taken first, and your branding and design are kept.
+
+Without a terminal on standard input (for example from a script), an existing install is only repaired when you say so explicitly:
+
+```bash
+RT_ASSUME_YES=1 bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
+```
+
+## Unattended install
+
+For provisioning scripts, give every answer through the environment. `RT_ASSUME_NONINTERACTIVE=1` turns off all prompts; the panel is then activated automatically when `sqlite3` is available.
+
+```bash
+RT_ASSUME_NONINTERACTIVE=1 \
+RT_TEMPLATE=editorial \
+RT_SERVICE_NAME="Aurora VPN" \
+RT_SUPPORT_URL="https://t.me/aurora_support" \
+RT_LOGO_PATH=/root/aurora-logo.png \
+bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
+```
+
+An invalid value stops the install before the panel is changed. Every variable is described in [Environment variables](/docs/installation/environment/).
+
+## If something goes wrong
+
+The installer stops at the first problem and says what it was. Nothing is activated until the new page has been generated and validated, so a failed run never leaves a broken page live. Look the message up in the [error reference](/docs/help/errors/).

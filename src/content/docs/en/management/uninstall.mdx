@@ -1,0 +1,80 @@
+---
+title: Uninstalling
+description: Remove Row-Template and return the panel to its built-in page — what is removed, what is never touched, and how to clean up by hand.
+---
+
+```bash
+row-template uninstall
+```
+
+As root. It asks first:
+
+```text
+  Remove Row-Template from /etc/3x-ui/sub_templates/row-template and revert the panel to its built-in page? [y/N]:
+```
+
+Answer `y`. Anything else cancels. From a script, where there is no terminal to ask, confirm with a variable instead:
+
+```bash
+RT_ASSUME_YES=1 row-template uninstall
+```
+
+The manager's **7 — Uninstall** does the same.
+
+## What it does
+
+<Steps>
+
+### Reverts the panel — only if it points at Row-Template
+
+When `sqlite3` can read the panel's `subThemeDir`:
+
+- if it points at Row-Template, it is cleared (the panel service is stopped, the value written, the service started, the value checked), and the panel returns to its built-in page;
+- if it points somewhere else, it is left exactly as it is.
+
+Without `sqlite3`, the value cannot be read, so you are asked to check it yourself:
+
+```text
+  warn could not read subThemeDir (sqlite3/DB unavailable). If it points at /etc/3x-ui/sub_templates/row-template, clear it in the panel.
+```
+
+### Removes Row-Template's files
+
+The install directory is deleted — the page, every design, your branding in `config.env`, the management library and **all backups**. Before deleting, it confirms the directory really is a Row-Template installation, and it refuses outright to delete system paths such as `/etc`, `/usr/local` or `/etc/x-ui`.
+
+### Removes the command
+
+`/usr/local/bin/row-template` is removed only if it is Row-Template's own launcher. A different file with the same name is never deleted.
+
+</Steps>
+
+```text
+  ok   Cleared subThemeDir; the panel reverts to its built-in page.
+  ok   Removed Row-Template files from /etc/3x-ui/sub_templates/row-template.
+  3x-ui, its database, inbounds, clients and certificates were left untouched.
+```
+
+## What is never touched
+
+3X-UI itself, its database (apart from clearing `subThemeDir` as above), inbounds, clients, users, traffic data and certificates.
+
+## If uninstall cannot run
+
+If the `row-template` command is missing or broken, remove Row-Template by hand:
+
+<Steps>
+
+### Clear the panel setting
+
+In the panel, open **Panel Settings → Subscription**, empty **Sub Theme Directory**, save, and restart the panel.
+
+### Delete the files
+
+```bash
+rm -rf /etc/3x-ui/sub_templates/row-template
+rm -f /usr/local/bin/row-template
+```
+
+</Steps>
+
+Clear the panel setting **first**: while it points at a directory that no longer exists, subscribers opening their link in a browser may get an error instead of a page.

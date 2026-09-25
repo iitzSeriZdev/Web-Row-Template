@@ -1,0 +1,22 @@
+---
+title: Error Reference
+nav: Error Reference
+description: Every error and warning the Row-Template 1.2.0 installer and row-template command can print — what it means, why it happens, and how to fix it.
+---
+
+This page lists **every** message the installer and the `row-template` command print as an error or a warning, taken from the 1.2.0 source. Paste part of a message into the filter to find it; names, paths and numbers that change from run to run are shown in *italics*.
+
+Messages look like this in your terminal:
+
+| Prefix | Printed by | Meaning |
+|---|---|---|
+| `install:` | the bootstrap, `install.sh`, before the library is loaded | The download or its verification stopped. Nothing was installed. |
+| `FAIL` | the management library | An operation stopped, or `verify` found a hard problem. |
+| `warn` | the management library | Worth your attention; the operation continued. |
+| `row-template:` | the command launcher | The command could not load its library. |
+
+<Callout type="warning" title="Refusals are safety checks">
+  Many of these messages are Row-Template **refusing** something unsafe on purpose. Fix the cause the message names — never work around it. When an operation stops, the page your subscribers see stays as it was unless the message says otherwise.
+</Callout>
+
+<ErrorReference />

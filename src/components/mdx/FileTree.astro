@@ -1,0 +1,9 @@
+---
+// A directory listing. Text after "#" on a line is shown as a note.
+interface Props { tree: string }
+const lines = Astro.props.tree.replace(/^\n+|\s+$/g, "").split("\n");
+---
+<div class="file-tree" role="figure">{lines.map((line) => {
+  const at = line.indexOf("#");
+  return at < 0 ? <div>{line}</div> : <div>{line.slice(0, at)}<span class="note">{line.slice(at)}</span></div>;
+})}</div>

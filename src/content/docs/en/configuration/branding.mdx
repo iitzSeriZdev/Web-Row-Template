@@ -1,0 +1,101 @@
+---
+title: Branding
+description: Put your service name, support link and logo on the page — interactively, from the manager, or from a script — and how Row-Template keeps that input safe.
+---
+
+Row-Template is **white-label by default**: nothing on the served page names Row-Template. You can add three things of your own, all optional.
+
+| Field | Rules | Where it shows |
+|---|---|---|
+| **Service name** | Up to 120 characters. No control characters (such as line breaks). | Where the design shows its brand. Leave it empty for an unbranded page. |
+| **Support link** | Must start with `https://`, `http://`, `tg://` or `mailto:`. | As the page's support / contact action. |
+| **Logo** | PNG, JPEG or WebP, at most **256 KiB**, recognised by the file's **content**, not its extension. Symlinks are refused. | In place of the generated monogram. |
+
+With no logo, the page shows a **monogram** built from the service name — for example `Katze-VPN` gives `K-V`. The installer previews it for Latin names; for other scripts the browser computes it.
+
+## Change branding
+
+### From the manager (one field at a time)
+
+```bash
+row-template
+```
+
+Choose **2 — Reconfigure branding**:
+
+```text
+  1  Service name
+  2  Support URL
+  3  Logo
+  4  Template
+  5  Reset branding
+  6  Reconfigure everything
+  0  Back
+```
+
+- **Service name** — type the new name, Enter to keep the current one, or `-` to clear it.
+- **Support URL** — keep, change or remove it. An invalid link is refused and asked again.
+- **Logo** — use or replace an image, remove it (back to the monogram), or show what is set.
+- **Reset branding** — clears all three and returns to the default look. It does not remove Row-Template.
+- **Reconfigure everything** — the same as `row-template config`.
+
+### With the config command (all fields)
+
+```bash
+row-template config
+```
+
+It asks for the three fields in turn, showing the current value. Press Enter to keep a value, or type `-` to clear it.
+
+### From a script
+
+Give the values as variables. Fields you do not set keep their current values:
+
+```bash
+RT_ASSUME_NONINTERACTIVE=1 \
+RT_SERVICE_NAME="Aurora VPN" \
+RT_SUPPORT_URL="tg://resolve?domain=aurora_support" \
+RT_LOGO_PATH=/root/aurora.png \
+row-template config
+```
+
+Use `RT_SERVICE_NAME=""` to clear the name, and `RT_LOGO_REMOVE=1` to remove the logo.
+
+## Every change is safe to try
+
+A branding change never replaces a working page with a broken one:
+
+1. The current configuration and page are set aside.
+2. The new configuration is written, and the page is regenerated from it and validated.
+3. Only a page that passes validation is swapped in. If anything fails, the previous configuration and page are restored and the error is shown.
+
+## How branding is stored
+
+Your values are kept in `/etc/3x-ui/sub_templates/row-template/config.env`, readable only by root and its group (mode `640`):
+
+<File name="config.env">
+
+```ini
+# Row-Template configuration — generated file. Do NOT source this.
+# Values are base64 data, read with grep+base64 and never executed.
+RT_CONFIG_VERSION=1
+TEMPLATE=row
+SERVICE_NAME_B64=QXVyb3JhIFZQTg==
+SUPPORT_URL_B64=aHR0cHM6Ly90Lm1lL2F1cm9yYQ==
+LOGO_MIME=image/png
+LOGO_DATA_B64=iVBORw0KGgo…
+```
+
+</File>
+
+- Text is stored **base64-encoded** and is only ever read as data. The file is never sourced or executed.
+- In the page it becomes plain JavaScript string data inside one fixed block, escaped so it can never close the script or add markup. The page then inserts it as **text**, never as HTML.
+- The logo is embedded in the page as a data URI, so it loads with no extra request.
+
+<Callout type="warning" title="Do not edit config.env by hand">
+  Use the manager or `row-template config`. A hand-edited value with a control character makes the page refuse to regenerate (`branding contains control characters; refusing to generate.`) until it is fixed.
+</Callout>
+
+## Branding survives everything
+
+Updates, rollbacks, template switches and repairs all keep your branding. A rollback restores an older **version** of the page, but always with your **current** branding.

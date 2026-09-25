@@ -1,0 +1,62 @@
+---
+title: The Subscriber Page
+description: What your subscribers see and can do on the page — status, one-tap import, QR codes, the Configuration Explorer, languages and themes — and what it never does.
+---
+
+Everything on this page is the same in all fifteen designs; only where things sit and how they look changes.
+
+## Status
+
+The top of the page shows the subscription's state, the traffic used and remaining, and the expiry date. 3X-UI fills these in when it serves the page, so they are correct the moment it opens.
+
+While the page stays open it **refreshes these figures from your own panel** — about every 15 seconds for an active subscription and every 60 seconds otherwise — and pauses while the tab is hidden. A refresh is used only if the response carries the page's own fields; anything unexpected stops refreshing and leaves the figures the server rendered, rather than showing wrong values.
+
+## Connect
+
+**Connect** offers the apps for the subscriber's platform, detected from the browser, with a one-tap import link:
+
+| Platform | Apps |
+|---|---|
+| Android | v2rayNG, Happ, sing-box |
+| iOS / iPadOS | Streisand, V2Box, Shadowrocket |
+| Windows | Clash Verge Rev, Mihomo Party, v2rayN |
+| macOS | Clash Verge Rev, Streisand, V2Box |
+
+- **sing-box** imports your panel's JSON subscription, and **Clash Verge Rev** and **Mihomo Party** its Clash subscription. Each app is listed only when your panel publishes the address it needs — a button that cannot work is never shown.
+- **v2rayN** has no verified import link, so it offers **copy** instead.
+- **Shadowrocket** is marked as a paid app.
+
+## Copy and QR
+
+The subscription link can be copied with one tap or shown as a **QR code** to scan from another device. The QR code is generated on the page itself; the link never leaves the browser.
+
+## Configuration Explorer
+
+The **Configurations** section lists every server in the subscription on its own row:
+
+- a country flag, or a monogram when the name carries no valid country code — the country is never guessed from a host or IP;
+- the configuration's name and a protocol label: VLESS, VMess, Trojan, Shadowsocks, Hysteria/Hysteria2, WireGuard, AmneziaWG or Telegram MTProto;
+- **View** (a local QR code and copy) and **Copy**, for adding a single server by hand.
+
+Long lists get a search box. Exact duplicates are collapsed and malformed links are set aside rather than shown. Links stay masked until **View** is opened and are never written to the browser console.
+
+<Callout type="info" title="Flags on Windows">
+  Windows has no flag emoji, so Chromium-based browsers show two letters (such as `DE`) instead. The flags of Germany, France, the Netherlands, Japan, Sweden and the United States are drawn with CSS so they appear everywhere; other countries use the platform's own flags where available.
+</Callout>
+
+## Languages and themes
+
+- **Five languages:** English, Persian (فارسی), Arabic (العربية), Russian (Русский) and Simplified Chinese (简体中文). The page follows the browser's language and lets the subscriber switch; Persian and Arabic use a full right-to-left layout.
+- **Three theme modes:** System, Light and Dark.
+
+A subscriber's choices are remembered in their own browser.
+
+## What the page never does
+
+- It makes **no third-party requests** — no CDNs, web fonts, analytics, external QR services or geolocation lookups. Fonts, styles, scripts and the QR generator are all inside the one file.
+- It **never sends subscriber data anywhere**. The only network request it makes is the status refresh to the same panel address it was served from.
+- It asks search engines not to index it, and sends no referrer when a link is followed.
+
+## VPN apps are unaffected
+
+The page is served only to browsers. When a VPN app fetches the same subscription link, 3X-UI still returns normal subscription content. `row-template verify` checks both, when it can find a subscription to test with.

@@ -1,0 +1,19 @@
+---
+import { t, type Locale } from "../lib/i18n";
+interface Props {
+  locale: Locale;
+  headings: { depth: number; slug: string; text: string }[];
+}
+const { locale, headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+{items.length > 1 && (
+  <aside class="toc" aria-label={t(locale).onThisPage} data-toc data-pagefind-ignore>
+    <h4>{t(locale).onThisPage}</h4>
+    <ul>
+      {items.map((h) => (
+        <li class={`depth-${h.depth}`}><a href={`#${h.slug}`} data-toc-link={h.slug}>{h.text}</a></li>
+      ))}
+    </ul>
+  </aside>
+)}

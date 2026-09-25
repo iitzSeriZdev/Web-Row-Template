@@ -1,0 +1,47 @@
+---
+title: Compatibility
+description: The panels, operating systems, browsers and apps Row-Template 1.2.0 supports — and what is research only.
+---
+
+## Panels
+
+| Panel | Status | Notes |
+|---|---|---|
+| [3X-UI](https://github.com/MHSanaei/3x-ui) (MHSanaei) | **Supported** | Version **3.6.0 or newer**. Validated against stock 3.7.0. |
+| [PasarGuard](https://github.com/PasarGuard/panel) | Research | Not supported. No installation path. |
+| [Rebecca](https://github.com/rebeccapanel/Rebecca) | Research | Not supported. No installation path. |
+
+3X-UI is the only supported panel. Every instruction on this site is for 3X-UI.
+
+### Why other panels are research only
+
+The three panels use different template engines — Go `html/template` for 3X-UI, Jinja2 for PasarGuard, pongo2 for Rebecca — and a page written for one is not valid in another. The visual layer is plain CSS and carries over; the page shell does not. Each design's shell is already built for PasarGuard and Rebecca and packaged under `shells/` in the release for study, but the installer never places it.
+
+Live status is the other open question: 3X-UI serves it at `?format=info`, while the other two use a path suffix, which needs either a runtime change or a reverse proxy. That decision is deferred.
+
+## Server
+
+| | |
+|---|---|
+| **Operating system** | Linux. Recommended: Ubuntu 24.04 LTS (x86_64). |
+| **Shell and tools** | `bash`, coreutils, `tar`, `sha256sum` or `shasum`, `curl`, `awk`, `sed`, `od`, `base64` |
+| **Optional** | `sqlite3` (automatic activation and extra checks), `systemd` (service restart around activation) |
+| **Runtime** | None — no Node.js, Python or database |
+
+## Subscribers
+
+| | |
+|---|---|
+| **Browsers** | Current desktop and mobile browsers. |
+| **Languages** | English, Persian, Arabic, Russian, Simplified Chinese — with right-to-left layout for Persian and Arabic. |
+| **Themes** | System, Light, Dark. |
+| **One-tap import** | v2rayNG, Happ and sing-box on Android; Streisand, V2Box and Shadowrocket on iOS; Clash Verge Rev, Mihomo Party and v2rayN (copy) on Windows; Clash Verge Rev, Streisand and V2Box on macOS. |
+| **Protocols labelled** | VLESS, VMess, Trojan, Shadowsocks, Hysteria/Hysteria2, WireGuard, AmneziaWG, Telegram MTProto. |
+
+## Versions
+
+| Row-Template | 3X-UI | Notes |
+|---|---|---|
+| 1.2.0 | ≥ 3.6.0 | Fifteen designs. From 1.1.0: [update twice](/docs/management/updating/#upgrading-from-110). |
+| 1.1.0 | ≥ 3.6.0 | Configuration Explorer. |
+| 1.0.0 | ≥ 3.6.0 | First stable release. |

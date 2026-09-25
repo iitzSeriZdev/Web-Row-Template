@@ -1,0 +1,46 @@
+---
+// A template's page: the live preview, its attributes, and how to use it.
+import TemplatePreview from "./TemplatePreview.astro";
+import { TEMPLATE_META, ATTRIBUTE_KEYS, attrLabel, valueLabel, type Template } from "../lib/templates";
+import { docHref, type Locale } from "../lib/i18n";
+import { Code } from "astro:components";
+
+interface Props {
+  tpl: Template;
+  locale: Locale;
+}
+const { tpl, locale } = Astro.props;
+const fa = locale === "fa";
+const isDefault = tpl.id === TEMPLATE_META.default;
+---
+<TemplatePreview tpl={tpl} locale={locale} />
+
+<h2 id="attributes">{fa ? "ویژگی‌ها" : "Attributes"}</h2>
+<dl class="attr-grid">
+  <div><dt>ID</dt><dd><code>{tpl.id}</code></dd></div>
+  {ATTRIBUTE_KEYS.map((k) => (
+    <div><dt>{attrLabel(k, locale)}</dt><dd>{valueLabel((tpl as any)[k], locale)}</dd></div>
+  ))}
+</dl>
+<p>
+  {fa
+    ? <>همهٔ تمپلیت‌ها یک اجرای مشترک، داده‌های یکسان، پشتیبانی کامل از راست‌به‌چپ و پوستهٔ روشن و تیره دارند؛ تفاوتشان فقط در چیدمان و ظاهر است. <a href={docHref(locale, "templates/choosing")}>انتخاب تمپلیت</a> مقایسهٔ کامل را نشان می‌دهد.</>
+    : <>Every template shares one runtime, the same data, full right-to-left support and light and dark themes; they differ only in layout and look. <a href={docHref(locale, "templates/choosing")}>Choosing a template</a> compares them side by side.</>}
+</p>
+
+<h2 id="use-this-template">{fa ? "استفاده از این تمپلیت" : "Use this template"}</h2>
+<h3 id="while-installing">{fa ? "هنگام نصب" : "While installing"}</h3>
+<p>
+  {fa
+    ? <>نصب‌کننده فهرست تمپلیت‌ها را نشان می‌دهد؛ شمارهٔ {tpl.name} را وارد کنید{isDefault ? " یا فقط Enter بزنید، چون تمپلیت پیش‌فرض است" : ""}. برای نصب بدون هیچ پرسشی (مثلاً در اسکریپت)، شناسهٔ آن را در <code>RT_TEMPLATE</code> بدهید؛ برندینگ را می‌توانید بعداً با <code>row-template config</code> تنظیم کنید:</>
+    : <>The installer lists the templates; enter {tpl.name}'s number{isDefault ? ", or just press Enter — it is the default" : ""}. To install with no questions at all — in a script, for example — pass its ID in <code>RT_TEMPLATE</code>; you can set branding afterwards with <code>row-template config</code>:</>}
+</p>
+<Code lang="bash" code={`RT_ASSUME_NONINTERACTIVE=1 RT_TEMPLATE=${tpl.id} \\\nbash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)`} themes={{ light: "github-light", dark: "github-dark" }} />
+
+<h3 id="on-an-existing-install">{fa ? "روی نصب موجود" : "On an existing install"}</h3>
+<p>
+  {fa
+    ? <>مدیر تعاملی را باز کنید و از <strong dir="ltr">Reconfigure branding → Template</strong>، {tpl.name} را انتخاب کنید. تعویض تمپلیت تراکنشی است: اگر اعتبارسنجی شکست بخورد، تمپلیت قبلی سر جایش می‌ماند.</>
+    : <>Open the interactive manager and choose {tpl.name} under <strong>Reconfigure branding → Template</strong>. The switch is transactional: if validation fails, the previous template stays in place.</>}
+</p>
+<Code lang="bash" code="row-template" themes={{ light: "github-light", dark: "github-dark" }} />

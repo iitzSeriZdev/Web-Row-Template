@@ -1,0 +1,47 @@
+---
+// Every documentation page, in both languages: the MDX pages under
+// src/content/docs/<locale>/ and one page per template.
+import Docs from "../layouts/Docs.astro";
+import TemplatePage from "../components/TemplatePage.astro";
+import { render } from "astro:content";
+import { LOCALES, DEFAULT_LOCALE, type Locale } from "../lib/i18n";
+import { pages, type PageInfo } from "../lib/pages";
+import { templateById } from "../lib/templates";
+import { mdxComponents } from "../components/mdx";
+
+export async function getStaticPaths() {
+  const out = [];
+  for (const locale of LOCALES) {
+    for (const [slug, page] of await pages(locale)) {
+      const prefix = locale === DEFAULT_LOCALE ? "" : `${locale}/`;
+      out.push({ params: { path: `${prefix}docs${slug ? `/${slug}` : ""}` }, props: { locale, page } });
+    }
+  }
+  return out;
+}
+
+const { locale, page } = Astro.props as { locale: Locale; page: PageInfo };
+let Content: any = null;
+let headings: { depth: number; slug: string; text: string }[] = [];
+if (page.entry) {
+  const rendered = await render(page.entry);
+  Content = rendered.Content;
+  headings = rendered.headings;
+}
+const tpl = page.templateId ? templateById(page.templateId) : undefined;
+if (tpl) {
+  const fa = locale === "fa";
+  headings = [
+    { depth: 2, slug: "attributes", text: fa ? "ویژگی‌ها" : "Attributes" },
+    { depth: 2, slug: "use-this-template", text: fa ? "استفاده از این تمپلیت" : "Use this template" },
+    { depth: 3, slug: "while-installing", text: fa ? "هنگام نصب" : "While installing" },
+    { depth: 3, slug: "on-an-existing-install", text: fa ? "روی نصب موجود" : "On an existing install" },
+  ];
+}
+const editPath = page.entry?.filePath;
+const wide = page.slug === "help/errors";
+---
+<Docs locale={locale} slug={page.slug} title={page.title} description={page.description} headings={headings} editPath={editPath} wide={wide}>
+  {Content && <Content components={mdxComponents} />}
+  {tpl && <TemplatePage tpl={tpl} locale={locale} />}
+</Docs>

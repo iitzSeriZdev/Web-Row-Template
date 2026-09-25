@@ -1,0 +1,89 @@
+---
+title: مرجع فرمان‌ها
+nav: مرجع فرمان‌ها
+description: همهٔ فرمان‌های row-template، گزینه‌هایشان، اینکه به root نیاز دارند یا نه، چه چیزی چاپ می‌کنند و با چه کدی خارج می‌شوند.
+---
+
+نصب‌کننده یک فرمان روی سرور شما قرار می‌دهد: `/usr/local/bin/row-template`. این فرمان یک راه‌انداز ساده برای کتابخانهٔ مدیریتی داخل پوشهٔ نصب است.
+
+```bash
+row-template <command> [options]
+```
+
+اجرای آن **بدون آرگومان** در ترمینال، [منوی تعاملی مدیریت](/docs/management/manager/) را باز می‌کند. بدون ترمینال — در اسکریپت، cron، CI یا `curl | bash` — به‌جای آن راهنما را چاپ می‌کند تا هرگز منتظر ورودی نماند.
+
+## فرمان‌ها
+
+| فرمان | کار | root |
+|---|---|---|
+| `row-template config` | تغییر نام سرویس، لینک پشتیبانی یا لوگو و ساخت دوبارهٔ صفحه. [برندینگ ←](/docs/configuration/branding/) | بله |
+| `row-template update` | دانلود، بررسی و فعال‌سازی آخرین نسخهٔ پایدار. [به‌روزرسانی ←](/docs/management/updating/) | بله |
+| `row-template rollback` | بازگرداندن نسخهٔ قبلی از پشتیبان. گزینه‌ها: `--auto`، `--to <backup>`. [بازگردانی ←](/docs/management/rollback/) | بله |
+| `row-template verify` | بررسی نصب، اتصال پنل و صفحهٔ زنده. فقط‌خواندنی. [Verify ←](/docs/management/verify/) | توصیه می‌شود |
+| `row-template version` | نمایش نسخهٔ نصب‌شده، حداقل نسخهٔ پشتیبانی‌شدهٔ 3X-UI و نسخهٔ 3X-UI شناسایی‌شده. نام‌های دیگر: `-v`، `--version`. | خیر |
+| `row-template uninstall` | حذف Row-Template و بازگرداندن پنل به صفحهٔ داخلی خودش. [حذف ←](/docs/management/uninstall/) | بله |
+| `row-template menu` | باز کردن صریح منوی تعاملی. نام دیگر: `manager`. | بله |
+| `row-template help` | نمایش راهنما. نام‌های دیگر: `-h`، `--help`. | خیر |
+
+فرمان‌هایی که سیستم را تغییر می‌دهند بدون root اجرا نمی‌شوند:
+
+```text
+  FAIL this operation must run as root (e.g. sudo row-template ...)
+```
+
+`verify` بر root اصرار ندارد، اما با کاربر دیگر نمی‌تواند `config.env` یا پایگاه‌دادهٔ پنل را بخواند و گزارش کمتری می‌دهد.
+
+## version
+
+```bash
+row-template version
+```
+
+```text
+Row-Template 1.2.0
+Supported 3x-ui minimum: 3.6.0
+Detected 3x-ui: 3.7.0
+```
+
+`unknown` یعنی مقدار خوانده نشد. این خروجی را در گزارش‌های خطا بیاورید.
+
+## گزینه‌های rollback
+
+| شکل | چه چیزی را برمی‌گرداند |
+|---|---|
+| `row-template rollback` | جدیدترین پشتیبان معتبر. |
+| `row-template rollback --auto` | همان، به‌صورت صریح. |
+| `row-template rollback --to <backup>` | یک پشتیبان مشخص: مسیر کامل آن، یا فقط نام پوشه‌اش زیر `backups/`. |
+
+## خروجی
+
+هر فرمان خط‌های وضعیت کوتاهی چاپ می‌کند:
+
+```text
+  ok   Canonical artifact integrity verified.
+  warn panel subThemeDir is empty; set it to /etc/3x-ui/sub_templates/row-template.
+  FAIL verification FAILED (1 hard issue(s), 1 warning(s)).
+```
+
+خط‌های `ok` به خروجی استاندارد و خط‌های `warn` و `FAIL` به خروجی خطای استاندارد می‌روند. رنگ فقط در ترمینال استفاده می‌شود و وقتی `NO_COLOR` تنظیم شده باشد هرگز. همهٔ پیام‌های `warn` و `FAIL` در [مرجع خطاها](/docs/help/errors/) توضیح داده شده‌اند.
+
+## کد خروج
+
+| کد | معنی |
+|---|---|
+| `0` | موفقیت. برای `verify`: هیچ خطای جدی‌ای نیست (هشدار مجاز است). |
+| `1` | فرمان شکست خورد، یا `verify` یک خطای جدی پیدا کرد. |
+| `2` | فرمان ناشناخته — پس از خطا راهنما چاپ می‌شود. |
+
+فرمان‌هایی که سیستم را تغییر می‌دهند مثل تراکنش کار می‌کنند: وقتی یکی از آن‌ها در میانهٔ کار شکست بخورد، پیش از خروج وضعیت قبلی را بازمی‌گرداند و این را اعلام می‌کند. اگر نتواند، به شما می‌گوید `row-template rollback` را اجرا کنید.
+
+## وقتی خود فرمان خراب است
+
+اگر کتابخانهٔ مدیریتی وجود نداشته باشد، راه‌انداز نمی‌تواند چیزی بارگذاری کند و این را چاپ می‌کند:
+
+```text
+row-template: management library not found at /etc/3x-ui/sub_templates/row-template/lib/row-template.sh
+row-template: the install may be damaged; re-run the installer.
+```
+
+اجرای دوبارهٔ نصب‌کننده، نصب را در همان جا تعمیر می‌کند و پیکربندی شما را نگه می‌دارد.

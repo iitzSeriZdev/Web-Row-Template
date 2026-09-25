@@ -1,0 +1,20 @@
+---
+import Icon from "./Icon.astro";
+import { t, type Locale } from "../lib/i18n";
+interface Props { locale: Locale }
+const s = t(Astro.props.locale);
+---
+<dialog class="search-dialog" data-search-dialog aria-label={s.searchShort}
+  data-empty={s.searchEmpty} data-loading={s.searchLoading} data-unavailable={s.searchUnavailable}>
+  <div class="search-input-row">
+    <Icon name="search" />
+    <input type="search" placeholder={s.searchPlaceholder} autocomplete="off" spellcheck="false" aria-label={s.searchShort} data-search-input />
+    <kbd>Esc</kbd>
+  </div>
+  <div class="search-results" role="listbox" data-search-results></div>
+  <div class="search-foot">
+    <span><kbd>↑</kbd><kbd>↓</kbd> {s.searchHint}</span>
+    <span><kbd>↵</kbd> {s.searchSelect}</span>
+    <span><kbd>Esc</kbd> {s.searchClose}</span>
+  </div>
+</dialog>

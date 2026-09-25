@@ -1,0 +1,80 @@
+---
+title: Requirements
+description: What the server needs before you install Row-Template, and how to check each item.
+---
+
+Row-Template runs on the same server as your 3X-UI panel. It needs nothing beyond standard Linux tools; the one optional extra, `sqlite3`, lets it activate itself instead of asking you to set one field in the panel.
+
+## At a glance
+
+| Requirement | Needed for | Required? |
+|---|---|---|
+| 3X-UI (MHSanaei) **3.6.0 or newer** | Everything — the installer refuses older or undetectable versions | Yes |
+| Root access | Installing, configuring, updating, rolling back, uninstalling | Yes |
+| `bash`, `tar`, `sha256sum` (or `shasum`) | Verifying and extracting the release | Yes |
+| `curl` | Downloading the release; the live page checks | Yes, unless you [install from a local folder](/docs/installation/manual/) |
+| `sqlite3` | Setting the panel's `subThemeDir` automatically; checking it in `verify`; the live page checks | Optional |
+| `systemd` with an `x-ui.service` unit | Stopping and restarting the panel around the automatic `subThemeDir` write | Optional |
+| HTTPS access to GitHub | The one-command install and `row-template update` | Unless you install from a local folder |
+
+**Recommended OS:** Ubuntu 24.04 LTS (x86_64). Other modern Linux distributions may work but have not had the same validation coverage.
+
+Row-Template adds no runtime to your server: no Node.js, no Python, no database, no background service.
+
+## Check your panel
+
+The installer looks for the panel binary at `/usr/local/x-ui/x-ui`, then `/usr/local/bin/x-ui`, then any `x-ui` on your `PATH`, and for a systemd unit named `x-ui.service`. It reads the version from the binary:
+
+```bash
+/usr/local/x-ui/x-ui -v
+```
+
+The first `X.Y.Z` in the output must be **3.6.0 or newer**. If the version cannot be read at all, the installer stops rather than guessing — see [`cannot determine the 3x-ui version`](/docs/help/errors/#cannot-determine-the-3x-ui-version-refusing-to-proceed).
+
+## Check the tools
+
+```bash
+for t in bash tar curl sha256sum sqlite3; do
+  command -v "$t" >/dev/null && echo "ok      $t" || echo "missing $t"
+done
+```
+
+`sha256sum` may be missing on some systems that have `shasum` instead; the installer accepts either.
+
+## Install sqlite3 (optional)
+
+The installer never installs `sqlite3` for you. If you want automatic activation, install it first:
+
+<Tabs labels={["Debian / Ubuntu", "RHEL / Alma / Rocky"]} sync="os">
+<Tab>
+
+```bash
+apt-get update && apt-get install -y sqlite3
+```
+
+</Tab>
+<Tab>
+
+```bash
+dnf install -y sqlite
+```
+
+</Tab>
+</Tabs>
+
+Without it, everything still works — you set **Sub Theme Directory** in the panel once, by hand. See [Activation](/docs/installation/activation/).
+
+## Where the panel database is found
+
+For automatic activation, Row-Template also needs to find the panel's database. It uses the **first** of these that exists:
+
+1. `$XUI_DB_FOLDER/x-ui.db`, when the `XUI_DB_FOLDER` environment variable is set
+2. `/etc/x-ui/x-ui.db`
+3. `/usr/local/x-ui/x-ui.db`
+4. `/etc/3x-ui/x-ui.db`
+
+If that file is not a real SQLite database, it is refused with a warning and Row-Template does **not** move on to the next location — a different file could belong to an old or unrelated install. Activation then falls back to the manual step.
+
+## Network
+
+The one-command install and `row-template update` download from `https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/`, over HTTPS only. A server that cannot reach GitHub can still be installed and updated from a folder you copy to it: see [Manual installation](/docs/installation/manual/).

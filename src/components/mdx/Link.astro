@@ -1,0 +1,14 @@
+---
+// Markdown links. "/docs/…" is resolved against the page's language and the
+// site base, other root-relative paths against the base; external links open
+// in a new tab.
+import { withBase, DEFAULT_LOCALE } from "../../lib/i18n";
+import { localeOf } from "../../lib/pages";
+const { href = "", ...rest } = Astro.props as { href?: string; [k: string]: unknown };
+const locale = localeOf(Astro.url);
+let to = href;
+if (href.startsWith("/docs")) to = withBase(`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}${href}`);
+else if (href.startsWith("/")) to = withBase(href);
+const external = /^https?:/.test(href);
+---
+<a href={to} {...rest} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}><slot /></a>

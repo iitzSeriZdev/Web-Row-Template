@@ -1,0 +1,64 @@
+---
+title: Release Verification
+nav: Releases & Verification
+description: What a Row-Template release contains, how to verify it yourself, and exactly what a matching checksum does and does not prove.
+---
+
+Releases are published at [github.com/iitzSeriZdev/Row-Template/releases](https://github.com/iitzSeriZdev/Row-Template/releases). The installer follows the **stable** channel: `releases/latest/download` always resolves to the newest release that is not a draft or pre-release.
+
+## What a release contains
+
+| Asset | Purpose |
+|---|---|
+| `row-template-<version>.tar.gz` | The payload: every design, the management library and its components, the `row-template` command, `install.sh`, `VERSION` |
+| `SHA256SUMS` | The SHA-256 checksum of the tarball |
+| `manifest.txt` | `name`, `version`, `artifact`, `min_xui` and `created` — read as data, never executed |
+| `install.sh` | The bootstrap used by the one-command install |
+
+Inside the tarball, a second `SHA256SUMS` lists the checksum of every file, and every design carries its own `template.html.sha256`.
+
+## Verify a download
+
+In the folder holding the downloaded files:
+
+```bash
+sha256sum -c SHA256SUMS
+```
+
+```text
+row-template-1.2.0.tar.gz: OK
+```
+
+Then, optionally, every file inside it:
+
+```bash
+tar -xzf row-template-1.2.0.tar.gz
+cd row-template-1.2.0 && sha256sum -c SHA256SUMS --quiet && echo "all files OK"
+```
+
+The installer performs the first check itself on every install and update, and refuses to continue on a mismatch.
+
+## What a matching checksum proves
+
+It proves **integrity relative to that checksum file**: your tarball is bit-for-bit the one named in `SHA256SUMS`, with no corruption or truncation in transit.
+
+It does **not**, on its own, prove **who** published it. Someone able to replace the tarball on the download host could replace `SHA256SUMS` at the same time. Trust in the publisher comes from elsewhere:
+
+- **HTTPS** authenticates GitHub and protects the transfer;
+- **control of the GitHub repository** decides who can publish a release.
+
+“Checksum verified” is not the same as “signed by the author.”
+
+## Signed tags
+
+For cryptographic proof of authorship, a release can be tied to a signed git tag. When a tag signature is published, verify it against a key you already trust:
+
+```bash
+git clone https://github.com/iitzSeriZdev/Row-Template
+cd Row-Template
+git tag -v v1.2.0
+```
+
+## Reproducible builds
+
+Releases are built with `tools/make-release.sh`, and the build is deterministic: the same sources produce the same designs byte for byte. From a checkout of the release tag you can rebuild them and compare each design's checksum with the one shipped in the release.

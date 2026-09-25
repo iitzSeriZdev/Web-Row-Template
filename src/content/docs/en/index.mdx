@@ -1,0 +1,72 @@
+---
+title: Introduction
+description: Row-Template is a self-contained, white-label subscription page for 3X-UI panels — fifteen designs, one HTML file each, installed and managed with one command.
+---
+
+3X-UI can serve a custom page to subscribers instead of its built-in one. **Row-Template is that page.** A subscriber opens their subscription link in a browser and sees their plan, their traffic, their expiry date, and one-tap ways to add the subscription to the app they use.
+
+It ships as one self-contained HTML file per design — every style, script, font and the QR code generator are inlined — and a single command installs it next to your panel, points the panel at it, and gives you a `row-template` manager for branding, updates and rollback.
+
+<Callout type="info" title="This documentation covers Row-Template 1.2.0">
+  3X-UI (MHSanaei) **3.6.0 or newer** is the only supported panel. Commands and messages on this site are taken from the 1.2.0 installer.
+</Callout>
+
+## How it works
+
+1. The installer downloads a release, **verifies its SHA-256 checksum** (there is no way to skip this), and installs it to its own directory: `/etc/3x-ui/sub_templates/row-template`.
+2. It generates the page from the design you chose and your branding, validates it, and swaps it into place atomically as `sub.html`.
+3. It sets **one** panel setting, the subscription theme directory (`subThemeDir`), to that directory. 3X-UI then fills the page with each subscriber's data when it serves it.
+4. In the browser, the page keeps its status fresh by asking **your own panel** for updated figures. VPN apps that fetch the same link still receive normal subscription content.
+
+<FileTree tree={`
+/etc/3x-ui/sub_templates/row-template/
+├── sub.html              # the page 3X-UI serves (generated)
+├── config.env            # your branding and selected design (data, never executed)
+├── VERSION
+├── dist/
+│   ├── template.html     # the selected design, pristine
+│   └── templates/<id>/   # every design in the release, each with its checksum
+├── lib/                  # the management library
+├── panels/               # installer components
+└── backups/              # snapshots used by rollback
+`} />
+
+## Why Row-Template
+
+<Cards>
+  <Card title="Private by design" icon="shield-check">
+    The page makes no third-party requests: no CDNs, no external QR or geolocation lookups, no telemetry. Live status comes from your own panel.
+  </Card>
+  <Card title="Genuinely white-label" icon="badge-check">
+    Your service name, your support link, your logo. Nothing on the served page identifies Row-Template.
+  </Card>
+  <Card title="Fifteen designs" icon="layout-template">
+    Same features, same languages, same safety checks — only the layout and look change. Row is the default.
+  </Card>
+  <Card title="Safe to operate" icon="history">
+    Checksum-verified releases, atomic activation, automatic restore on failure, and one-command rollback.
+  </Card>
+</Cards>
+
+## What it does not do
+
+- It **never patches 3X-UI**. The only panel setting it changes is `subThemeDir`, and uninstall clears it again (only if it still points at Row-Template).
+- It **never touches** your inbounds, clients, users, certificates or the panel's other settings.
+- It **installs nothing else** on your server: no Node.js, no Python, no database. It uses the tools Linux already has, plus `sqlite3` if it is present.
+
+## Where to go next
+
+<Cards>
+  <Card title="Quick start" href="/docs/quick-start/" icon="zap">
+    Install, activate and verify in three steps.
+  </Card>
+  <Card title="Templates" href="/docs/templates/" icon="panels-top-left">
+    Live previews of all fifteen designs.
+  </Card>
+  <Card title="Manual installation" href="/docs/installation/manual/" icon="list-ordered">
+    Download, verify and install by hand, step by step — including offline servers.
+  </Card>
+  <Card title="Error reference" href="/docs/help/errors/" icon="circle-alert">
+    Every message the installer can print, what it means, and how to fix it.
+  </Card>
+</Cards>
