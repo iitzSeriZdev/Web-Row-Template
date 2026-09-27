@@ -1,7 +1,7 @@
 ---
 title: The Interactive Manager
 nav: Interactive Manager
-description: The row-template menu — what the dashboard shows, what each option does, and how it differs from the direct commands.
+description: The row-template menu — what the dashboard shows on each panel, what each option does, and how it differs from the direct commands.
 ---
 
 Run `row-template` with no arguments, as root, in a terminal:
@@ -10,16 +10,52 @@ Run `row-template` with no arguments, as root, in a terminal:
 row-template
 ```
 
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
+
 ```text
   Row-Template / by iitzSeriZdev
   ------------------------------------------------------------
-  Version         1.2.0
-  3X-UI           3.7.0
+  Version         1.3.0
+  3X-UI           3.8.5
   Status          Installed / Active
   Template        Row
   Theme           Row-Template (active)
   Service         x-ui (running)
+```
 
+</Tab>
+<Tab>
+
+```text
+  Row-Template / by iitzSeriZdev
+  ------------------------------------------------------------
+  Version         1.3.0
+  Panel           PasarGuard
+  Status          Installed / Active
+  Template        Row
+  Theme           Row-Template (active)
+  Service         PasarGuard (running)
+```
+
+</Tab>
+<Tab>
+
+```text
+  Row-Template / by iitzSeriZdev
+  ------------------------------------------------------------
+  Version         1.3.0
+  Panel           Rebecca
+  Status          Installed / Active
+  Template        Row
+  Theme           Row-Template (active)
+  Service         Rebecca (running)
+```
+
+</Tab>
+</Tabs>
+
+```text
   1  Update
   2  Reconfigure branding
   3  Verify installation
@@ -33,29 +69,31 @@ row-template
 
 Every option runs the same tested code as the matching command. A failed action returns you to the menu instead of closing it.
 
+If this installation came from 1.1.0's own updater and is missing designs or installer files, the manager first downloads the rest of **the same version** you have installed — checksum-verified — before it shows the dashboard. It never installs a different version this way. See [Updating](/docs/management/updating/#upgrading-from-110-or-120).
+
 ## The dashboard
 
-The status is decided from evidence — the files on disk and the panel's actual `subThemeDir` — never from file presence alone.
+The status is decided from evidence — the files on disk and the panel's actual settings — never from file presence alone.
 
 | Status | Meaning |
 |---|---|
-| **Installed / Active** | Installed, and the panel's `subThemeDir` points at Row-Template. |
-| **Installed / Not active** | Installed, but the panel serves another theme directory or none. Use option **5**. |
-| **Installed / Activation unverified** | Installed; the panel setting cannot be read here (no `sqlite3` or no database found). |
+| **Installed / Active** | Installed, and the panel serves Row-Template: on 3X-UI its `subThemeDir` points at Row-Template; on PasarGuard `.env` selects the page; on Rebecca its subscription settings do. |
+| **Installed / Not active** | Installed, but the panel serves another page. Use option **5**. |
+| **Installed / Activation unverified** | Installed; the panel's setting cannot be read here — on 3X-UI without `sqlite3` or the panel database, on Rebecca with MySQL/MariaDB or without `sqlite3`. |
 | **Installation damaged** | Files are missing or the live page fails validation. Run **3 — Verify**, then repair by re-running the installer. |
 
-**Service** shows whether the `x-ui` service is running, or `not detected`.
+**Service** shows whether the panel is running — `x-ui (running)`, `PasarGuard (stopped)` and so on — or `not detected`.
 
 ## The options
 
 | Option | What it does |
 |---|---|
-| **1 — Update** | Checks the release source for the latest version and compares it with yours. If it is newer, asks `Update <current> -> <latest> now?`. If you are up to date, offers to re-install anyway. If this installation came from 1.1.0 and is missing installer components, offers to re-install to complete it. If the source cannot be reached, says so and changes nothing. |
+| **1 — Update** | Checks the release source for the latest version and compares it with yours. If it is newer, asks `Update <current> -> <latest> now?`. If you are up to date, offers to re-install anyway. If this installation is missing installer components, offers to re-install to complete it. If the source cannot be reached, says so and changes nothing. |
 | **2 — Reconfigure branding** | Opens the submenu below. |
 | **3 — Verify installation** | Runs [`row-template verify`](/docs/management/verify/). |
 | **4 — Rollback** | Restores the newest valid backup, like `row-template rollback`. To pick a specific backup, use `row-template rollback --to` from the shell. |
-| **5 — Activate / Re-apply theme** | Shows the panel's current theme directory and offers to point it at Row-Template, then runs the live checks. Nothing is written unless you confirm. [Activation →](/docs/installation/activation/) |
-| **6 — Installation info** | Version, developer, GitHub, 3X-UI version, install directory, template, theme status, service, and whether a custom logo and a support URL are set. Never shows subscription links, IDs, credentials or your support URL itself. |
+| **5 — Activate / Re-apply theme** | Shows the panel's current state and offers to point it at Row-Template, then runs the live checks. On PasarGuard and Rebecca it regenerates the page first and activates it as a transaction; where Rebecca's settings cannot be written, it places the page and prints the values to enter. Nothing is changed unless you confirm. [Activation →](/docs/installation/activation/) |
+| **6 — Installation info** | Version, developer, GitHub, the panel (on 3X-UI, its version), install directory, template, theme status, service, and whether a custom logo and a support URL are set. Never shows subscription links, IDs, credentials, `.env` contents or your support URL itself. |
 | **7 — Uninstall** | Runs [`row-template uninstall`](/docs/management/uninstall/), which asks for confirmation first. |
 | **0 — Exit** | Leaves the manager. |
 

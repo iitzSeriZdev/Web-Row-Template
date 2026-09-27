@@ -27,16 +27,18 @@ What a checksum does and does not prove is explained in [Release verification](/
 
 - **Atomic writes.** Every file is written to a temporary name beside its target and renamed into place, so readers see the whole old file or the whole new one.
 - **Validate before swap.** A new page is generated and structurally validated before it replaces the live one. A failure leaves the live page untouched.
-- **Automatic restore.** Updates, template switches, branding changes and rollbacks snapshot the current state first and restore it if a later step fails.
+- **Automatic restore.** Updates, template switches, branding changes and rollbacks snapshot the current state first and restore it if a later step fails. On PasarGuard and Rebecca, activation snapshots the panel's settings, and a restore is confirmed by reading them back and comparing them with the snapshot — never assumed.
 - **No writes through symlinks.** Row-Template refuses to write to, or delete, a path that is a symbolic link.
 - **Contained deletes.** Old backups are removed only from strictly inside the backups folder, never the folder itself. Uninstall first confirms the directory is a Row-Template installation and refuses system paths outright; it removes the `row-template` command only if the file is Row-Template's own launcher.
 
 ## Your panel
 
-- **Fail-closed checks.** Installation refuses a 3X-UI below 3.6.0, or one whose version cannot be read.
-- **No guessing the database.** If the first panel database found is not a real SQLite file, it is refused rather than replaced by another candidate that might belong to a different installation.
-- **One setting.** Only `subThemeDir` is ever written, with the service stopped and the result read back.
-- **No secrets in output.** The live checks read one client's subscription ID to build a local test request; it is never printed, logged or stored. The manager's info screen shows only whether a support link is set, not the link.
+- **Fail-closed detection.** A panel counts as installed only when two independent signs of it agree; a half-installed panel is refused rather than guessed at. On a server with several panels, a scripted install must name one with `RT_PANEL`, and an installation never switches to another panel on its own.
+- **Fail-closed checks.** Installation refuses a 3X-UI below 3.6.0, or one whose version cannot be read, and Rebecca's 0.0.x Docker image — which would accept the setting and silently keep serving its own page — before anything is changed.
+- **No guessing the database.** If the first 3X-UI database found is not a real SQLite file, it is refused rather than replaced by another candidate that might belong to a different installation.
+- **The smallest change.** On 3X-UI only `subThemeDir` is ever written, with the service stopped and the result read back. On PasarGuard, one marked block is appended to `.env` and none of your lines is edited; uninstall returns `.env` to its exact previous bytes. On Rebecca, two fields of the subscription settings are set, and restored exactly on uninstall.
+- **Every value escaped.** PasarGuard's template engine does not escape values by default, so every Row-Template page for PasarGuard and Rebecca wraps its body in an explicit autoescape block: a username or a link remark can never inject markup.
+- **No secrets in output.** On 3X-UI the live checks read one client's subscription ID to build a local test request; it is never printed, logged or stored. On PasarGuard and Rebecca no subscription is ever looked up. PasarGuard's `.env` — which holds your admin password, JWT secret and database URL — is read only for the two page keys, never printed and never copied into a backup, and no Rebecca database password is ever asked for, read or printed. The manager's info screen shows only whether a support link is set, not the link.
 
 ## The served page
 
@@ -47,6 +49,6 @@ What a checksum does and does not prove is explained in [Release verification](/
 
 ## Reporting a vulnerability
 
-Please report security problems **privately**, not in a public issue. On the repository, open **Security → Report a vulnerability** and include the affected version (`row-template version`), your 3X-UI version and operating system, and clear steps to reproduce. Security fixes are released for the latest stable version.
+Please report security problems **privately**, not in a public issue. On the repository, open **Security → Report a vulnerability** and include the affected version (`row-template version`), your panel and its version, your operating system, and clear steps to reproduce. Security fixes are released for the latest stable version.
 
 If private reporting is unavailable to you, open a minimal public issue asking a maintainer to enable it — with no exploit details.

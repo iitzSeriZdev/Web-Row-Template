@@ -1,16 +1,20 @@
+<p align="center">
+  <img src="public/branding/row-template-logo.png" alt="Row-Template" width="112" height="112">
+</p>
+
 # Row-Template Docs
 
-The documentation site for [Row-Template](https://github.com/iitzSeriZdev/Row-Template), the self-contained, white-label subscription page for 3X-UI panels.
+The documentation site for [Row-Template](https://github.com/iitzSeriZdev/Row-Template), the self-contained, white-label subscription page for 3X-UI, PasarGuard and Rebecca panels.
 
 **→ [iitzseridev.github.io/Web-Row-Template](https://iitzseridev.github.io/Web-Row-Template/)** · [فارسی](https://iitzseridev.github.io/Web-Row-Template/fa/)
 
-- **Installation** with the one-command installer, and a step-by-step manual install that also works on servers without GitHub access.
+- **Installation** on 3X-UI, PasarGuard and Rebecca with the one-command installer, and a step-by-step manual install that also works on servers without GitHub access.
 - **Every template** with a live, interactive preview: phone and desktop sizes, all five languages, light and dark.
-- **An error reference** covering every error and warning the installer can print, with what it means and how to fix it, translated into Persian.
+- **An error reference** covering every error and warning the installer can print — including the panel adapters and the activation transaction engine — with what it means and how to fix it, translated into Persian.
 - **Management**: the `row-template` command, the interactive manager, updating, backups and rollback, verify, uninstall.
 - **English and Persian**, right-to-left, with full-text search in both.
 
-Everything is written against the Row-Template 1.2.0 source: commands, paths and messages are exactly what the installer prints.
+Everything is written against the Row-Template 1.3.0 source: commands, paths and messages are exactly what the installer prints.
 
 ## Development
 
@@ -33,7 +37,9 @@ Search needs the Pagefind index, so it works after `npm run build` (in `preview`
 | `src/content/docs/en/`, `src/content/docs/fa/` | The pages, as MDX — one file per page and language, at the same path |
 | `src/data/errors.ts` | The error reference: every installer message, its translation, meaning and fix |
 | `src/data/templates.json`, `public/previews/`, `public/live/` | Synced from Row-Template — never edited here |
-| `src/data/installer-messages.json` | Every error and warning in the installer source, extracted by the sync script |
+| `public/branding/` | The official Row-Template logo: the symbol (navigation bar), the square logo (landing page, social image) and the app icon (favicon). Copies and downscaled derivatives of the canonical logo files — never redrawn or recoloured |
+| `public/flags/` | The language switch: the United States flag for English, the Lion and Sun flag for Persian |
+| `src/data/installer-messages.json` | Every error and warning in the installer source — the bootstrap, the library, the command and every companion the library declares — extracted by the sync script |
 | `src/components/`, `src/layouts/` | The UI, modelled on the shadcn/ui documentation |
 | `src/lib/nav.ts` | The sidebar, in reading order |
 | `src/styles/globals.css` | The design system: shadcn/ui's neutral palette, Geist and Vazirmatn, logical properties for RTL |

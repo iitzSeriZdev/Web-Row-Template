@@ -16,8 +16,17 @@
 // it comes from, in src/data/installer-messages.json. scripts/check-site.mjs
 // compares the error reference against that list, so a message added to or
 // removed from the installer shows up as a failing check here.
+//
+// The messages come from the bootstrap, the management library, the command
+// launcher, and every companion the library declares (RT_INSTALLER_COMPANIONS:
+// the transaction engine and the panel adapters). Each message is read as the
+// bash double-quoted string it is, so a command substitution with quotes of its
+// own -- $(rt_panel_label "$panel") -- is read whole. Command substitutions are
+// then recorded as named placeholders (SUBST below), because what they print
+// changes from run to run just like a variable does; one this script does not
+// know stops the sync, so a new one is named deliberately.
 
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -32,7 +41,7 @@ function need(path) {
   return path;
 }
 
-need(join(SRC, "installer", "lib", "row-template.sh"));
+const LIB = need(join(SRC, "installer", "lib", "row-template.sh"));
 
 // 1. the catalogue
 const catalogue = need(join(SRC, "docs", "src", "data", "templates.json"));
@@ -57,26 +66,110 @@ for (const id of ids) {
 }
 
 // 4. installer messages
-const FILES = ["installer/install.sh", "installer/lib/row-template.sh", "installer/bin/row-template"];
-const CALL = /\b(b_die|b_err|rt_die|rt_err|rt_warn|rt_ui_warn|rt_ui_error)\s+"((?:[^"\\]|\\.)*)"/g;
+const declared = readFileSync(LIB, "utf8").match(/^RT_INSTALLER_COMPANIONS="(.*)"$/m);
+if (!declared) {
+  console.error("sync: the management library declares no RT_INSTALLER_COMPANIONS");
+  process.exit(1);
+}
+const FILES = [
+  "installer/install.sh",
+  "installer/lib/row-template.sh",
+  "installer/bin/row-template",
+  ...declared[1].trim().split(/\s+/).map((rel) => `installer/${rel}`),
+];
+const CALL = /\b(b_die|b_err|rt_die|rt_err|rt_warn|rt_ui_warn|rt_ui_error)\s+(?=")/g;
 // The CLI launcher prints two lines of its own before the library is loaded.
 const RAW = /printf '(row-template: [^'\\]*)(?:\\n)?'/g;
-// Groundwork no 1.2.0 command reaches (format-2 backups), and the printing
-// helpers themselves.
-const SKIP = new Set([
-  "rt_backup_create_v2", "rt_backup_panel_write", "rt_backup_manifest_write", "rt_backup_format",
-  "rt_ui_success", "rt_section",
-]);
+// The printing helpers themselves.
+const SKIP = new Set(["rt_ui_success", "rt_section"]);
+// Command substitutions inside messages, and the placeholder each becomes.
+const SUBST = [
+  [/^\$\(rt_panel_label\b/, "${PANEL}"],
+  [/^\$\(basename "\$dir"\)$/, "${BACKUP}"],
+  [/^\$\(printf '%s' "\$found" \| tr '\\n' ' '\)$/, "${PANELS}"],
+  [/^\$\(rt_panel_rebecca_image\)$/, "${IMAGE}"],
+  [/^\$\(\(n_avail - n_missing\)\)$/, "${N_PRESENT}"],
+];
+
+// Read the bash double-quoted string that starts at s[i]; return its source
+// text and where it ends, or null when the line does not close it.
+function readDq(s, i) {
+  if (s[i] !== '"') return null;
+  const paren = (k) => { // k: just after "$(" -- the index after its ")"
+    let depth = 1;
+    while (k < s.length && depth > 0) {
+      const c = s[k];
+      if (c === "\\") { k += 2; continue; }
+      if (c === "'") { const e = s.indexOf("'", k + 1); if (e < 0) return -1; k = e + 1; continue; }
+      if (c === '"') { const r = readDq(s, k); if (!r) return -1; k = r.end; continue; }
+      if (c === "(") depth++;
+      else if (c === ")") depth--;
+      k++;
+    }
+    return depth === 0 ? k : -1;
+  };
+  let j = i + 1;
+  while (j < s.length) {
+    const c = s[j];
+    if (c === "\\") { j += 2; continue; }
+    if (c === '"') return { text: s.slice(i + 1, j), end: j + 1 };
+    if (c === "$" && s[j + 1] === "(") { const k = paren(j + 2); if (k < 0) return null; j = k; continue; }
+    if (c === "$" && s[j + 1] === "{") { const k = s.indexOf("}", j + 2); if (k < 0) return null; j = k + 1; continue; }
+    j++;
+  }
+  return null;
+}
+
+// Replace each top-level $( … ) in a message with its placeholder.
+function placeholders(text, where) {
+  let out = "";
+  let j = 0;
+  while (j < text.length) {
+    if (text[j] === "\\") { out += text.slice(j, j + 2); j += 2; continue; }
+    if (text[j] === "$" && text[j + 1] === "(") {
+      let depth = 0, k = j + 1;
+      for (; k < text.length; k++) {
+        const c = text[k];
+        if (c === "\\") { k++; continue; }
+        if (c === "'") { k = text.indexOf("'", k + 1); continue; }
+        if (c === '"') { const q = readDq(text, k); k = q.end - 1; continue; }
+        if (c === "(") depth++;
+        else if (c === ")" && --depth === 0) break;
+      }
+      const sub = text.slice(j, k + 1);
+      const hit = SUBST.find(([re]) => re.test(sub));
+      if (!hit) {
+        console.error(`sync: ${where}: no placeholder for ${sub}; add one to SUBST`);
+        process.exit(1);
+      }
+      out += hit[1];
+      j = k + 1;
+      continue;
+    }
+    out += text[j++];
+  }
+  return out;
+}
+
 const messages = [];
 for (const file of FILES) {
   let fn = "(top)";
-  readFileSync(join(SRC, file), "utf8").split("\n").forEach((line, i) => {
+  readFileSync(need(join(SRC, file)), "utf8").split("\n").forEach((line, i) => {
     const def = line.match(/^([a-z_0-9]+)\(\) \{/);
     if (def) fn = def[1];
     if (/^\s*#/.test(line) || SKIP.has(fn)) return;
     for (const m of line.matchAll(CALL)) {
-      if (/^\$\d$/.test(m[2])) continue; // the helpers passing their argument on
-      messages.push({ file, line: i + 1, fn, level: /die|err|error/.test(m[1]) ? "FAIL" : "warn", text: m[2] });
+      const r = readDq(line, m.index + m[0].length);
+      if (!r) {
+        console.error(`sync: ${file}:${i + 1}: cannot read the message string`);
+        process.exit(1);
+      }
+      if (/^\$\d$/.test(r.text)) continue; // the helpers passing their argument on
+      messages.push({
+        file, line: i + 1, fn,
+        level: /die|err|error/.test(m[1]) ? "FAIL" : "warn",
+        text: placeholders(r.text, `${file}:${i + 1}`),
+      });
     }
     for (const m of line.matchAll(RAW)) {
       messages.push({ file, line: i + 1, fn, level: "FAIL", text: m[1].replace(/^row-template: /, "") });
@@ -86,4 +179,4 @@ for (const file of FILES) {
 writeFileSync(join(ROOT, "src", "data", "installer-messages.json"),
   JSON.stringify({ source: "Row-Template installer", count: messages.length, messages }, null, 2) + "\n");
 
-console.log(`sync: ${ids.length} templates, ${ids.length * 2} screenshots, ${ids.length} live pages, ${messages.length} installer messages`);
+console.log(`sync: ${ids.length} templates, ${ids.length * 2} screenshots, ${ids.length} live pages, ${messages.length} installer messages from ${FILES.length} files`);

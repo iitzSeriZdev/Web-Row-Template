@@ -1,19 +1,33 @@
 ---
 title: Activation
-description: How Row-Template becomes the page your subscribers see — the one panel setting involved, setting it automatically or by hand, and confirming it worked.
+description: How Row-Template becomes the page your subscribers see on 3X-UI, PasarGuard and Rebecca — what changes on each panel, doing it automatically or by hand, and confirming it worked.
 ---
 
-Installing Row-Template puts the page on disk. **Activation** tells 3X-UI to serve it. It is one panel setting — the subscription theme directory, stored as `subThemeDir` — set to:
+Installing Row-Template puts the page on disk. **Activation** tells the panel to serve it. What that means depends on the panel, and on each one Row-Template changes as little as it can:
+
+| Panel | What activation changes | Automatic when | Restart |
+|---|---|---|---|
+| 3X-UI | One setting, `subThemeDir` | `sqlite3` is installed and the panel database is found | Yes, briefly |
+| PasarGuard | The page placed in PasarGuard's templates directory, and one marked block in `/opt/pasarguard/.env` | Always | Once, only if the panel is running |
+| Rebecca | The page placed in Rebecca's templates directory, and two fields of its subscription settings | Rebecca uses its default SQLite database and `sqlite3` is installed | Never |
+
+The panel then serves the page to browsers that open a subscription link, filling in each subscriber's own data. VPN apps that fetch the same link keep receiving normal subscription content.
+
+On PasarGuard and Rebecca, activation is a **transaction**: the panel's settings are snapshotted (under `backups.v2/` in the install directory), changed and verified, and — if any step fails — restored exactly from the snapshot, and the restore is confirmed by reading the settings back.
+
+## 3X-UI
+
+The one setting is the subscription theme directory, stored as `subThemeDir`, set to:
 
 ```text
 /etc/3x-ui/sub_templates/row-template
 ```
 
-3X-UI then serves `sub.html` from that directory to browsers that open a subscription link, filling in each subscriber's own data. VPN apps that fetch the same link keep receiving normal subscription content.
+3X-UI then serves `sub.html` from that directory.
 
-## Automatic activation
+### Automatic activation
 
-When `sqlite3` is installed and the panel database is found (see [Requirements](/docs/requirements/#where-the-panel-database-is-found)), the installer can set `subThemeDir` itself. It:
+When `sqlite3` is installed and the panel database is found (see [Requirements](/docs/requirements/#where-the-3x-ui-database-is-found)), the installer can set `subThemeDir` itself. It:
 
 1. stops the `x-ui` service if it is running, so the panel cannot write an old value back over the change;
 2. writes `subThemeDir` in the panel database — nothing else;
@@ -24,7 +38,7 @@ On an interactive install it shows the current value and asks first: `Make Row-T
 
 If any step fails, the installer makes sure the service is running again and prints the manual step instead.
 
-## Manual activation
+### Manual activation
 
 Without `sqlite3` — or if you prefer to do it yourself:
 
@@ -48,9 +62,54 @@ Save the settings, then restart the panel so it picks up the new directory — f
 
 </Steps>
 
+## PasarGuard
+
+Always automatic. The page is placed at:
+
+```text
+/var/lib/pasarguard/templates/row-template/index.html
+```
+
+— or inside your own `CUSTOM_TEMPLATES_DIRECTORY`, if you set one. For a Docker install that directory must be inside `/var/lib/pasarguard`, the folder the container shares with the host; any other directory is refused before anything changes. Then this block is appended to `/opt/pasarguard/.env`:
+
+```text
+# >>> row-template (managed by Row-Template; do not edit) nl=0 >>>
+CUSTOM_TEMPLATES_DIRECTORY = "/var/lib/pasarguard/templates"
+SUBSCRIPTION_PAGE_TEMPLATE = "row-template/index.html"
+# <<< row-template <<<
+```
+
+The last assignment of a key in `.env` wins, so none of your own lines is edited. PasarGuard reads `.env` only at start-up, so a running panel is restarted once (a stopped panel is not started). `.env` also holds your admin password, JWT secret and database URL: it is read only for the two page keys, never printed, and never copied into a backup.
+
+**What still takes precedence:** an admin with their own subscription template, and the panel's **disable subscription template** setting. Both are yours to change; `row-template verify` reports them.
+
+## Rebecca
+
+Row-Template supports Rebecca **1.x**, the Go edition, from Rebecca's binary install. The 0.0.x Docker image is refused before anything changes — see [Requirements](/docs/requirements/#check-your-panel).
+
+The page is placed at:
+
+```text
+/var/lib/rebecca/templates/row-template/index.html
+```
+
+— or inside your own custom templates directory, if Rebecca already has one. Rebecca's subscription settings are then set to select it. Rebecca reads them on every request, so nothing is restarted.
+
+- **Automatic** with the default SQLite database and `sqlite3` installed: the page and directory fields of the newest subscription settings row are set. The directory is set only when you had none, and every value — empty, `NULL` or set — is restored exactly on uninstall.
+- **Manual** with MySQL/MariaDB, or without `sqlite3`: the page is still placed, and the installer prints the one step. In the Rebecca dashboard open **Settings → Subscription → Templates** and set:
+
+```text
+Subscription page template:   row-template/index.html
+Custom templates directory:   /var/lib/rebecca/templates
+```
+
+If a custom templates directory is already set, keep it and copy `/var/lib/rebecca/templates/row-template/` into it instead. No database password is ever asked for, read or printed.
+
+**What still takes precedence:** an admin's own subscription template settings. `row-template verify` reports how many admins have one.
+
 ## Activating later
 
-The interactive manager can check and set it at any time: run `row-template`, then choose **5 — Activate / Re-apply theme**. It shows the current value, asks before changing it, and runs the live checks afterwards.
+The interactive manager can check and apply activation at any time: run `row-template`, then choose **5 — Activate / Re-apply theme**. It shows the current state, asks before changing anything, and runs the live checks afterwards. On PasarGuard and Rebecca it regenerates the page first, so what is activated is exactly what `verify` checks.
 
 ## Confirm it works
 
@@ -60,7 +119,8 @@ Open any client's subscription link in a browser. You should see the Row-Templat
 row-template verify
 ```
 
-Among its checks:
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
 
 | Line | Meaning |
 |---|---|
@@ -71,8 +131,38 @@ Among its checks:
 | `warn live render check: the panel served its built-in page.` | The setting is not active yet — restart the panel, or check the path. |
 | `ok   VPN-client check: normal subscription content is served.` | VPN apps are unaffected. |
 
-The `subThemeDir` and live checks need `sqlite3` to find a subscription to test with; without it they are skipped, not failed. [All verify checks →](/docs/management/verify/)
+The `subThemeDir` and live checks need `sqlite3` to find a subscription to test with; without it they are skipped, not failed.
+
+</Tab>
+<Tab>
+
+| Line | Meaning |
+|---|---|
+| `ok   PasarGuard selects the Row-Template page, and the placed page is current.` | `.env` selects the page, and the placed copy is the one just generated. |
+| `ok   Live check: the running PasarGuard uses the Row-Template page.` | The running container reads the setting and can see the page (Docker install). |
+| `warn the running PasarGuard does not use the Row-Template page yet; restart the panel.` | Restart PasarGuard (`pasarguard restart`). |
+| `warn PasarGuard does not select the Row-Template page; activate it from the manager.` | Not activated yet. |
+| `warn panel pasarguard: … admin(s) set their own subscription page …` | Those admins' users keep their own page. |
+
+</Tab>
+<Tab>
+
+| Line | Meaning |
+|---|---|
+| `ok   Rebecca selects the Row-Template page, and the placed page is current.` | Rebecca's settings select the page, and the placed copy is the one just generated. |
+| `warn Rebecca does not select the Row-Template page; activate it from the manager.` | Not activated yet, or another page was chosen in the dashboard. |
+| `Panel selection not checked (activation is manual here: …)` | MySQL/MariaDB, or no `sqlite3`: check **Settings → Subscription → Templates** yourself. |
+| `warn panel rebecca: … admin(s) override the subscription page …` | Those admins' users keep their own page. |
+
+</Tab>
+</Tabs>
+
+[All verify checks →](/docs/management/verify/)
 
 ## Deactivating
 
-Clear **Sub Theme Directory** in the panel and save: 3X-UI goes back to its built-in page, and Row-Template stays installed. `row-template uninstall` clears it for you — but only when it still points at Row-Template.
+- **3X-UI:** clear **Sub Theme Directory** in the panel and save: 3X-UI goes back to its built-in page, and Row-Template stays installed.
+- **PasarGuard:** remove the `row-template` block from `/opt/pasarguard/.env` and restart the panel.
+- **Rebecca:** in **Settings → Subscription → Templates**, set **Subscription page template** back to `subscription/index.html`, Rebecca's own page.
+
+`row-template uninstall` does all of this for you, and on each panel changes only what Row-Template itself set. See [Uninstalling](/docs/management/uninstall/).

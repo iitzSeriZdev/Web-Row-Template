@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting
-description: Symptoms, their usual causes and the fix — from a page that does not appear to a logo that is refused. Start with row-template verify.
+description: Symptoms, their usual causes and the fix — on 3X-UI, PasarGuard and Rebecca, from a page that does not appear to a logo that is refused. Start with row-template verify.
 ---
 
 Most problems show up in one command. Run it first, as root:
@@ -12,41 +12,75 @@ row-template verify
 Every line it prints is explained in [Verifying an installation](/docs/management/verify/), and every error message in the [error reference](/docs/help/errors/). This page starts from what you **see** instead.
 
 <Callout type="warning" title="Refusals are deliberate">
-  Many messages are the installer **refusing** to do something unsafe — a checksum that does not match, a symlink where a file should be, an unknown panel database. Fix the cause they name. Never work around a refusal.
+  Many messages are the installer **refusing** to do something unsafe — a checksum that does not match, a symlink where a file should be, an unknown panel database, a Rebecca edition that cannot render the page. Fix the cause they name. Never work around a refusal.
 </Callout>
 
 ## Subscribers still see the panel's built-in page
+
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
 
 1. **Check the setting.** In **Panel Settings → Subscription**, **Sub Theme Directory** must be exactly `/etc/3x-ui/sub_templates/row-template` — no trailing slash or spaces.
 2. **Restart the panel** after changing it, from the panel or with `systemctl restart x-ui`.
 3. **Open the link in a browser.** VPN apps are meant to keep receiving normal subscription content.
 4. **Run `row-template verify`.** `Panel subThemeDir points at Row-Template` and `Live render check: a browser receives Row-Template` confirm it from the server's side.
 
+</Tab>
+<Tab>
+
+1. **Run `row-template verify`.** `PasarGuard selects the Row-Template page, and the placed page is current` confirms the files and `.env`.
+2. **Restart the panel** if verify says the running PasarGuard does not use the page yet: `pasarguard restart`. PasarGuard reads `.env` only when it starts.
+3. **Check your own `.env` lines.** A `SUBSCRIPTION_PAGE_TEMPLATE` line of yours **below** the Row-Template block wins, because the last assignment counts.
+4. **Check what still takes precedence.** An admin with their own subscription template keeps it for their users, and the **disable subscription template** setting makes the panel send browsers the raw subscription instead of any page. `verify` reports both.
+
+</Tab>
+<Tab>
+
+1. **Run `row-template verify`.** `Rebecca selects the Row-Template page, and the placed page is current` confirms the files and the settings.
+2. **Check the dashboard.** In **Settings → Subscription → Templates**, **Subscription page template** must be `row-template/index.html`, and **Custom templates directory** must be the directory that holds `row-template/` (by default `/var/lib/rebecca/templates`). With MySQL/MariaDB this step is always manual.
+3. **Check admin overrides.** An admin with their own subscription template settings keeps them for their users; `verify` reports how many.
+
+</Tab>
+</Tabs>
+
 If `verify` passes but your browser still shows the old page, something between you and the panel — a CDN or caching proxy — may be serving a stored copy.
+
+## The installer refuses Rebecca
+
+`panel rebecca: this is Rebecca 0.0.x, the Python edition …` — Docker Hub's `rebeccapanel/rebecca` image is still the 0.0.x Python edition, which cannot render Row-Template's Rebecca page; with it, Rebecca would accept the setting and silently keep serving its own page. The installer refuses it before changing anything. Install Rebecca **1.x**, the Go edition, with Rebecca's binary installer (`rebecca-binary.sh`) — the install Row-Template is tested against — then run the installer again. The refusal message also names Rebecca's `rebecca migrate-binary`; Row-Template has not verified it, and in Rebecca's current scripts that command is not routed by the `rebecca` command, so it may only print its usage text.
+
+## The installer says more than one panel is installed
+
+`more than one panel is installed here (…); choose one with RT_PANEL=3xui|pasarguard|rebecca.` — the server runs several supported panels, and a scripted install cannot ask which one to serve. Run the installer again with `RT_PANEL` set to that panel, or run it in a terminal and pick it from the list. One installation serves one panel.
+
+## The installer says no supported panel was found
+
+`no supported panel was detected on this host: …` — the installer found neither 3X-UI nor PasarGuard nor Rebecca. A panel counts as installed only when two independent signs of it agree (see [Requirements](/docs/requirements/#check-your-panel)); if a line above says a panel *looks partly installed*, finish or repair that panel's installation. Row-Template must be installed on the same server as the panel. For 3X-UI, the installer looks for `/usr/local/x-ui/x-ui`, `/usr/local/bin/x-ui`, an `x-ui` command on the `PATH`, or a systemd unit named `x-ui.service`; a 3X-UI in a container or under another name is not detected.
+
+## Activation failed and was rolled back
+
+On PasarGuard and Rebecca, activation is a transaction: if a step fails, the panel's settings are restored from the snapshot taken just before, and you see `… was restored exactly to its state before the attempt.` Row-Template stays installed. Read the `panel pasarguard:` or `panel rebecca:` line above it for the cause — often a panel that could not be restarted, or a `CUSTOM_TEMPLATES_DIRECTORY` outside the folder the container shares — fix it, then run `row-template` and choose **5 — Activate / Re-apply theme**.
 
 ## VPN apps receive HTML instead of their configuration
 
-`verify` reports `VPN-client check: HTML was returned instead of subscription content.` 3X-UI decides what to send from the request, so something in front of the panel is changing it — typically a proxy or CDN that rewrites or drops the `User-Agent` or `Accept` headers. Let those requests through to the panel unchanged.
+`verify` reports `VPN-client check: HTML was returned instead of subscription content.` The panel decides what to send from the request, so something in front of it is changing the request — typically a proxy or CDN that rewrites or drops the `User-Agent` or `Accept` headers. Let those requests through to the panel unchanged.
 
 ## The page shows, but the figures never update
 
-The page refreshes by requesting its own address with `?format=info` from your panel. If a reverse proxy strips the query string or blocks that request, the page keeps the figures it was served with. A response the page does not recognise stops refreshing on purpose; reloading the page starts it again.
-
-## The installer says no 3X-UI was found
-
-`no 3x-ui installation was detected on this host.` The installer looks for `/usr/local/x-ui/x-ui`, `/usr/local/bin/x-ui`, an `x-ui` command on the `PATH`, or a systemd unit named `x-ui.service`. Row-Template must be installed on the same server as the panel; a panel in a container or under another name is not detected.
+- **PasarGuard and Rebecca:** expected. On these panels the page shows the figures as of when it was opened; reloading it shows newer ones. Both panels serve live status on a path of their own, and wiring that up is a decision deferred in 1.3.0.
+- **3X-UI:** the page refreshes by requesting its own address with `?format=info` from your panel. If a reverse proxy strips the query string or blocks that request, the page keeps the figures it was served with. A response the page does not recognise stops refreshing on purpose; reloading the page starts it again.
 
 ## Automatic activation is unavailable
 
-`Automatic activation is unavailable here (sqlite3 is not installed).` Either install `sqlite3` and use the manager's **5 — Activate / Re-apply theme**, or set Sub Theme Directory in the panel by hand. Both are equally good. See [Activation](/docs/installation/activation/).
+- **3X-UI:** `Automatic activation is unavailable here (sqlite3 is not installed).` Either install `sqlite3` and use the manager's **5 — Activate / Re-apply theme**, or set Sub Theme Directory in the panel by hand. Both are equally good. If `sqlite3` is installed but the database is not found — for example because it lives somewhere unusual — tell Row-Template where it is:
 
-If `sqlite3` is installed but the database is not found — for example because it lives somewhere unusual — tell Row-Template where it is:
+  ```bash
+  XUI_DB_FOLDER=/opt/x-ui/db row-template
+  ```
 
-```bash
-XUI_DB_FOLDER=/opt/x-ui/db row-template
-```
+- **Rebecca:** `Automatic activation is unavailable here; the page will be placed for you to select.` Rebecca uses MySQL/MariaDB, or `sqlite3` is not installed. Enter the two values it prints in **Settings → Subscription → Templates**. See [Activation](/docs/installation/activation/#rebecca).
 
-## The panel database was refused
+## The 3X-UI database was refused
 
 `panel database is not an SQLite database: … (not falling back to another database; …)`. The first database file Row-Template found is not a valid SQLite file, and it will not guess another one. Point it at the right folder with `XUI_DB_FOLDER`, or remove the stale file if you are sure it is not in use. Until then, activate by hand.
 
@@ -54,13 +88,13 @@ XUI_DB_FOLDER=/opt/x-ui/db row-template
 
 `cannot fetch manifest.txt from the release source.` or `could not obtain a verified release.` Check `curl -I https://github.com` from the server. If GitHub is blocked, [install or update from a local folder](/docs/installation/manual/).
 
-## Only Row is available after updating from 1.1.0
+## Designs are missing after updating from 1.1.0
 
-Expected after the **first** update from 1.1.0, which is carried out by 1.1.0's own updater. Run `row-template update` once more. [Why →](/docs/management/updating/#upgrading-from-110)
+After `row-template update` from 1.1.0, the next time you open `row-template`, or run `row-template config` or `row-template verify` as root, 1.3.0 downloads the rest of the same release — every design — before doing anything else. If the manager says `No templates are installed, and they could not be restored automatically`, that download failed and the message above it says why: make sure the server can reach the release source, then open the menu again, or run `row-template update`. [Why →](/docs/management/updating/#upgrading-from-110-or-120)
 
 ## A branding change does not show
 
-The page is regenerated as soon as the command reports success. Reload the subscription page in the browser, bypassing its cache. If the old page persists, restart the panel.
+The page is regenerated — and on PasarGuard and Rebecca, copied into the panel's templates directory — as soon as the command reports success. Reload the subscription page in the browser, bypassing its cache. If the old page persists on 3X-UI, restart the panel.
 
 ## The logo is refused
 
@@ -85,9 +119,10 @@ Files are missing or the live page failed validation. Run **3 — Verify** to se
 Open an issue at [github.com/iitzSeriZdev/Row-Template/issues](https://github.com/iitzSeriZdev/Row-Template/issues) with:
 
 - `row-template version` and `row-template verify` output;
+- your panel and its version;
 - your operating system, version and CPU architecture;
 - what you did, what you expected, and what happened.
 
 <Callout type="danger" title="Never include secrets">
-  Do not paste subscription links, `subId` values, client UUIDs, panel usernames or passwords, cookies, tokens, the panel's `webBasePath`, TLS keys or real server addresses. `verify` and `version` never print any of these, but other logs may — redact them.
+  Do not paste subscription links, `subId` values, client UUIDs, panel usernames or passwords, cookies, tokens, the panel's `webBasePath`, the contents of `.env`, database URLs, TLS keys or real server addresses. `verify` and `version` never print any of these, but other logs may — redact them.
 </Callout>

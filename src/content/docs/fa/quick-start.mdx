@@ -1,31 +1,58 @@
 ---
 title: شروع سریع
-description: Row-Template را روی سرور 3X-UI نصب کنید، آن را صفحهٔ فعال اشتراک کنید و درستی کارش را بررسی کنید — در سه مرحله.
+description: Row-Template را روی سرور 3X-UI، PasarGuard یا Rebecca نصب کنید، آن را صفحهٔ فعال اشتراک کنید و از درستی کار مطمئن شوید — در سه مرحله.
 ---
 
-این صفحه کوتاه‌ترین مسیر است. هر مرحله به توضیح کامل آن پیوند دارد.
+این صفحه مسیر کوتاه است. هر مرحله به توضیح کامل پیوند دارد، اگر خواستید.
 
 <Steps>
 
 ### روی سرور پنل root شوید
 
-وارد سروری شوید که پنل 3X-UI روی آن اجرا می‌شود و یک پوستهٔ root باز کنید:
+وارد سروری شوید که پنل شما روی آن است و یک پوستهٔ root باز کنید:
 
 ```bash
 sudo -i
 ```
 
 <Callout type="warning">
-  از پوستهٔ واقعی root استفاده کنید. `sudo bash <(curl …)` کار نمی‌کند: `sudo` توصیف‌گر فایلی را که `<(…)` می‌سازد می‌بندد و bash نمی‌تواند اسکریپت را بخواند.
+  از یک پوستهٔ واقعی root استفاده کنید. `sudo bash <(curl …)` کار نمی‌کند: `sudo` توصیف‌گر فایلی را که `<(…)` می‌سازد می‌بندد، پس bash نمی‌تواند اسکریپت را بخواند.
 </Callout>
 
-نسخهٔ پنل را بررسی کنید — باید **3.6.0 یا جدیدتر** باشد:
+بررسی کنید پنل شما از پنل‌هایی است که Row-Template پشتیبانی می‌کند:
+
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
+
+نسخه باید **3.6.0 یا جدیدتر** باشد:
 
 ```bash
 /usr/local/x-ui/x-ui -v
 ```
 
-برای همهٔ پیش‌نیازها [پیش‌نیازها](/docs/requirements/) را ببینید.
+</Tab>
+<Tab>
+
+PasarGuard نسخهٔ **5.x**، نصب‌شده با نصب‌کنندهٔ رسمی‌اش (Docker) یا از سورس (`pasarguard.service`). نصب‌کنندهٔ رسمی فرمان `pasarguard` را اضافه می‌کند:
+
+```bash
+pasarguard status              # the official (Docker) install
+systemctl status pasarguard    # a source install
+```
+
+</Tab>
+<Tab>
+
+Rebecca نسخهٔ **1.x**، یعنی نسخهٔ Go — نصب باینری Rebecca که به‌صورت `rebecca.service` اجرا می‌شود. ایمیج Docker مربوط به Rebecca هنوز 0.0.x است و رد می‌شود؛ Rebecca نسخهٔ 1.x را با نصب‌کنندهٔ باینری‌اش (`rebecca-binary.sh`) نصب کنید.
+
+```bash
+systemctl status rebecca
+```
+
+</Tab>
+</Tabs>
+
+برای همهٔ چیزهایی که نصب‌کننده لازم دارد، [پیش‌نیازها](/docs/requirements/) را ببینید.
 
 ### نصب‌کننده را اجرا کنید
 
@@ -33,23 +60,47 @@ sudo -i
 bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
 ```
 
-نصب‌کننده دانلود را بررسی می‌کند و بعد چند سؤال می‌پرسد:
+نصب‌کننده دانلود را بررسی می‌کند، پنل شما را پیدا می‌کند و بعد چند سؤال می‌پرسد:
 
+- **کدام پنل؟** — فقط روی سروری که بیش از یک پنل پشتیبانی‌شده دارد.
 - **Continue installation?** — Enter بزنید.
 - **Choose your Row-Template design** — یک شماره وارد کنید، یا برای Row کلید Enter را بزنید. می‌توانید اول [همهٔ طرح‌ها را ببینید](/docs/templates/).
-- **Service name، Support URL و Logo** — همه اختیاری‌اند. برای رد شدن از هر کدام Enter بزنید.
+- **Service name، Support URL، Logo** — همه اختیاری‌اند. برای رد شدن از هر کدام Enter بزنید.
 - **Install with these settings?** — Enter بزنید.
-- **Make Row-Template the active 3X-UI subscription theme now?** — Enter بزنید.
+- **Make Row-Template the active subscription page now?** — Enter بزنید. اول نشان می‌دهد فعال‌سازی چه چیزی را در پنل شما تغییر می‌دهد.
 
-سؤال آخر فقط وقتی نمایش داده می‌شود که `sqlite3` نصب باشد و پایگاه‌دادهٔ پنل پیدا شود. در غیر این صورت یک فیلد را خودتان در پنل تنظیم می‌کنید — مرحلهٔ بعد را ببینید. [نصب‌کننده، سؤال به سؤال ←](/docs/installation/installer/)
+در 3X-UI پرسش آخر فقط وقتی می‌آید که `sqlite3` نصب باشد و پایگاه‌دادهٔ پنل پیدا شود؛ در غیر این صورت یک فیلد را خودتان در پنل تنظیم می‌کنید. [نصب‌کننده، پرسش به پرسش ←](/docs/installation/installer/)
 
-### فعال کنید و بررسی کنید
+### فعال‌سازی و بررسی
 
-اگر نصب‌کننده Row-Template را برایتان فعال کرده، مستقیم سراغ `verify` بروید. در غیر این صورت، در پنل 3X-UI بخش **Panel Settings → Subscription** را باز کنید، **Sub Theme Directory** را دقیقاً روی این مسیر بگذارید و ذخیره کنید:
+اگر نصب‌کننده Row-Template را برایتان فعال کرده، مستقیم سراغ `verify` بروید. در غیر این صورت:
+
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
+
+در پنل **Panel Settings → Subscription** را باز کنید، **Sub Theme Directory** را دقیقاً روی این مسیر بگذارید و ذخیره کنید:
 
 ```text
 /etc/3x-ui/sub_templates/row-template
 ```
+
+</Tab>
+<Tab>
+
+فعال‌سازی خودکار است. اگر از آن گذشتید، `row-template` را اجرا کنید و **5 — Activate / Re-apply theme** را انتخاب کنید.
+
+</Tab>
+<Tab>
+
+با پایگاه‌دادهٔ پیش‌فرض SQLite و نصب بودن `sqlite3`، خودکار است. با MySQL/MariaDB در داشبورد Rebecca **Settings → Subscription → Templates** را باز کنید و این مقادیر را بگذارید:
+
+```text
+Subscription page template:   row-template/index.html
+Custom templates directory:   /var/lib/rebecca/templates
+```
+
+</Tab>
+</Tabs>
 
 سپس کل نصب را بررسی کنید:
 
@@ -57,7 +108,7 @@ bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/d
 row-template verify
 ```
 
-لینک اشتراک یکی از کلاینت‌ها را در مرورگر باز کنید. باید به‌جای صفحهٔ داخلی پنل، صفحهٔ Row-Template را ببینید. [بیشتر دربارهٔ فعال‌سازی ←](/docs/installation/activation/)
+لینک اشتراک یکی از کلاینت‌ها را در مرورگر باز کنید. باید به‌جای صفحهٔ داخلی پنل، صفحهٔ Row-Template را ببینید. [دربارهٔ فعال‌سازی ←](/docs/installation/activation/)
 
 </Steps>
 
@@ -65,12 +116,12 @@ row-template verify
 
 <Cards>
   <Card title="برندینگ" href="/docs/configuration/branding/" icon="palette">
-    نام سرویس، لینک پشتیبانی و لوگو را هر وقت خواستید تغییر دهید.
+    نام سرویس، لینک پشتیبانی و لوگو را هر زمان تغییر دهید.
   </Card>
   <Card title="تعویض طرح" href="/docs/templates/choosing/" icon="panels-top-left">
-    پانزده طرح را مقایسه کنید و با خیال راحت تعویض کنید.
+    هفده طرح را مقایسه کنید و با خیال راحت عوض کنید.
   </Card>
   <Card title="منوی مدیریت" href="/docs/management/manager/" icon="terminal">
-    با اجرای `row-template` منوی تعاملی را باز کنید.
+    برای منوی تعاملی `row-template` را اجرا کنید.
   </Card>
 </Cards>

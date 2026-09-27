@@ -4,7 +4,7 @@ nav: CLI Reference
 description: Every row-template command, its options, whether it needs root, what it prints and how it exits.
 ---
 
-The installer puts one command on your server, `/usr/local/bin/row-template`. It is a thin launcher for the management library in the install directory.
+The installer puts one command on your server, `/usr/local/bin/row-template`. It is a thin launcher for the management library in the install directory — `/etc/3x-ui/sub_templates/row-template` on 3X-UI, `/etc/row-template` on PasarGuard and Rebecca. The commands are the same on every panel.
 
 ```bash
 row-template <command> [options]
@@ -19,9 +19,9 @@ Run it with **no arguments** in a terminal to open the [interactive manager](/do
 | `row-template config` | Change the service name, support URL or logo, then regenerate the page. [Branding →](/docs/configuration/branding/) | Yes |
 | `row-template update` | Download, verify and activate the latest stable release. [Updating →](/docs/management/updating/) | Yes |
 | `row-template rollback` | Restore a previous version from a backup. Options: `--auto`, `--to <backup>`. [Rollback →](/docs/management/rollback/) | Yes |
-| `row-template verify` | Check the installation, the panel wiring and the live page. Read-only. [Verify →](/docs/management/verify/) | Recommended |
-| `row-template version` | Show the installed version, the minimum supported 3X-UI and the detected 3X-UI. Aliases: `-v`, `--version`. | No |
-| `row-template uninstall` | Remove Row-Template and revert the panel to its built-in page. [Uninstall →](/docs/management/uninstall/) | Yes |
+| `row-template verify` | Check the installation, the panel wiring and the live page. [Verify →](/docs/management/verify/) | Recommended |
+| `row-template version` | Show the installed version and the panel it serves; on 3X-UI, also the minimum supported and the detected 3X-UI version. Aliases: `-v`, `--version`. | No |
+| `row-template uninstall` | Remove Row-Template and return the panel to the page it had before. [Uninstall →](/docs/management/uninstall/) | Yes |
 | `row-template menu` | Open the interactive manager explicitly. Alias: `manager`. | Yes |
 | `row-template help` | Show usage. Aliases: `-h`, `--help`. | No |
 
@@ -31,7 +31,7 @@ Commands that change the system refuse to run without root:
   FAIL this operation must run as root (e.g. sudo row-template ...)
 ```
 
-`verify` does not insist on root, but as another user it cannot read `config.env` or the panel database, so it reports less.
+`verify` does not insist on root, but as another user it cannot read `config.env` or the panel's settings, so it reports less. Run as root, it also puts the template store right before checking — see [Verify](/docs/management/verify/).
 
 ## version
 
@@ -39,11 +39,34 @@ Commands that change the system refuse to run without root:
 row-template version
 ```
 
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
+
 ```text
-Row-Template 1.2.0
+Row-Template 1.3.0
+Panel: 3X-UI
 Supported 3x-ui minimum: 3.6.0
-Detected 3x-ui: 3.7.0
+Detected 3x-ui: 3.8.5
 ```
+
+</Tab>
+<Tab>
+
+```text
+Row-Template 1.3.0
+Panel: PasarGuard
+```
+
+</Tab>
+<Tab>
+
+```text
+Row-Template 1.3.0
+Panel: Rebecca
+```
+
+</Tab>
+</Tabs>
 
 `unknown` means the value could not be read. Include this output in bug reports.
 
@@ -61,11 +84,11 @@ Every command prints short status lines:
 
 ```text
   ok   Canonical artifact integrity verified.
-  warn panel subThemeDir is empty; set it to /etc/3x-ui/sub_templates/row-template.
+  warn PasarGuard does not select the Row-Template page; activate it from the manager.
   FAIL verification FAILED (1 hard issue(s), 1 warning(s)).
 ```
 
-`ok` lines go to standard output; `warn` and `FAIL` lines go to standard error. Colour is used only on a terminal, and never when `NO_COLOR` is set. Every `warn` and `FAIL` message is explained in the [error reference](/docs/help/errors/).
+`ok` lines go to standard output; `warn` and `FAIL` lines go to standard error. Messages from a panel adapter start with the panel, such as `panel pasarguard:` or `panel rebecca:`. Colour is used only on a terminal, and never when `NO_COLOR` is set. Every `warn` and `FAIL` message is explained in the [error reference](/docs/help/errors/).
 
 ## Exit status
 
@@ -79,7 +102,7 @@ Commands that change the system work as transactions: when one fails part-way, i
 
 ## When the command itself is broken
 
-If the management library is missing, the launcher cannot load anything and prints:
+If the management library is missing, the launcher cannot load anything and prints, for example on 3X-UI:
 
 ```text
 row-template: management library not found at /etc/3x-ui/sub_templates/row-template/lib/row-template.sh

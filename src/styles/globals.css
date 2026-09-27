@@ -129,8 +129,11 @@ input { font: inherit; color: inherit; }
 }
 .site-header .container { display: flex; align-items: center; gap: .5rem; height: 100%; }
 .brand { display: inline-flex; align-items: center; gap: .5rem; font-weight: 600; font-size: .95rem; margin-inline-end: 1rem; white-space: nowrap; }
-.brand-mark { width: 1.5rem; height: 1.5rem; border-radius: .4rem; background: var(--primary); color: var(--primary-foreground); display: grid; place-items: center; }
-.brand-mark svg { width: .95rem; height: .95rem; }
+/* The official symbol is dark on transparent: on the dark theme it sits on a
+   white tile, the way the symbol itself is designed to be seen. */
+.brand-mark { width: 1.75rem; height: 1.75rem; border-radius: .45rem; flex: none; }
+.brand-mark img { width: 100%; height: 100%; display: block; }
+.dark .brand-mark { background: #fff; }
 .main-nav { display: none; align-items: center; gap: .25rem; }
 .main-nav a { font-size: .875rem; color: var(--muted-foreground); padding: .375rem .625rem; border-radius: .375rem; transition: color .15s; }
 .main-nav a:hover, .main-nav a[aria-current="page"] { color: var(--foreground); }
@@ -161,7 +164,9 @@ input { font: inherit; color: inherit; }
 }
 .search-trigger .label, .search-trigger kbd { display: none; }
 .search-trigger:hover { background: var(--accent); color: var(--foreground); }
-@media (min-width: 768px) {
+/* The labelled field needs the room the menu button gives back at 1024px;
+   below that it stays an icon, so the header never scrolls sideways. */
+@media (min-width: 1024px) {
   .search-trigger { width: 15rem; justify-content: flex-start; }
   .search-trigger .label { display: inline; flex: 1; text-align: start; }
   .search-trigger kbd { display: inline-flex; }
@@ -375,6 +380,11 @@ a.card:hover { background: var(--accent); }
 
 .hero { padding-block: 4rem 2rem; text-align: center; }
 @media (min-width: 768px) { .hero { padding-block: 6rem 3rem; } }
+/* The square logo is a rounded tile on a black canvas; the radius matches the
+   tile's own corners, so only the canvas is clipped. */
+.hero-logo { display: block; width: 5.5rem; height: 5.5rem; margin: 0 auto 1.5rem; }
+.hero-logo img { width: 100%; height: 100%; display: block; border-radius: 15%; box-shadow: 0 14px 32px -16px oklch(0 0 0 / 45%); }
+@media (min-width: 768px) { .hero-logo { width: 7rem; height: 7rem; margin-bottom: 1.75rem; } }
 .pill { display: inline-flex; align-items: center; gap: .5rem; border-width: 1px; border-radius: 999px; padding: .25rem .75rem; font-size: .8125rem; background: var(--surface); }
 .pill:hover { background: var(--accent); }
 .pill .sep { width: 1px; height: 1rem; background: var(--border); }
@@ -457,8 +467,9 @@ a.card:hover { background: var(--accent); }
 .menu-trigger .when-open, .menu-open .menu-trigger .when-closed { display: none; }
 .menu-open .menu-trigger .when-open { display: block; }
 .menu-open body { overflow: hidden; }
-.lang-switch { font-size: .8125rem; font-weight: 600; }
-.lang-switch[lang="fa"] { font-family: "Vazirmatn Variable", var(--font-sans); font-size: .875rem; }
+/* the flag of the language the switch leads to; the hairline keeps its white
+   band visible on the light theme */
+.lang-switch .flag { width: 1.375rem; height: auto; border-radius: 3px; box-shadow: 0 0 0 1px var(--border); }
 .tabs:not([data-ready]) > .tab-panel ~ .tab-panel { display: none; }
 .tab-list button { display: inline-flex; align-items: center; gap: .375rem; }
 .code-frame.titled .copy-btn { top: 2.5rem; }

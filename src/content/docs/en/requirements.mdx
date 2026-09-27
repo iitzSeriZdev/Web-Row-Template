@@ -1,20 +1,21 @@
 ---
 title: Requirements
-description: What the server needs before you install Row-Template, and how to check each item.
+description: What the server needs before you install Row-Template on 3X-UI, PasarGuard or Rebecca, and how to check each item.
 ---
 
-Row-Template runs on the same server as your 3X-UI panel. It needs nothing beyond standard Linux tools; the one optional extra, `sqlite3`, lets it activate itself instead of asking you to set one field in the panel.
+Row-Template runs on the same server as your panel. It needs nothing beyond standard Linux tools; the one optional extra, `sqlite3`, lets it activate itself on 3X-UI and Rebecca instead of asking you to set a value in the panel.
 
 ## At a glance
 
 | Requirement | Needed for | Required? |
 |---|---|---|
-| 3X-UI (MHSanaei) **3.6.0 or newer** | Everything — the installer refuses older or undetectable versions | Yes |
+| A supported panel: **3X-UI** (MHSanaei) **3.6.0 or newer**, **PasarGuard 5.x**, or **Rebecca 1.x** (the binary install) | Everything — the installer refuses a panel it cannot identify, a 3X-UI older than 3.6.0, and Rebecca's 0.0.x Docker image | Yes |
 | Root access | Installing, configuring, updating, rolling back, uninstalling | Yes |
 | `bash`, `tar`, `sha256sum` (or `shasum`) | Verifying and extracting the release | Yes |
 | `curl` | Downloading the release; the live page checks | Yes, unless you [install from a local folder](/docs/installation/manual/) |
-| `sqlite3` | Setting the panel's `subThemeDir` automatically; checking it in `verify`; the live page checks | Optional |
-| `systemd` with an `x-ui.service` unit | Stopping and restarting the panel around the automatic `subThemeDir` write | Optional |
+| `flock` (util-linux) | PasarGuard and Rebecca: the activation transaction's lock | On PasarGuard and Rebecca — present on virtually every Linux system |
+| `sqlite3` | 3X-UI: setting `subThemeDir` automatically and checking it. Rebecca: selecting the page automatically and checking it | Optional — without it, you set one value in the panel |
+| `systemd` with an `x-ui.service` unit | 3X-UI: stopping and restarting the panel around the automatic `subThemeDir` write | Optional |
 | HTTPS access to GitHub | The one-command install and `row-template update` | Unless you install from a local folder |
 
 **Recommended OS:** Ubuntu 24.04 LTS (x86_64). Other modern Linux distributions may work but have not had the same validation coverage.
@@ -22,6 +23,11 @@ Row-Template runs on the same server as your 3X-UI panel. It needs nothing beyon
 Row-Template adds no runtime to your server: no Node.js, no Python, no database, no background service.
 
 ## Check your panel
+
+The installer detects which panel is installed. A panel counts as installed only when **two independent signs** of it agree; a panel that is only partly there is refused rather than guessed at. On a server with more than one supported panel, an interactive install asks which one to serve, and a scripted fresh install **must** name it with `RT_PANEL` — see [Environment variables](/docs/installation/environment/#panel-and-terminal).
+
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
 
 The installer looks for the panel binary at `/usr/local/x-ui/x-ui`, then `/usr/local/bin/x-ui`, then any `x-ui` on your `PATH`, and for a systemd unit named `x-ui.service`. It reads the version from the binary:
 
@@ -31,10 +37,39 @@ The installer looks for the panel binary at `/usr/local/x-ui/x-ui`, then `/usr/l
 
 The first `X.Y.Z` in the output must be **3.6.0 or newer**. If the version cannot be read at all, the installer stops rather than guessing — see [`cannot determine the 3x-ui version`](/docs/help/errors/#cannot-determine-the-3x-ui-version-refusing-to-proceed).
 
+</Tab>
+<Tab>
+
+PasarGuard **5.x**, laid out the way its official installer lays it out. The signs checked: `/opt/pasarguard/.env`; a compose file running PasarGuard, or a `pasarguard` systemd unit (a source install); the `pasarguard` command at `/usr/local/bin/pasarguard`; and the data folder `/var/lib/pasarguard`.
+
+```bash
+ls -l /opt/pasarguard/.env
+pasarguard status              # the official (Docker) install
+systemctl status pasarguard    # a source install
+```
+
+Nothing extra is needed for automatic activation: Row-Template writes `.env` and restarts a running panel once.
+
+</Tab>
+<Tab>
+
+Rebecca **1.x**, the Go edition, from Rebecca's binary install (`rebecca-binary.sh`), which runs as `rebecca.service`. The signs checked: `/opt/rebecca/.env`; a compose file or a `rebecca` systemd unit; the `rebecca` command at `/usr/local/bin/rebecca`; and the data folder `/var/lib/rebecca`.
+
+```bash
+systemctl status rebecca
+```
+
+**Rebecca's Docker image is not supported.** Docker Hub's `rebeccapanel/rebecca` is still the 0.0.x Python edition, which renders pages from a different context and cannot render this one. The installer identifies the edition before it changes anything and refuses it; use Rebecca 1.x from its binary installer (`rebecca-binary.sh`) instead.
+
+Automatic activation needs Rebecca's default **SQLite** database and the `sqlite3` command. With MySQL/MariaDB the page is still placed, and you select it in the dashboard.
+
+</Tab>
+</Tabs>
+
 ## Check the tools
 
 ```bash
-for t in bash tar curl sha256sum sqlite3; do
+for t in bash tar curl sha256sum flock sqlite3; do
   command -v "$t" >/dev/null && echo "ok      $t" || echo "missing $t"
 done
 ```
@@ -43,7 +78,7 @@ done
 
 ## Install sqlite3 (optional)
 
-The installer never installs `sqlite3` for you. If you want automatic activation, install it first:
+The installer never installs `sqlite3` for you. For automatic activation on 3X-UI or Rebecca, install it first:
 
 <Tabs labels={["Debian / Ubuntu", "RHEL / Alma / Rocky"]} sync="os">
 <Tab>
@@ -62,11 +97,11 @@ dnf install -y sqlite
 </Tab>
 </Tabs>
 
-Without it, everything still works — you set **Sub Theme Directory** in the panel once, by hand. See [Activation](/docs/installation/activation/).
+Without it, everything still works — you set the value in the panel once, by hand. See [Activation](/docs/installation/activation/).
 
-## Where the panel database is found
+## Where the 3X-UI database is found
 
-For automatic activation, Row-Template also needs to find the panel's database. It uses the **first** of these that exists:
+For automatic activation on 3X-UI, Row-Template also needs to find the panel's database. It uses the **first** of these that exists:
 
 1. `$XUI_DB_FOLDER/x-ui.db`, when the `XUI_DB_FOLDER` environment variable is set
 2. `/etc/x-ui/x-ui.db`

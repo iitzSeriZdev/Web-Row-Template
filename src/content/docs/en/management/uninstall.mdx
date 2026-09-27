@@ -1,13 +1,13 @@
 ---
 title: Uninstalling
-description: Remove Row-Template and return the panel to its built-in page — what is removed, what is never touched, and how to clean up by hand.
+description: Remove Row-Template and return the panel to the page it had before — on 3X-UI, PasarGuard and Rebecca — what is removed, what is never touched, and how to clean up by hand.
 ---
 
 ```bash
 row-template uninstall
 ```
 
-As root. It asks first:
+As root. It asks first, for example on 3X-UI:
 
 ```text
   Remove Row-Template from /etc/3x-ui/sub_templates/row-template and revert the panel to its built-in page? [y/N]:
@@ -25,7 +25,10 @@ The manager's **7 — Uninstall** does the same.
 
 <Steps>
 
-### Reverts the panel — only if it points at Row-Template
+### Returns the panel to the page it had — only what Row-Template set
+
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
 
 When `sqlite3` can read the panel's `subThemeDir`:
 
@@ -38,6 +41,21 @@ Without `sqlite3`, the value cannot be read, so you are asked to check it yourse
   warn could not read subThemeDir (sqlite3/DB unavailable). If it points at /etc/3x-ui/sub_templates/row-template, clear it in the panel.
 ```
 
+</Tab>
+<Tab>
+
+The Row-Template block is removed from `/opt/pasarguard/.env`, which returns to its exact previous bytes; the page Row-Template placed is removed (a file at that path that Row-Template did not create is left alone); and a running panel is restarted once, so it goes back to the page it had.
+
+</Tab>
+<Tab>
+
+Rebecca's two subscription settings are put back exactly as they were before Row-Template — using the snapshot taken at activation — and the page Row-Template placed is removed. If you have chosen another page in the dashboard since, the settings are left alone. With MySQL/MariaDB, or without `sqlite3`, the settings cannot be written, so you are told to switch the page back yourself (to `subscription/index.html`, Rebecca's own page, or your own).
+
+</Tab>
+</Tabs>
+
+On PasarGuard and Rebecca the panel is reverted **first**: if that fails, uninstall stops before removing anything, and both the panel and Row-Template stay exactly as they were.
+
 ### Removes Row-Template's files
 
 The install directory is deleted — the page, every design, your branding in `config.env`, the management library and **all backups**. Before deleting, it confirms the directory really is a Row-Template installation, and it refuses outright to delete system paths such as `/etc`, `/usr/local` or `/etc/x-ui`.
@@ -48,33 +66,97 @@ The install directory is deleted — the page, every design, your branding in `c
 
 </Steps>
 
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
+
 ```text
   ok   Cleared subThemeDir; the panel reverts to its built-in page.
   ok   Removed Row-Template files from /etc/3x-ui/sub_templates/row-template.
   3x-ui, its database, inbounds, clients and certificates were left untouched.
 ```
 
+</Tab>
+<Tab>
+
+```text
+  ok   PasarGuard is back on the subscription page it had before Row-Template.
+  ok   Removed Row-Template files from /etc/row-template.
+  PasarGuard's users, nodes, settings and database were left untouched.
+```
+
+</Tab>
+<Tab>
+
+```text
+  ok   Rebecca is back on the subscription page it had before Row-Template.
+  ok   Removed Row-Template files from /etc/row-template.
+  Rebecca's users, nodes, settings and database were left untouched.
+```
+
+</Tab>
+</Tabs>
+
 ## What is never touched
 
-3X-UI itself, its database (apart from clearing `subThemeDir` as above), inbounds, clients, users, traffic data and certificates.
+The panel itself and its data: on 3X-UI its database (apart from clearing `subThemeDir` as above), inbounds, clients and certificates; on PasarGuard and Rebecca their users, nodes, hosts, settings and databases (apart from the page selection Row-Template set, as above).
 
 ## If uninstall cannot run
 
-If the `row-template` command is missing or broken, remove Row-Template by hand:
+If the `row-template` command is missing or broken, remove Row-Template by hand. Revert the panel **first**: while it selects a page that no longer exists, subscribers opening their link in a browser may get an error instead of a page.
 
 <Steps>
 
-### Clear the panel setting
+### Revert the panel
+
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
 
 In the panel, open **Panel Settings → Subscription**, empty **Sub Theme Directory**, save, and restart the panel.
 
+</Tab>
+<Tab>
+
+Delete the block from `# >>> row-template` to `# <<< row-template <<<` in `/opt/pasarguard/.env`, then restart the panel with `pasarguard restart`.
+
+</Tab>
+<Tab>
+
+In the Rebecca dashboard open **Settings → Subscription → Templates** and set **Subscription page template** back to `subscription/index.html` (or your own page).
+
+</Tab>
+</Tabs>
+
 ### Delete the files
+
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
 
 ```bash
 rm -rf /etc/3x-ui/sub_templates/row-template
 rm -f /usr/local/bin/row-template
 ```
 
-</Steps>
+</Tab>
+<Tab>
 
-Clear the panel setting **first**: while it points at a directory that no longer exists, subscribers opening their link in a browser may get an error instead of a page.
+```bash
+rm -rf /etc/row-template /var/lib/pasarguard/templates/row-template
+rm -f /usr/local/bin/row-template
+```
+
+If you use your own `CUSTOM_TEMPLATES_DIRECTORY`, delete the `row-template` folder there instead.
+
+</Tab>
+<Tab>
+
+```bash
+rm -rf /etc/row-template /var/lib/rebecca/templates/row-template
+rm -f /usr/local/bin/row-template
+```
+
+If Rebecca uses its own custom templates directory, delete the `row-template` folder there instead.
+
+</Tab>
+</Tabs>
+
+</Steps>

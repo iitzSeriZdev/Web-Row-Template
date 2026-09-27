@@ -11,14 +11,15 @@
 
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const BASE = "/Web-Row-Template";
 const problems = [];
 const fail = (msg) => problems.push(msg);
 
-const { ENTRIES } = await import(join(ROOT, "src/data/errors.ts"));
+// A file URL, not a bare path: on Windows import() reads "D:" as a URL scheme.
+const { ENTRIES } = await import(pathToFileURL(join(ROOT, "src/data/errors.ts")).href);
 const messages = JSON.parse(readFileSync(join(ROOT, "src/data/installer-messages.json"), "utf8")).messages;
 const catalogue = JSON.parse(readFileSync(join(ROOT, "src/data/templates.json"), "utf8"));
 

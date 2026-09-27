@@ -1,14 +1,14 @@
 ---
 title: Install with the Installer
 nav: With the Installer
-description: The one-command installer — what it does, every question it asks, and how to run it unattended.
+description: The one-command installer — what it does on 3X-UI, PasarGuard and Rebecca, every question it asks, and how to run it unattended.
 ---
 
 The installer is a small bootstrap script published with every release. It downloads the release, proves it is intact, and hands the installation to Row-Template's own management library, which does the rest as one transaction.
 
 ## Run it
 
-As root, on the server that runs 3X-UI:
+As root, on the server that runs your panel:
 
 ```bash
 bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
@@ -36,17 +36,23 @@ The tarball's SHA-256 must match the value in `SHA256SUMS`. There is no option, 
 
 Every entry is checked before extraction: absolute paths, `..` traversal, symlinks, hard links and special files are refused. Extraction never keeps the archive's owners or permissions.
 
-### The library takes over
+### The library takes over and finds your panel
 
-The extracted management library re-checks the payload (the page's checksum, its structure, and that every installer file it declares is present), then looks for 3X-UI and **refuses to continue below version 3.6.0** or when the version cannot be read.
+The extracted management library re-checks the payload (the page's checksum, its structure, and that every installer file it declares is present), then decides which panel to install for:
+
+- an existing installation keeps the panel it was installed for;
+- otherwise `RT_PANEL`, if set, must name a panel installed on this server;
+- otherwise the one supported panel on the server — and with several, an interactive install asks, while a scripted one stops before changing anything.
+
+It then checks that panel can be served: 3X-UI must be **3.6.0 or newer** with a readable version, and Rebecca must be the **1.x** Go edition — its 0.0.x Docker image is refused here. Nothing has been changed yet.
 
 ### Files are installed
 
-The install tree is created at `/etc/3x-ui/sub_templates/row-template`. The page, `VERSION`, the management library and its components are installed there, and the `row-template` command at `/usr/local/bin/row-template`. Every file is written to a temporary name and renamed into place, so nothing is ever half-written.
+The install tree is created — `/etc/3x-ui/sub_templates/row-template` on 3X-UI, `/etc/row-template` on PasarGuard and Rebecca. `VERSION`, a record of the panel it serves, the management library and its components are installed there, and the `row-template` command at `/usr/local/bin/row-template`. Every file is written to a temporary name and renamed into place, so nothing is ever half-written.
 
 ### Every design is verified
 
-All fifteen designs are copied into the install's template store, each one checked against its own checksum and validated first.
+All seventeen designs are copied into the install's template store — each in the version built for your panel's template engine — and every one is checked against its own checksum and validated first.
 
 ### You choose a design and your branding
 
@@ -58,11 +64,15 @@ The live page `sub.html` is generated from the chosen design and your branding, 
 
 ### The panel is pointed at it
 
-When `sqlite3` is available, the installer can set the panel's `subThemeDir` for you (it asks first on an interactive install). Otherwise it prints the one manual step. See [Activation](/docs/installation/activation/).
+- **3X-UI:** when `sqlite3` is available, the installer can set the panel's `subThemeDir` for you (it asks first on an interactive install). Otherwise it prints the one manual step.
+- **PasarGuard:** the page is placed in PasarGuard's templates directory, a marked block selecting it is appended to `/opt/pasarguard/.env`, and a running panel is restarted once.
+- **Rebecca:** the page is placed in Rebecca's templates directory and selected in its subscription settings — automatically with SQLite and `sqlite3`, otherwise by you in the dashboard.
+
+On PasarGuard and Rebecca this runs as a transaction: the panel's settings are snapshotted, changed and verified, and restored exactly if any step fails. See [Activation](/docs/installation/activation/).
 
 ### A live check runs
 
-Finally, when it can find a subscription to test with (this needs `sqlite3` and the panel database), it requests your subscription endpoint as a browser would and as a VPN app would, and reports what each received.
+Finally it checks what the panel really serves. On 3X-UI, when it can find a subscription to test with (this needs `sqlite3` and the panel database), it requests your subscription endpoint as a browser would and as a VPN app would, and reports what each received. On PasarGuard and Rebecca it asks the running panel which page it uses.
 
 </Steps>
 
@@ -72,21 +82,23 @@ An interactive install — a terminal on both ends — asks these in order. Ever
 
 | Prompt | What to enter |
 |---|---|
-| `Continue installation? [Y/n]` | Enter to continue. Shown with the 3X-UI version it detected. |
-| `Choose your Row-Template design` then `Select [1-15, Enter=Row]` | A number from the list, or Enter for Row. [Preview the designs](/docs/templates/). |
+| `More than one panel is installed on this host`, then a numbered list | Only on a server with several supported panels: the number of the panel Row-Template should serve. |
+| `Continue installation? [Y/n]` | Enter to continue. Shown with the panel it detected (and, on 3X-UI, its version). |
+| `Choose your Row-Template design` then `Select [1-17, Enter=Row]` | A number from the list, or Enter for Row. [Preview the designs](/docs/templates/). |
 | `Service name (Enter to keep, - to clear)` | The name your subscribers should see, up to 120 characters. Empty is fine: the page stays unbranded. |
 | `Support URL, optional (Enter to keep, - to clear)` | A link starting with `https://`, `http://`, `tg://` or `mailto:`. Anything else is refused and asked again. |
 | `Logo file [none] (Enter to keep, - to remove, or a path)` | Path to a PNG, JPEG or WebP file of at most 256 KiB, or Enter for the generated monogram. |
 | `Install with these settings? [Y/n]` | Enter to install. Answer `n` to go back and change the branding. |
-| `Make Row-Template the active 3X-UI subscription theme now? [Y/n]` | Enter to let the installer set `subThemeDir`. Only shown when `sqlite3` and the panel database are available. |
+| `Make Row-Template the active 3X-UI subscription theme now? [Y/n]` | 3X-UI: Enter to let the installer set `subThemeDir`. Only shown when `sqlite3` and the panel database are available. |
+| `Make Row-Template the active PasarGuard subscription page now? [Y/n]` (or `… Rebecca …`) | PasarGuard and Rebecca: shown after a short description of what activation changes. Enter to activate; `n` leaves it for later, from the manager. |
 
 After you enter a service name, the installer shows a **monogram preview** — the letters used in place of a logo — for plain Latin names. For other scripts it notes that the browser computes the monogram.
 
-When it finishes you get a summary: service, version, template, install directory, and whether the theme is **Active** or needs **manual activation**.
+When it finishes you get a summary: service, version, panel, template, install directory, and whether the page is **Active**, needs **manual activation**, or was not activated yet.
 
 ## Running it again
 
-Running the installer on a server that already has Row-Template does not reinstall blindly. Interactively, it offers:
+Running the installer on a server that already has Row-Template does not reinstall blindly, and it always keeps the panel the installation serves. Interactively, it offers:
 
 ```text
   1  Open the manager
@@ -104,9 +116,11 @@ Without a terminal on standard input (for example from a script), an existing in
 RT_ASSUME_YES=1 bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
 ```
 
+One installation serves one panel. To serve a different panel on the same server, run `row-template uninstall` first.
+
 ## Unattended install
 
-For provisioning scripts, give every answer through the environment. `RT_ASSUME_NONINTERACTIVE=1` turns off all prompts; the panel is then activated automatically when `sqlite3` is available.
+For provisioning scripts, give every answer through the environment. `RT_ASSUME_NONINTERACTIVE=1` turns off all prompts; the panel is then activated automatically when it can be.
 
 ```bash
 RT_ASSUME_NONINTERACTIVE=1 \
@@ -116,6 +130,10 @@ RT_SUPPORT_URL="https://t.me/aurora_support" \
 RT_LOGO_PATH=/root/aurora-logo.png \
 bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
 ```
+
+<Callout type="warning" title="More than one panel on the server?">
+  A scripted fresh install on a server with more than one supported panel **must** name the panel — add `RT_PANEL=3xui`, `RT_PANEL=pasarguard` or `RT_PANEL=rebecca`. Without it the installer stops before changing anything.
+</Callout>
 
 An invalid value stops the install before the panel is changed. Every variable is described in [Environment variables](/docs/installation/environment/).
 

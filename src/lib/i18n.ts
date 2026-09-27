@@ -8,16 +8,18 @@ export const LOCALES = ["en", "fa"] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = "en";
 
-export const LOCALE_META: Record<Locale, { label: string; short: string; dir: "ltr" | "rtl"; lang: string }> = {
-  en: { label: "English", short: "EN", dir: "ltr", lang: "en" },
-  fa: { label: "فارسی", short: "فا", dir: "rtl", lang: "fa" },
+// `flag` is what the language switch shows: the United States flag for
+// English, the Lion and Sun flag for Persian.
+export const LOCALE_META: Record<Locale, { label: string; flag: string; dir: "ltr" | "rtl"; lang: string }> = {
+  en: { label: "English", flag: "/flags/flag-en-us.svg", dir: "ltr", lang: "en" },
+  fa: { label: "فارسی", flag: "/flags/flag-fa-lion-and-sun.png", dir: "rtl", lang: "fa" },
 };
 
 export const UI = {
   en: {
     siteTitle: "Row-Template",
     siteDescription:
-      "Documentation for Row-Template, the self-contained, white-label subscription page for 3X-UI panels.",
+      "Documentation for Row-Template, the self-contained, white-label subscription page for 3X-UI, PasarGuard and Rebecca panels.",
     docs: "Docs",
     templates: "Templates",
     errors: "Errors",
@@ -44,12 +46,12 @@ export const UI = {
     notFoundTitle: "Page not found",
     notFoundBody: "The page you are looking for does not exist or has moved.",
     backToDocs: "Back to the documentation",
-    appliesTo: "Applies to Row-Template 1.2.0",
+    appliesTo: "Applies to Row-Template 1.3.0",
   },
   fa: {
     siteTitle: "Row-Template",
     siteDescription:
-      "مستندات Row-Template، صفحهٔ اشتراک مستقل و بدون برند (white-label) برای پنل‌های 3X-UI.",
+      "مستندات Row-Template، صفحهٔ اشتراک مستقل و بدون برند (white-label) برای پنل‌های 3X-UI، PasarGuard و Rebecca.",
     docs: "مستندات",
     templates: "تمپلیت‌ها",
     errors: "خطاها",
@@ -76,7 +78,7 @@ export const UI = {
     notFoundTitle: "صفحه پیدا نشد",
     notFoundBody: "صفحه‌ای که دنبال آن هستید وجود ندارد یا جابه‌جا شده است.",
     backToDocs: "بازگشت به مستندات",
-    appliesTo: "مربوط به Row-Template نسخهٔ 1.2.0",
+    appliesTo: "مربوط به Row-Template نسخهٔ 1.3.0",
   },
 } as const;
 

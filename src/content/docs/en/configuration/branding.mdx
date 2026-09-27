@@ -67,11 +67,12 @@ A branding change never replaces a working page with a broken one:
 
 1. The current configuration and page are set aside.
 2. The new configuration is written, and the page is regenerated from it and validated.
-3. Only a page that passes validation is swapped in. If anything fails, the previous configuration and page are restored and the error is shown.
+3. Only a page that passes validation is swapped in. On PasarGuard and Rebecca the copy in the panel's templates directory is replaced as well; the panel's selection is not touched, and nothing is restarted.
+4. If anything fails, the previous configuration and page are restored and the error is shown.
 
 ## How branding is stored
 
-Your values are kept in `/etc/3x-ui/sub_templates/row-template/config.env`, readable only by root and its group (mode `640`):
+Your values are kept in `config.env` in the install directory — `/etc/3x-ui/sub_templates/row-template/config.env` on 3X-UI, `/etc/row-template/config.env` on PasarGuard and Rebecca — readable only by root and its group (mode `640`):
 
 <File name="config.env">
 

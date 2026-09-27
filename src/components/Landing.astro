@@ -12,13 +12,13 @@ const install = "bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/
 
 const T = fa
   ? {
-      pill: "Row-Template 1.2.0 — پانزده طرح",
-      title: "صفحهٔ اشتراک 3X-UI، همان‌طور که باید باشد.",
-      lead: "Row-Template صفحهٔ داخلی پنل را با صفحه‌ای سریع، خصوصی و بدون برند جایگزین می‌کند — پانزده طرح، پنج زبان، و نصب با یک فرمان.",
+      pill: "به‌زودی: Row-Template 1.3.0 — PasarGuard و Rebecca، هفده طرح",
+      title: "صفحهٔ اشتراک پنل شما، همان‌طور که باید باشد.",
+      lead: "Row-Template صفحهٔ اشتراک داخلی 3X-UI، PasarGuard و Rebecca را با صفحه‌ای سریع، خصوصی و بدون برند جایگزین می‌کند — هفده طرح، پنج زبان، و نصب با یک فرمان.",
       start: "شروع کنید",
       browse: "دیدن تمپلیت‌ها",
       installNote: "با root روی سرور پنل اجرا کنید. [روش نصب دستی ←]",
-      showcase: "هر پانزده طرح، زنده",
+      showcase: "هر هفده طرح، زنده",
       showcaseSub: "روی هر طرح بزنید تا آن را با داده‌های نمونه در اندازهٔ موبایل و دسکتاپ امتحان کنید.",
       all: "همهٔ تمپلیت‌ها",
       features: "برای مشترکان شما ساخته شده، برای شما امن",
@@ -27,13 +27,13 @@ const T = fa
       docsSub: "از نصب تا عیب‌یابی، به فارسی و انگلیسی.",
     }
   : {
-      pill: "Row-Template 1.2.0 — fifteen designs",
-      title: "The 3X-UI subscription page, done properly.",
-      lead: "Row-Template replaces the panel's built-in page with a fast, private, white-label one — fifteen designs, five languages, installed with one command.",
+      pill: "Upcoming: Row-Template 1.3.0 — PasarGuard, Rebecca, seventeen designs",
+      title: "Your panel's subscription page, done properly.",
+      lead: "Row-Template replaces the built-in subscription page of 3X-UI, PasarGuard and Rebecca with a fast, private, white-label one — seventeen designs, five languages, installed with one command.",
       start: "Get Started",
       browse: "Browse Templates",
       installNote: "Run as root on the panel's server. [Prefer to install by hand? →]",
-      showcase: "All fifteen designs, live",
+      showcase: "All seventeen designs, live",
       showcaseSub: "Open any design to try it with sample data at phone and desktop sizes.",
       all: "All templates",
       features: "Built for your subscribers, safe for you",
@@ -44,7 +44,7 @@ const T = fa
 
 const features = fa
   ? [
-      ["shield-check", "بدون درخواست بیرونی", "نه CDN، نه فونت وب، نه آمارگیری، نه سرویس بیرونی QR. تنها درخواست صفحه، به‌روزرسانی وضعیت از پنل خود شماست."],
+      ["shield-check", "بدون درخواست بیرونی", "نه CDN، نه فونت وب، نه آمارگیری، نه سرویس بیرونی QR. تنها درخواست صفحه — روی 3X-UI — به‌روزرسانی وضعیت از پنل خود شماست."],
       ["badge-check", "بدون برند", "نام سرویس، لینک پشتیبانی و لوگوی شما — ذخیره‌شده به‌صورت داده و قرارگرفته به‌صورت متن، هرگز اجرا نمی‌شود."],
       ["smartphone", "افزودن یک‌لمسی", "v2rayNG، Happ، sing-box، Streisand، V2Box، Shadowrocket، Clash Verge Rev و… بر اساس پلتفرم مشترک."],
       ["languages", "پنج زبان، راست‌به‌چپ", "انگلیسی، فارسی، عربی، روسی و چینی، با چیدمان کامل راست‌به‌چپ و پوستهٔ روشن و تیره."],
@@ -52,7 +52,7 @@ const features = fa
       ["history", "برگشت‌پذیر", "فعال‌سازی اتمی، بازگردانی خودکار هنگام خطا و بازگشت به نسخهٔ قبل با یک فرمان."],
     ]
   : [
-      ["shield-check", "No third-party requests", "No CDNs, web fonts, analytics or external QR services. The page's only request is its status refresh, from your own panel."],
+      ["shield-check", "No third-party requests", "No CDNs, web fonts, analytics or external QR services. The page's only request — on 3X-UI — is its status refresh, from your own panel."],
       ["badge-check", "Genuinely white-label", "Your service name, support link and logo — stored as data and inserted as text, never executed."],
       ["smartphone", "One-tap import", "v2rayNG, Happ, sing-box, Streisand, V2Box, Shadowrocket, Clash Verge Rev and more, chosen by the subscriber's platform."],
       ["languages", "Five languages, RTL", "English, Persian, Arabic, Russian and Chinese, with full right-to-left layout and light and dark themes."],
@@ -78,6 +78,10 @@ const [noteText, noteLink] = T.installNote.split(" [");
 <Base locale={locale} section="home">
   <main id="content">
     <section class="hero container">
+      <picture class="hero-logo">
+        <source srcset={withBase("/branding/row-template-logo.webp")} type="image/webp" />
+        <img src={withBase("/branding/row-template-logo.png")} alt="Row-Template" width="112" height="112" />
+      </picture>
       <a class="pill" href={docHref(locale, "reference/changelog")}>
         <Icon name="sparkles" />
         <span>{T.pill}</span>

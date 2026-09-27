@@ -1,23 +1,25 @@
 ---
-title: بررسی سلامت نصب
+title: بررسی نصب
 nav: Verify
-description: row-template verify چه چیزهایی را بررسی می‌کند، هر خطی که چاپ می‌کند چه معنایی دارد، و کدام نتیجه‌ها خطا هستند و کدام فقط هشدار.
+description: row-template verify روی 3X-UI، PasarGuard و Rebecca چه چیزهایی را بررسی می‌کند، هر خطی که چاپ می‌کند را چطور بخوانید، و کدام نتیجه‌ها خطا و کدام فقط هشدارند.
 ---
 
 ```bash
 row-template verify
 ```
 
-`verify` **فقط‌خواندنی** است — هرگز چیزی را تغییر نمی‌دهد، پس اجرای آن همیشه بی‌خطر است. آن را پس از نصب، پس از هر تغییر و پیش از گزارش مشکل اجرا کنید. با root اجرایش کنید: با کاربر دیگر نمی‌تواند `config.env` یا پایگاه‌دادهٔ پنل را بخواند.
+پس از نصب، پس از هر تغییر و پیش از گزارش مشکل اجرایش کنید. با root اجرایش کنید: با کاربر دیگر نمی‌تواند `config.env` یا تنظیمات پنل را بخواند.
+
+`verify` هرگز صفحه، برندینگ یا پنل شما را تغییر نمی‌دهد. با root، اول یک کار انجام می‌دهد: **مخزن تمپلیت‌ها** را مرتب می‌کند — طرح‌هایی که به‌روزرسانی قبلی بیرون از `dist/templates/` جا گذاشته به داخل برگردانده می‌شوند، و طرح‌هایی که نسخهٔ نصب‌شده دارد اما روی سرور نیستند از همان نسخه (با بررسی چک‌سام) دانلود می‌شوند. هیچ چیز دیگری را تغییر نمی‌دهد.
 
 ## خواندن نتیجه
 
 هر بررسی یک خط چاپ می‌کند:
 
 - `ok` — بررسی موفق بود.
-- `warn` — ارزش رسیدگی دارد، اما صفحه کار می‌کند. هشدارها هرگز فرمان را ناموفق نمی‌کنند.
-- `FAIL` — یک مشکل جدی. فرمان با `verification FAILED (…)` تمام می‌شود و با کد `1` خارج می‌شود.
-- خطی بدون برچسب، اطلاع‌رسانی است؛ مثلاً بررسی‌ای که اینجا قابل انجام نبود.
+- `warn` — ارزش اصلاح دارد، اما صفحه کار می‌کند. هشدارها هرگز فرمان را ناموفق نمی‌کنند.
+- `FAIL` — مشکل جدی. فرمان با `verification FAILED (…)` تمام می‌شود و با کد `1` خارج می‌شود.
+- خطی بدون برچسب، اطلاعات است؛ مثلاً بررسی‌ای که اینجا قابل اجرا نبود.
 
 خط آخر جمع‌بندی است:
 
@@ -31,13 +33,13 @@ row-template verify
 
 ### فایل‌ها و یکپارچگی
 
-| نتیجه | خط | چه کنید |
+| نتیجه | خط | چه باید کرد |
 |---|---|---|
 | ok | `Install root present: …` | — |
 | FAIL | `install root missing or is a symlink: …` | نصب‌کننده را دوباره اجرا کنید. پوشهٔ نصب باید یک پوشهٔ واقعی باشد. |
 | ok | `Canonical artifact integrity verified.` | — |
-| FAIL | `canonical artifact missing checksum or does not match it.` | طرح نصب‌شده تغییر کرده یا خراب شده است. با `row-template update` دوباره نصبش کنید. |
-| FAIL | `canonical artifact missing or unreadable: …` | `row-template update` را اجرا کنید یا نصب‌کننده را دوباره اجرا کنید. |
+| FAIL | `canonical artifact missing checksum or does not match it.` | طرح نصب‌شده تغییر کرده یا خراب شده. برای نصب دوباره `row-template update` را اجرا کنید. |
+| FAIL | `canonical artifact missing or unreadable: …` | `row-template update` را اجرا کنید، یا نصب‌کننده را دوباره اجرا کنید. |
 | ok | `Live template is structurally valid and readable.` | — |
 | FAIL | `live template failed structural validation.` / `live template missing or unreadable: …` | آن را دوباره بسازید: `row-template update`، یا برای تعمیر نصب‌کننده را دوباره اجرا کنید. |
 | ok | `VERSION present: …` | — |
@@ -45,60 +47,110 @@ row-template verify
 
 ### طرح‌ها
 
-| نتیجه | خط | چه کنید |
+| نتیجه | خط | چه باید کرد |
 |---|---|---|
-| ok | `Template store verified (15 design(s)).` | — |
-| FAIL | `a template in the store does not match its checksum.` | یک فایل طرح تغییر کرده است. با `row-template update` مخزن را دوباره نصب کنید. |
+| ok | `Template store verified (17 design(s)).` | — |
+| FAIL | `a template in the store does not match its checksum: …` | یک فایل طرح تغییر کرده؛ پیام نامش را می‌آورد. برای نصب دوبارهٔ مخزن `row-template update` را اجرا کنید. |
+| warn | `template store is incomplete (… of … designs); missing: …` | `row-template update` را اجرا کنید. |
+| warn | `templates were found outside the store at …; run 'row-template verify' as root to move them.` | `verify` را با root اجرا کنید. |
 | ok | `Template: …` | طرح انتخاب‌شده. |
 | ok | `Canonical artifact matches the selected template.` | — |
-| FAIL | `canonical artifact does not match the selected template (…).` | انتخاب ذخیره‌شده و طرح نصب‌شده با هم نمی‌خوانند. `row-template config` را اجرا کنید و در همهٔ پرسش‌ها Enter بزنید — طرح نصب‌شده را با انتخاب ذخیره‌شده هماهنگ می‌کند — یا `row-template update` را اجرا کنید. |
+| FAIL | `canonical artifact does not match the selected template (…).` | انتخاب ذخیره‌شده و طرح نصب‌شده یکی نیستند. `row-template config` را اجرا کنید و در هر پرسش Enter بزنید — طرح نصب‌شده را با انتخاب ذخیره‌شده هماهنگ می‌کند — یا `row-template update` را اجرا کنید. |
 | FAIL | `selected template '…' is missing from the template store.` | `row-template update` را اجرا کنید. |
-| FAIL | `template store missing or empty; run 'row-template update' to install it.` | پس از اولین به‌روزرسانی از 1.1.0 طبیعی است — [دوباره اجرایش کنید](/docs/management/updating/). |
+| FAIL | `template store missing or empty; run 'row-template update' to install it.` | `verify` را با root اجرا کنید، یا `row-template update` را — [ارتقا از 1.1.0 یا 1.2.0](/docs/management/updating/#upgrading-from-110-or-120) را ببینید. |
 
 ### پیکربندی و ابزارها
 
-| نتیجه | خط | چه کنید |
+| نتیجه | خط | چه باید کرد |
 |---|---|---|
 | ok | `Config present and readable.` | — |
-| — | `No config.env (white-label defaults).` | کاری لازم نیست: برندینگی تنظیم نشده است. |
+| — | `No config.env (white-label defaults).` | کاری لازم نیست: برندینگی تنظیم نشده. |
 | warn | `config present but not readable.` | `verify` را با root اجرا کنید. |
-| warn | `config.env is other-writable (mode …); tighten to 640.` | `chmod 640 /etc/3x-ui/sub_templates/row-template/config.env` |
+| warn | `config.env is other-writable (mode …); tighten to 640.` | مجوز `config.env` داخل پوشهٔ نصب را با `chmod 640` تنظیم کنید. |
 | ok | `Management library present.` | — |
 | warn | `management library not found under the install root.` | برای تعمیر، نصب‌کننده را دوباره اجرا کنید. |
 | ok | `Installer components present.` | — |
-| warn | `installer components are missing (lib/transaction.sh, panels/), …` | `row-template update` را اجرا کنید. |
+| warn | `installer components are missing (lib/transaction.sh, panels/), …` | `verify` را با root اجرا کنید، یا `row-template update` را. |
 | ok | `CLI present: /usr/local/bin/row-template` | — |
 | warn | `CLI not found or not executable at …` | برای تعمیر، نصب‌کننده را دوباره اجرا کنید. |
 
 ### پنل
 
-| نتیجه | خط | چه کنید |
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
+
+| نتیجه | خط | چه باید کرد |
 |---|---|---|
 | ok | `3x-ui … meets the minimum 3.6.0.` | — |
 | FAIL | `3x-ui … is below the minimum 3.6.0.` | 3X-UI را به‌روز کنید. |
 | warn | `could not determine the 3x-ui version.` / `3x-ui installation was not detected.` | [مرجع خطاها](/docs/help/errors/) را ببینید. |
 | ok | `Panel subThemeDir points at Row-Template.` | — |
 | warn | `panel subThemeDir is empty; set it to …` | [فعال کنید](/docs/installation/activation/). |
-| warn | `panel subThemeDir does not point at Row-Template.` | [فعال کنید](/docs/installation/activation/) — یا اگر عمداً از پوستهٔ دیگری استفاده می‌کنید، رهایش کنید. |
-| — | `subThemeDir not checked (sqlite3/DB unavailable).` | برای انجام این بررسی `sqlite3` را نصب کنید. |
-| warn | `leftover staging files found under the install root (possible interrupted update).` | پایین‌تر را ببینید. |
+| warn | `panel subThemeDir does not point at Row-Template.` | [فعال کنید](/docs/installation/activation/) — یا اگر عمداً از پوستهٔ دیگری استفاده می‌کنید، دست نزنید. |
+| — | `subThemeDir not checked (sqlite3/DB unavailable).` | برای بررسی آن، `sqlite3` را نصب کنید. |
+
+</Tab>
+<Tab>
+
+| نتیجه | خط | چه باید کرد |
+|---|---|---|
+| ok | `PasarGuard detected.` | — |
+| warn | `PasarGuard was not detected on this host.` | `verify` را روی سرور پنل و با root اجرا کنید. |
+| ok | `PasarGuard selects the Row-Template page, and the placed page is current.` | — |
+| FAIL | `PasarGuard's Row-Template page is out of step (see above); …` | خط `panel pasarguard:` بالای آن را بخوانید، سپس از منوی مدیریت دوباره اعمالش کنید (**5 — Activate / Re-apply theme**). |
+| ok | `Live check: the running PasarGuard uses the Row-Template page.` | کانتینرِ در حال اجرا تنظیم را می‌خواند و صفحه را می‌بیند. |
+| — | `Live check skipped (not available for this panel layout).` | نصب از سورس: کانتینری برای پرسیدن نیست. |
+| warn | `the running PasarGuard does not use the Row-Template page yet; restart the panel.` | `pasarguard restart` و سپس دوباره بررسی کنید. |
+| warn | `PasarGuard does not select the Row-Template page; activate it from the manager.` | [فعال کنید](/docs/installation/activation/#pasarguard). |
+| warn | `the PasarGuard configuration could not be read.` | `/opt/pasarguard/.env` را بررسی کنید و `verify` را با root اجرا کنید. |
+| warn | `panel pasarguard: … admin(s) set their own subscription page (sub_template); …` | کاربران آن ادمین‌ها صفحهٔ خودشان را می‌بینند. |
+| warn | `panel pasarguard: the panel's 'disable subscription template' setting is on, …` | مرورگرها اشتراک خام را می‌گیرند: این تنظیم را در PasarGuard خاموش کنید. |
+
+</Tab>
+<Tab>
+
+| نتیجه | خط | چه باید کرد |
+|---|---|---|
+| ok | `Rebecca detected.` | — |
+| warn | `Rebecca was not detected on this host.` | `verify` را روی سرور پنل و با root اجرا کنید. |
+| FAIL | `panel rebecca: this is Rebecca 0.0.x, the Python edition …` | ایمیج Docker مربوط به Rebecca نمی‌تواند صفحه را ارائه کند: Rebecca نسخهٔ 1.x را با نصب‌کنندهٔ باینری‌اش (`rebecca-binary.sh`) نصب کنید. |
+| ok | `Rebecca selects the Row-Template page, and the placed page is current.` | — |
+| FAIL | `Rebecca's Row-Template page is out of step (see above); …` | خط `panel rebecca:` بالای آن را بخوانید، سپس از منوی مدیریت دوباره اعمالش کنید (**5 — Activate / Re-apply theme**). |
+| — | `Live check skipped (not available for this panel layout).` | در Rebecca همیشه: تنظیماتش را در هر درخواست می‌خواند، پس بررسی بالا همان است که اهمیت دارد. |
+| warn | `Rebecca does not select the Row-Template page; activate it from the manager.` | [فعال کنید](/docs/installation/activation/#rebecca)، یا اگر عمداً صفحهٔ دیگری انتخاب کرده‌اید دست نزنید. |
+| — | `Panel selection not checked (activation is manual here: …)` | MySQL/MariaDB یا نبود `sqlite3`: خودتان **Settings → Subscription → Templates** را بررسی کنید. |
+| warn | `panel rebecca: … admin(s) override the subscription page for their own users; …` | کاربران آن ادمین‌ها صفحهٔ خودشان را می‌بینند. |
+
+</Tab>
+</Tabs>
+
+| نتیجه | خط | چه باید کرد |
+|---|---|---|
+| FAIL | `the panel components are missing; run 'row-template update'.` | PasarGuard و Rebecca از طریق فایل‌های همراه نصب‌کننده بررسی می‌شوند. `row-template update` را اجرا کنید. |
+| warn | `leftover staging files found under the install root (possible interrupted update).` | پایین را ببینید. |
 
 ### بررسی‌های زنده
 
-وقتی `sqlite3` بتواند اشتراک یک کلاینت را برای آزمایش پیدا کند، `verify` دو بار آن را به‌صورت محلی درخواست می‌کند — یک بار مانند مرورگر و یک بار مانند اپ VPN.
+`verify` یک اشتراک را دو بار به‌صورت محلی درخواست می‌کند — یک بار مانند مرورگر و یک بار مانند اپ VPN. در 3X-UI اشتراکی برای آزمایش را از طریق `sqlite3` پیدا می‌کند؛ در PasarGuard و Rebecca که Row-Template هرگز خودش دنبال لینک اشتراک نمی‌گردد، این بررسی‌ها فقط وقتی اجرا می‌شوند که لینکی را در `RT_SMOKE_URL` بدهید:
 
-| نتیجه | خط | چه کنید |
+```bash
+RT_SMOKE_URL='https://your-panel.example.com/sub/…' row-template verify
+```
+
+| نتیجه | خط | چه باید کرد |
 |---|---|---|
 | ok | `Live render check: a browser receives Row-Template.` | — |
 | warn | `live render check: the panel served its built-in page.` | پنل هنوز Row-Template را ارائه نمی‌کند — فعال‌سازی را بررسی کنید و پنل را ری‌استارت کنید. |
-| warn | `live render check: the subscription endpoint was unreachable.` | پورت اشتراک به‌صورت محلی پاسخ نداد. در حال اجرا بودن پنل و فعال بودن سرویس اشتراک را بررسی کنید. |
+| warn | `live render check: the subscription endpoint was unreachable.` | پورت اشتراک به‌صورت محلی پاسخ نداد. بررسی کنید پنل در حال اجرا و سرویس اشتراکش فعال باشد. |
 | — | `Live render check skipped (no test URL available).` | کاری لازم نیست. |
 | ok | `VPN-client check: normal subscription content is served.` | — |
-| warn | `VPN-client check: HTML was returned instead of subscription content.` | اپ‌های VPN به‌جای پیکربندی، صفحه را دریافت می‌کنند. مطمئن شوید پراکسی یا CDNی که جلوی پنل است درخواست را تغییر نمی‌دهد. |
+| warn | `VPN-client check: HTML was returned instead of subscription content.` | اپ‌های VPN به‌جای پیکربندی، صفحه را دریافت می‌کردند. بررسی کنید پراکسی یا CDN جلوی پنل درخواست را بازنویسی نکند. |
+
+لینک اشتراکی را که برای `RT_SMOKE_URL` به کار می‌برید هرگز در گزارش خطا نگذارید.
 
 ## فایل‌های موقت باقی‌مانده
 
-هر فایلی که Row-Template جایگزین می‌کند اول با نامی موقت که با `.stage.` یا `.live.` شروع می‌شود نوشته و سپس با تغییر نام سر جایش گذاشته می‌شود. اگر فرمانی نیمه‌کاره بماند — برق سرور برود یا پردازه کشته شود — ممکن است یکی از آن‌ها باقی بماند. این فایل‌ها هرگز استفاده نمی‌شوند. وقتی هیچ فرمان `row-template` در حال اجرا نیست، حذفشان بی‌خطر است:
+هر فایلی که Row-Template جایگزین می‌کند اول با نامی موقت که با `.stage.` یا `.live.` شروع می‌شود نوشته و سپس جایگزین می‌شود. اگر فرمانی نیمه‌کاره رها شود — برق سرور برود یا پردازه کشته شود — ممکن است یکی از آن‌ها باقی بماند. این فایل‌ها هرگز استفاده نمی‌شوند. وقتی هیچ فرمان `row-template` در حال اجرا نیست، حذفشان بی‌خطر است (در PasarGuard و Rebecca از `/etc/row-template` استفاده کنید):
 
 ```bash
 find /etc/3x-ui/sub_templates/row-template -maxdepth 2 \( -name '.stage.*' -o -name '.live.*' \) -print -delete

@@ -1,10 +1,10 @@
 ---
 title: Choosing a Template
 nav: Choosing & Switching
-description: Compare the fifteen designs by layout, density and shape, then set one at install time or switch to it later — safely, with automatic restore.
+description: Compare the seventeen designs by layout, density and shape, then set one at install time or switch to it later — safely, with automatic restore.
 ---
 
-Because every design has the same features, choosing one is purely a matter of look and fit: how dense your subscribers like their information, how much they read on phones versus desktops, and what suits your brand.
+Because every design has the same features, choosing one is purely a matter of look and fit: how dense your subscribers like their information, how much they read on phones versus desktops, and what suits your brand. Every design is available on every supported panel.
 
 ## Compare them
 
@@ -30,8 +30,9 @@ Choose your Row-Template design
   1  Row
   2  Editorial
   …
-  15  Arcade Nova
-  Select [1-15, Enter=Row]:
+  16  Meter
+  17  Notebook
+  Select [1-17, Enter=Row]:
 ```
 
 For an unattended install, give the ID instead:
@@ -41,7 +42,7 @@ RT_ASSUME_NONINTERACTIVE=1 RT_TEMPLATE=terminal \
 bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
 ```
 
-An unknown ID stops the install with the list of valid ones, rather than silently falling back to Row.
+An unknown ID stops the install with the list of valid ones, rather than silently falling back to Row. On a server with more than one supported panel, add `RT_PANEL` as well.
 
 ## Switch an existing install
 
@@ -79,7 +80,7 @@ The switch is a single transaction:
 1. The new design's checksum is verified against the template store.
 2. A trial page is generated from it **with your current branding** — if that fails, nothing has changed yet.
 3. A backup of the current state is taken.
-4. The design is staged, your choice is saved, and the live page is regenerated and validated.
+4. The design is staged, your choice is saved, and the live page is regenerated and validated. On PasarGuard and Rebecca the copy in the panel's templates directory is replaced too; the panel's selection is not touched, and nothing is restarted.
 5. If any step after the backup fails, the backup is restored automatically and you are told what happened.
 
 Your branding is untouched by a switch: it belongs to you, not to the design.
@@ -99,7 +100,7 @@ row-template verify
 ```
 
 ```text
-  ok   Template store verified (15 design(s)).
+  ok   Template store verified (17 design(s)).
   ok   Template: Editorial
   ok   Canonical artifact matches the selected template.
 ```

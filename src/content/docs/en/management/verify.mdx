@@ -1,14 +1,16 @@
 ---
 title: Verifying an Installation
 nav: Verify
-description: What row-template verify checks, how to read every line it prints, and which results are failures and which are only warnings.
+description: What row-template verify checks on 3X-UI, PasarGuard and Rebecca, how to read every line it prints, and which results are failures and which are only warnings.
 ---
 
 ```bash
 row-template verify
 ```
 
-`verify` is **read-only** — it never changes anything, so it is always safe to run. Run it after installing, after any change, and before reporting a problem. Run it as root: as another user it cannot read `config.env` or the panel database.
+Run it after installing, after any change, and before reporting a problem. Run it as root: as another user it cannot read `config.env` or the panel's settings.
+
+`verify` never changes your page, your branding or your panel. Run as root, it does one thing first: it puts the **template store** right — designs left outside `dist/templates/` by an earlier update are moved back in, and designs the installed version ships but the server lacks are downloaded from that same release (checksum-verified). It changes nothing else.
 
 ## Reading the result
 
@@ -47,13 +49,15 @@ The last line sums it up:
 
 | Result | Line | What to do |
 |---|---|---|
-| ok | `Template store verified (15 design(s)).` | — |
-| FAIL | `a template in the store does not match its checksum.` | A design file was altered. Run `row-template update` to reinstall the store. |
+| ok | `Template store verified (17 design(s)).` | — |
+| FAIL | `a template in the store does not match its checksum: …` | A design file was altered; the message names it. Run `row-template update` to reinstall the store. |
+| warn | `template store is incomplete (… of … designs); missing: …` | Run `row-template update`. |
+| warn | `templates were found outside the store at …; run 'row-template verify' as root to move them.` | Run `verify` as root. |
 | ok | `Template: …` | The selected design. |
 | ok | `Canonical artifact matches the selected template.` | — |
 | FAIL | `canonical artifact does not match the selected template (…).` | The saved choice and the installed design disagree. Run `row-template config` and press Enter at each question — it realigns the installed design with the saved choice — or run `row-template update`. |
 | FAIL | `selected template '…' is missing from the template store.` | Run `row-template update`. |
-| FAIL | `template store missing or empty; run 'row-template update' to install it.` | Normal after the first update from 1.1.0 — [run it again](/docs/management/updating/#upgrading-from-110). |
+| FAIL | `template store missing or empty; run 'row-template update' to install it.` | Run `verify` as root, or `row-template update` — see [Upgrading from 1.1.0 or 1.2.0](/docs/management/updating/#upgrading-from-110-or-120). |
 
 ### Configuration and tools
 
@@ -62,15 +66,18 @@ The last line sums it up:
 | ok | `Config present and readable.` | — |
 | — | `No config.env (white-label defaults).` | Nothing: no branding has been set. |
 | warn | `config present but not readable.` | Run `verify` as root. |
-| warn | `config.env is other-writable (mode …); tighten to 640.` | `chmod 640 /etc/3x-ui/sub_templates/row-template/config.env` |
+| warn | `config.env is other-writable (mode …); tighten to 640.` | `chmod 640` the `config.env` in the install directory. |
 | ok | `Management library present.` | — |
 | warn | `management library not found under the install root.` | Re-run the installer to repair. |
 | ok | `Installer components present.` | — |
-| warn | `installer components are missing (lib/transaction.sh, panels/), …` | Run `row-template update`. |
+| warn | `installer components are missing (lib/transaction.sh, panels/), …` | Run `verify` as root, or `row-template update`. |
 | ok | `CLI present: /usr/local/bin/row-template` | — |
 | warn | `CLI not found or not executable at …` | Re-run the installer to repair. |
 
 ### The panel
+
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
 
 | Result | Line | What to do |
 |---|---|---|
@@ -81,11 +88,54 @@ The last line sums it up:
 | warn | `panel subThemeDir is empty; set it to …` | [Activate](/docs/installation/activation/). |
 | warn | `panel subThemeDir does not point at Row-Template.` | [Activate](/docs/installation/activation/) — or leave it, if you deliberately use another theme. |
 | — | `subThemeDir not checked (sqlite3/DB unavailable).` | Install `sqlite3` to have it checked. |
+
+</Tab>
+<Tab>
+
+| Result | Line | What to do |
+|---|---|---|
+| ok | `PasarGuard detected.` | — |
+| warn | `PasarGuard was not detected on this host.` | Run `verify` on the panel's server, as root. |
+| ok | `PasarGuard selects the Row-Template page, and the placed page is current.` | — |
+| FAIL | `PasarGuard's Row-Template page is out of step (see above); …` | Read the `panel pasarguard:` line above it, then re-apply from the manager (**5 — Activate / Re-apply theme**). |
+| ok | `Live check: the running PasarGuard uses the Row-Template page.` | The running container reads the setting and can see the page. |
+| — | `Live check skipped (not available for this panel layout).` | A source install: there is no container to ask. |
+| warn | `the running PasarGuard does not use the Row-Template page yet; restart the panel.` | `pasarguard restart`, then verify again. |
+| warn | `PasarGuard does not select the Row-Template page; activate it from the manager.` | [Activate](/docs/installation/activation/#pasarguard). |
+| warn | `the PasarGuard configuration could not be read.` | Check `/opt/pasarguard/.env`, and run `verify` as root. |
+| warn | `panel pasarguard: … admin(s) set their own subscription page (sub_template); …` | Those admins' users keep their own page. |
+| warn | `panel pasarguard: the panel's 'disable subscription template' setting is on, …` | Browsers get the raw subscription: turn the setting off in PasarGuard. |
+
+</Tab>
+<Tab>
+
+| Result | Line | What to do |
+|---|---|---|
+| ok | `Rebecca detected.` | — |
+| warn | `Rebecca was not detected on this host.` | Run `verify` on the panel's server, as root. |
+| FAIL | `panel rebecca: this is Rebecca 0.0.x, the Python edition …` | Rebecca's Docker image cannot serve the page: install Rebecca 1.x with its binary installer (`rebecca-binary.sh`). |
+| ok | `Rebecca selects the Row-Template page, and the placed page is current.` | — |
+| FAIL | `Rebecca's Row-Template page is out of step (see above); …` | Read the `panel rebecca:` line above it, then re-apply from the manager (**5 — Activate / Re-apply theme**). |
+| — | `Live check skipped (not available for this panel layout).` | Always, on Rebecca: it reads its settings on every request, so the check above is the one that counts. |
+| warn | `Rebecca does not select the Row-Template page; activate it from the manager.` | [Activate](/docs/installation/activation/#rebecca), or leave it if you chose another page on purpose. |
+| — | `Panel selection not checked (activation is manual here: …)` | MySQL/MariaDB, or no `sqlite3`: check **Settings → Subscription → Templates** yourself. |
+| warn | `panel rebecca: … admin(s) override the subscription page for their own users; …` | Those admins' users keep their own page. |
+
+</Tab>
+</Tabs>
+
+| Result | Line | What to do |
+|---|---|---|
+| FAIL | `the panel components are missing; run 'row-template update'.` | PasarGuard and Rebecca are checked through the installer's companion files. Run `row-template update`. |
 | warn | `leftover staging files found under the install root (possible interrupted update).` | See below. |
 
 ### Live checks
 
-Where `sqlite3` can find a client's subscription to test with, `verify` requests it locally twice — once as a browser, once as a VPN app.
+`verify` requests a subscription locally twice — once as a browser, once as a VPN app. On 3X-UI it finds a client's subscription to test with through `sqlite3`; on PasarGuard and Rebecca, where Row-Template never looks up a subscription link itself, the checks run only when you give one in `RT_SMOKE_URL`:
+
+```bash
+RT_SMOKE_URL='https://your-panel.example.com/sub/…' row-template verify
+```
 
 | Result | Line | What to do |
 |---|---|---|
@@ -96,9 +146,11 @@ Where `sqlite3` can find a client's subscription to test with, `verify` requests
 | ok | `VPN-client check: normal subscription content is served.` | — |
 | warn | `VPN-client check: HTML was returned instead of subscription content.` | VPN apps would receive the page instead of their configuration. Check any proxy or CDN in front of the panel is not rewriting the request. |
 
+Never paste the subscription link you use for `RT_SMOKE_URL` into a bug report.
+
 ## Leftover staging files
 
-Every file Row-Template replaces is first written under a temporary name starting with `.stage.` or `.live.`, then renamed into place. If a command was interrupted — the server lost power, or the process was killed — one can be left behind. They are never used. When no `row-template` command is running, it is safe to delete them:
+Every file Row-Template replaces is first written under a temporary name starting with `.stage.` or `.live.`, then renamed into place. If a command was interrupted — the server lost power, or the process was killed — one can be left behind. They are never used. When no `row-template` command is running, it is safe to delete them (on PasarGuard and Rebecca, use `/etc/row-template`):
 
 ```bash
 find /etc/3x-ui/sub_templates/row-template -maxdepth 2 \( -name '.stage.*' -o -name '.live.*' \) -print -delete

@@ -61,20 +61,22 @@ export const ENTRIES: ErrorEntry[] = [
     group: "host",
     texts: ["no 3x-ui installation was detected on this host."],
     en: {
-      what: "The installer found neither the 3X-UI binary (`/usr/local/x-ui/x-ui`, `/usr/local/bin/x-ui`, or `x-ui` on the `PATH`) nor a systemd unit named `x-ui.service`. Nothing was changed.",
+      what: "Row-Template was to serve 3X-UI — because `RT_PANEL=3xui` was set, or because the installation on this server serves 3X-UI — but found neither the 3X-UI binary (`/usr/local/x-ui/x-ui`, `/usr/local/bin/x-ui`, or `x-ui` on the `PATH`) nor a systemd unit named `x-ui.service`. Nothing was changed.",
       fix: [
         "Run the installer on the server that runs your 3X-UI panel.",
         "Check the panel is installed: `ls -l /usr/local/x-ui/x-ui` and `systemctl status x-ui`.",
         "A panel running in a container, or installed under another name, is not supported.",
+        "If this server runs PasarGuard or Rebecca, do not set `RT_PANEL=3xui`.",
       ],
     },
     fa: {
       tr: "هیچ نصبی از 3x-ui روی این سرور پیدا نشد.",
-      what: "نصب‌کننده نه فایل اجرایی 3X-UI را پیدا کرد (`/usr/local/x-ui/x-ui`، `/usr/local/bin/x-ui` یا `x-ui` در `PATH`) و نه سرویس systemd با نام `x-ui.service` را. هیچ تغییری اعمال نشده است.",
+      what: "Row-Template قرار بود به 3X-UI سرویس بدهد — چون `RT_PANEL=3xui` تنظیم شده یا چون نصب روی این سرور به 3X-UI سرویس می‌دهد — اما نه فایل اجرایی 3X-UI را پیدا کرد (`/usr/local/x-ui/x-ui`، `/usr/local/bin/x-ui` یا `x-ui` در `PATH`) و نه سرویس systemd با نام `x-ui.service` را. هیچ تغییری اعمال نشده است.",
       fix: [
         "نصب‌کننده را روی همان سروری اجرا کنید که پنل 3X-UI روی آن است.",
         "از نصب بودن پنل مطمئن شوید: `ls -l /usr/local/x-ui/x-ui` و `systemctl status x-ui`.",
         "پنلی که داخل کانتینر یا با نام دیگری نصب شده باشد پشتیبانی نمی‌شود.",
+        "اگر این سرور PasarGuard یا Rebecca را اجرا می‌کند، `RT_PANEL=3xui` را تنظیم نکنید.",
       ],
     },
   },
@@ -104,12 +106,12 @@ export const ENTRIES: ErrorEntry[] = [
       "3x-ui $RT_XUI_VERSION is below the minimum $RT_MIN_XUI.",
     ],
     en: {
-      what: "Row-Template 1.2.0 needs 3X-UI 3.6.0 or newer, and the panel is older. The installer stops without changing anything; `verify` reports it as a hard failure.",
+      what: "On 3X-UI, Row-Template needs version 3.6.0 or newer, and the panel is older. The installer stops without changing anything; `verify` reports it as a hard failure.",
       fix: ["Update 3X-UI to 3.6.0 or newer, then run the installer (or `row-template verify`) again."],
     },
     fa: {
       tr: "نسخهٔ ‹نسخه› از 3x-ui پایین‌تر از حداقل لازم یعنی 3.6.0 است؛ نصب انجام نمی‌شود / نسخهٔ ‹نسخه› از 3x-ui پایین‌تر از حداقل 3.6.0 است.",
-      what: "Row-Template 1.2.0 به 3X-UI نسخهٔ 3.6.0 یا جدیدتر نیاز دارد و پنل شما قدیمی‌تر است. نصب‌کننده بدون هیچ تغییری متوقف می‌شود و `verify` آن را خطای جدی گزارش می‌کند.",
+      what: "Row-Template روی 3X-UI به نسخهٔ 3.6.0 یا جدیدتر نیاز دارد و پنل شما قدیمی‌تر است. نصب‌کننده بدون هیچ تغییری متوقف می‌شود و `verify` آن را خطای جدی گزارش می‌کند.",
       fix: ["3X-UI را به نسخهٔ 3.6.0 یا جدیدتر به‌روز کنید و نصب‌کننده (یا `row-template verify`) را دوباره اجرا کنید."],
     },
   },
@@ -204,7 +206,7 @@ export const ENTRIES: ErrorEntry[] = [
     en: {
       what: "The value of `RT_RELEASE_URL` is not a web address. Nothing was downloaded.",
       fix: [
-        "Give the base URL of the folder holding the release files, for example `https://mirror.example.com/row-template/1.2.0`.",
+        "Give the base URL of the folder holding the release files, for example `https://mirror.example.com/row-template/1.3.0`.",
         "For a folder on the server itself, use `RT_RELEASE_DIR` instead.",
       ],
     },
@@ -212,7 +214,7 @@ export const ENTRIES: ErrorEntry[] = [
       tr: "`RT_RELEASE_URL` باید یک نشانی `http(s)` باشد. / نشانی نسخه باید یک نشانی `http(s)` باشد: ‹نشانی›",
       what: "مقدار `RT_RELEASE_URL` نشانی وب نیست. چیزی دانلود نشده است.",
       fix: [
-        "نشانی پوشه‌ای را بدهید که فایل‌های نسخه در آن است، مثلاً `https://mirror.example.com/row-template/1.2.0`.",
+        "نشانی پوشه‌ای را بدهید که فایل‌های نسخه در آن است، مثلاً `https://mirror.example.com/row-template/1.3.0`.",
         "برای پوشه‌ای روی خود سرور، به‌جای آن از `RT_RELEASE_DIR` استفاده کنید.",
       ],
     },
@@ -553,15 +555,15 @@ export const ENTRIES: ErrorEntry[] = [
     group: "download",
     texts: [
       "payload template directory is not a plain id: $id (skipped)",
-      "payload template $id has no template.html (skipped)",
+      "payload template $id has no $name (skipped)",
     ],
     en: {
-      what: "A folder under `templates/` in the release is not a design Row-Template recognises, so it is ignored. The other designs install normally.",
+      what: "A folder under `templates/` in the release is not a design Row-Template recognises, or has no page for this server's panel, so it is ignored. The other designs install normally.",
       fix: ["Nothing to do for an official release. If you added folders to a release yourself, remove them."],
     },
     fa: {
-      tr: "پوشهٔ تمپلیت در محتوای نسخه شناسهٔ ساده‌ای نیست: ‹شناسه› (نادیده گرفته شد) / تمپلیت ‹شناسه› در محتوای نسخه `template.html` ندارد (نادیده گرفته شد)",
-      what: "یکی از پوشه‌های `templates/` در نسخه تمپلیتی نیست که Row-Template بشناسد، پس نادیده گرفته می‌شود. بقیهٔ تمپلیت‌ها معمولی نصب می‌شوند.",
+      tr: "پوشهٔ تمپلیت در محتوای نسخه شناسهٔ ساده‌ای نیست: ‹شناسه› (نادیده گرفته شد) / تمپلیت ‹شناسه› در محتوای نسخه ‹فایل› ندارد (نادیده گرفته شد)",
+      what: "یکی از پوشه‌های `templates/` در نسخه تمپلیتی نیست که Row-Template بشناسد، یا صفحه‌ای برای پنل این سرور ندارد، پس نادیده گرفته می‌شود. بقیهٔ تمپلیت‌ها معمولی نصب می‌شوند.",
       fix: ["برای نسخهٔ رسمی کاری لازم نیست. اگر خودتان پوشه‌ای به نسخه اضافه کرده‌اید، حذفش کنید."],
     },
   },
@@ -623,17 +625,17 @@ export const ENTRIES: ErrorEntry[] = [
     group: "install",
     texts: ["install root is a symlink; refusing to proceed."],
     en: {
-      what: "`/etc/3x-ui/sub_templates/row-template` is a symbolic link. Row-Template never writes through a symlink, because it could redirect root-owned writes anywhere. Nothing was changed.",
+      what: "The install directory — `/etc/3x-ui/sub_templates/row-template` on 3X-UI, `/etc/row-template` on PasarGuard and Rebecca — is a symbolic link. Row-Template never writes through a symlink, because it could redirect root-owned writes anywhere. Nothing was changed.",
       fix: [
-        "Replace the link with a real directory: `rm /etc/3x-ui/sub_templates/row-template && mkdir -p /etc/3x-ui/sub_templates/row-template`.",
+        "Replace the link with a real directory — for example on 3X-UI: `rm /etc/3x-ui/sub_templates/row-template && mkdir -p /etc/3x-ui/sub_templates/row-template` (on PasarGuard and Rebecca the path is `/etc/row-template`).",
         "If you need the files on another disk, bind-mount that disk onto the path instead of linking it.",
       ],
     },
     fa: {
       tr: "ریشهٔ نصب یک پیوند نمادین است؛ ادامه نمی‌دهم.",
-      what: "مسیر `/etc/3x-ui/sub_templates/row-template` یک پیوند نمادین (symlink) است. Row-Template هرگز از طریق symlink نمی‌نویسد، چون می‌تواند نوشتن با دسترسی root را به هر جایی هدایت کند. هیچ تغییری اعمال نشده است.",
+      what: "پوشهٔ نصب — `/etc/3x-ui/sub_templates/row-template` در 3X-UI و `/etc/row-template` در PasarGuard و Rebecca — یک پیوند نمادین (symlink) است. Row-Template هرگز از طریق symlink نمی‌نویسد، چون می‌تواند نوشتن با دسترسی root را به هر جایی هدایت کند. هیچ تغییری اعمال نشده است.",
       fix: [
-        "پیوند را با یک پوشهٔ واقعی جایگزین کنید: `rm /etc/3x-ui/sub_templates/row-template && mkdir -p /etc/3x-ui/sub_templates/row-template`.",
+        "پیوند را با یک پوشهٔ واقعی جایگزین کنید — مثلاً در 3X-UI: `rm /etc/3x-ui/sub_templates/row-template && mkdir -p /etc/3x-ui/sub_templates/row-template` (در PasarGuard و Rebecca مسیر `/etc/row-template` است).",
         "اگر می‌خواهید فایل‌ها روی دیسک دیگری باشند، به‌جای پیوند، آن دیسک را روی همین مسیر bind-mount کنید.",
       ],
     },
@@ -649,7 +651,7 @@ export const ENTRIES: ErrorEntry[] = [
       ],
     },
     fa: {
-      tr: "نصب قبلی در `/etc/3x-ui/sub_templates/row-template` پیدا شد؛ برای تعمیر، نصب‌کننده را به‌صورت تعاملی اجرا کنید یا `RT_ASSUME_YES=1` را تنظیم کنید.",
+      tr: "نصب قبلی در ‹پوشهٔ نصب› پیدا شد؛ برای تعمیر، نصب‌کننده را به‌صورت تعاملی اجرا کنید یا `RT_ASSUME_YES=1` را تنظیم کنید.",
       what: "Row-Template از قبل نصب است و نصب‌کننده بدون ترمینال اجرا شده؛ پس بدون رضایت صریح شما نصب را تعمیر نمی‌کند. هیچ تغییری اعمال نشده است.",
       fix: [
         "برای رفتن به آخرین نسخه، `row-template update` را اجرا کنید.",
@@ -661,18 +663,18 @@ export const ENTRIES: ErrorEntry[] = [
     group: "install",
     texts: ["could not create the install tree."],
     en: {
-      what: "The folders under `/etc/3x-ui/sub_templates/row-template` could not be created — usually a full disk, a read-only `/etc`, or a file where a folder should be.",
+      what: "The folders of the install directory (`/etc/3x-ui/sub_templates/row-template` on 3X-UI, `/etc/row-template` on PasarGuard and Rebecca) could not be created — usually a full disk, a read-only `/etc`, or a file where a folder should be.",
       fix: [
         "Check free space with `df -h /etc`.",
-        "Check `/etc/3x-ui/sub_templates` is a writable directory, not a file, then run the installer again.",
+        "Check that the parent folder (`/etc/3x-ui/sub_templates` on 3X-UI, `/etc` otherwise) is a writable directory, not a file, then run the installer again.",
       ],
     },
     fa: {
       tr: "ساختار پوشه‌های نصب ساخته نشد.",
-      what: "پوشه‌های زیر `/etc/3x-ui/sub_templates/row-template` ساخته نشدند — معمولاً به‌دلیل پر بودن دیسک، فقط‌خواندنی بودن `/etc` یا وجود یک فایل به‌جای پوشه.",
+      what: "پوشه‌های پوشهٔ نصب (`/etc/3x-ui/sub_templates/row-template` در 3X-UI و `/etc/row-template` در PasarGuard و Rebecca) ساخته نشدند — معمولاً به‌دلیل پر بودن دیسک، فقط‌خواندنی بودن `/etc` یا وجود یک فایل به‌جای پوشه.",
       fix: [
         "فضای آزاد را با `df -h /etc` بررسی کنید.",
-        "مطمئن شوید `/etc/3x-ui/sub_templates` پوشه‌ای قابل نوشتن است (نه فایل) و نصب‌کننده را دوباره اجرا کنید.",
+        "مطمئن شوید پوشهٔ والد (`/etc/3x-ui/sub_templates` در 3X-UI و در غیر این صورت `/etc`) پوشه‌ای قابل نوشتن است (نه فایل) و نصب‌کننده را دوباره اجرا کنید.",
       ],
     },
   },
@@ -764,7 +766,7 @@ export const ENTRIES: ErrorEntry[] = [
       fix: ["Use one of the IDs in the message — lowercase, with no spaces, for example `RT_TEMPLATE=pulsenova`. The [comparison table](/docs/templates/choosing/#compare-them) lists them."],
     },
     fa: {
-      tr: "مقدار ‹مقدار› در `RT_TEMPLATE` تمپلیتی نیست که این نسخه ارائه کند (موجود: `row editorial canvas prism terminal pulse brutal arcade sketch signature saffron pulsenova prismnova terminalnova arcadenova`).",
+      tr: "مقدار ‹مقدار› در `RT_TEMPLATE` تمپلیتی نیست که این نسخه ارائه کند (موجود: `row editorial canvas prism terminal pulse brutal arcade sketch signature saffron pulsenova prismnova terminalnova arcadenova meter notebook`).",
       what: "شناسهٔ تمپلیت در `RT_TEMPLATE` جزو تمپلیت‌های این نسخه نیست. نصب به‌جای استفادهٔ بی‌صدا از Row متوقف می‌شود.",
       fix: ["یکی از شناسه‌های داخل پیام را بدهید — با حروف کوچک و بدون فاصله، مثلاً `RT_TEMPLATE=pulsenova`. [جدول مقایسه](/docs/templates/choosing/#compare-them) همه را فهرست کرده است."],
     },
@@ -998,16 +1000,16 @@ export const ENTRIES: ErrorEntry[] = [
     group: "templates",
     texts: [
       "template '$id' is not installed; re-run the installer to refresh the template store",
-      "No templates are installed. Re-run the installer to restore the template store.",
+      "No templates are installed, and they could not be restored automatically (see above).",
     ],
     en: {
-      what: "The design you picked — or every design — is missing from the installation's template store. This is normal right after the first update from 1.1.0.",
-      fix: ["Run `row-template update` (or re-run the installer). It installs every design of the release."],
+      what: "The design you picked — or every design — is missing from the installation's template store. The manager restores missing designs itself when it opens, by downloading them from the release you have installed; this appears when that was not possible, and the line above says why.",
+      fix: ["Make sure the server can reach the release source and open the manager again — or run `row-template update` (or re-run the installer), which installs every design of the release."],
     },
     fa: {
-      tr: "تمپلیت '‹شناسه›' نصب نیست؛ برای به‌روز کردن مخزن تمپلیت‌ها نصب‌کننده را دوباره اجرا کنید / هیچ تمپلیتی نصب نیست. برای بازگرداندن مخزن تمپلیت‌ها نصب‌کننده را دوباره اجرا کنید.",
-      what: "تمپلیتی که انتخاب کرده‌اید — یا همهٔ تمپلیت‌ها — در مخزن تمپلیت‌های نصب وجود ندارد. این وضعیت درست پس از اولین به‌روزرسانی از 1.1.0 طبیعی است.",
-      fix: ["`row-template update` را اجرا کنید (یا نصب‌کننده را دوباره اجرا کنید). همهٔ تمپلیت‌های نسخه را نصب می‌کند."],
+      tr: "تمپلیت '‹شناسه›' نصب نیست؛ برای به‌روز کردن مخزن تمپلیت‌ها نصب‌کننده را دوباره اجرا کنید / هیچ تمپلیتی نصب نیست و به‌صورت خودکار هم بازگردانده نشدند (بالا را ببینید).",
+      what: "تمپلیتی که انتخاب کرده‌اید — یا همهٔ تمپلیت‌ها — در مخزن تمپلیت‌های نصب وجود ندارد. منوی مدیریت هنگام باز شدن، تمپلیت‌های ناموجود را خودش از نسخهٔ نصب‌شده دانلود و بازگردانی می‌کند؛ این پیام وقتی می‌آید که این کار ممکن نبود و خط بالا علتش را می‌گوید.",
+      fix: ["مطمئن شوید سرور به منبع نسخه دسترسی دارد و منوی مدیریت را دوباره باز کنید — یا `row-template update` را اجرا کنید (یا نصب‌کننده را دوباره اجرا کنید) که همهٔ تمپلیت‌های نسخه را نصب می‌کند."],
     },
   },
   {
@@ -1537,13 +1539,13 @@ export const ENTRIES: ErrorEntry[] = [
     group: "update",
     texts: ["This installation is incomplete: some installer components are missing, as after an update from 1.1.0."],
     en: {
-      what: "The manager found that the installer's companion files are missing — the expected state after the first update from 1.1.0.",
-      fix: ["Accept `Re-install … now to complete it?` — or run `row-template update` — to install them and every design. [Upgrading from 1.1.0 →](/docs/management/updating/#upgrading-from-110)"],
+      what: "The manager found that the installer's companion files are missing — the state right after 1.1.0's own updater installed a newer release, when completing the installation automatically did not work.",
+      fix: ["Accept `Re-install … now to complete it?` — or run `row-template update` — to install them and every design. [Upgrading from 1.1.0 or 1.2.0 →](/docs/management/updating/#upgrading-from-110-or-120)"],
     },
     fa: {
       tr: "این نصب ناقص است: برخی از اجزای نصب‌کننده وجود ندارند؛ مانند وضعیت پس از به‌روزرسانی از 1.1.0.",
-      what: "منوی مدیریت دریافت که فایل‌های همراه نصب‌کننده وجود ندارند — وضعیتی که پس از اولین به‌روزرسانی از 1.1.0 انتظار می‌رود.",
-      fix: ["پرسش `Re-install … now to complete it?` را تأیید کنید — یا `row-template update` را اجرا کنید — تا آن‌ها و همهٔ تمپلیت‌ها نصب شوند. [ارتقا از 1.1.0 ←](/docs/management/updating/#upgrading-from-110)"],
+      what: "منوی مدیریت دریافت که فایل‌های همراه نصب‌کننده وجود ندارند — وضعیتی که درست پس از نصب نسخهٔ جدیدتر با به‌روزرسان خود 1.1.0 پیش می‌آید، وقتی کامل کردن خودکار نصب انجام نشده باشد.",
+      fix: ["پرسش `Re-install … now to complete it?` را تأیید کنید — یا `row-template update` را اجرا کنید — تا آن‌ها و همهٔ تمپلیت‌ها نصب شوند. [ارتقا از 1.1.0 یا 1.2.0 ←](/docs/management/updating/#upgrading-from-110-or-120)"],
     },
   },
   {
@@ -1575,7 +1577,7 @@ export const ENTRIES: ErrorEntry[] = [
       fix: ["Re-run the installer to repair the installation."],
     },
     fa: {
-      tr: "چیزی برای پشتیبان‌گیری نیست: `/etc/3x-ui/sub_templates/row-template/dist/template.html` وجود ندارد",
+      tr: "چیزی برای پشتیبان‌گیری نیست: ‹مسیر› وجود ندارد",
       what: "به پشتیبان نیاز بود، اما فایل تمپلیت نصب‌شده وجود ندارد، پس چیزی برای پشتیبان‌گیری نیست. عملیاتی که به آن نیاز داشت متوقف شد.",
       fix: ["برای تعمیر نصب، نصب‌کننده را دوباره اجرا کنید."],
     },
@@ -1599,33 +1601,14 @@ export const ENTRIES: ErrorEntry[] = [
     en: {
       what: "The backup's page no longer matches the checksum stored with it, or its files are missing. A damaged backup is never restored. Nothing was changed.",
       fix: [
-        "List the backups with `ls /etc/3x-ui/sub_templates/row-template/backups/` and choose another with `row-template rollback --to <name>`.",
+        "List the backups — `ls /etc/3x-ui/sub_templates/row-template/backups/` on 3X-UI, `ls /etc/row-template/backups/` on PasarGuard and Rebecca — and choose another with `row-template rollback --to <name>`.",
       ],
     },
     fa: {
       tr: "پشتیبان در اعتبارسنجی رد شد: ‹مسیر›",
       what: "صفحهٔ داخل پشتیبان دیگر با چک‌سامی که همراهش ذخیره شده یکی نیست، یا فایل‌هایش وجود ندارند. پشتیبان خراب هرگز بازگردانده نمی‌شود. هیچ تغییری اعمال نشده است.",
       fix: [
-        "فهرست پشتیبان‌ها را با `ls /etc/3x-ui/sub_templates/row-template/backups/` ببینید و با `row-template rollback --to <name>` پشتیبان دیگری انتخاب کنید.",
-      ],
-    },
-  },
-  {
-    group: "rollback",
-    texts: ["backup artifact matches no installed template; the template store may be damaged"],
-    en: {
-      what: "Rollback works out which design a backup holds by matching its page, byte for byte, against the designs in the current template store — and this one matches none. Either the template store is damaged, or the backup was made by an older release (such as 1.1.0) whose page differs from every 1.2.0 design. Nothing was changed.",
-      fix: [
-        "Run `row-template verify`. If the store is damaged, `row-template update` reinstalls it; then try again.",
-        "A backup made by 1.1.0 cannot be restored by 1.2.0. See [Rolling back across versions](/docs/management/rollback/#rolling-back-across-versions).",
-      ],
-    },
-    fa: {
-      tr: "صفحهٔ داخل پشتیبان با هیچ تمپلیت نصب‌شده‌ای مطابقت ندارد؛ ممکن است مخزن تمپلیت‌ها خراب باشد",
-      what: "بازگردانی تشخیص می‌دهد پشتیبان کدام تمپلیت را دارد، با مقایسهٔ بایت‌به‌بایت صفحهٔ آن با تمپلیت‌های مخزن فعلی — و این یکی با هیچ‌کدام مطابقت ندارد. یا مخزن تمپلیت‌ها خراب است، یا پشتیبان را نسخهٔ قدیمی‌تری (مانند 1.1.0) ساخته که صفحه‌اش با همهٔ تمپلیت‌های 1.2.0 فرق دارد. هیچ تغییری اعمال نشده است.",
-      fix: [
-        "`row-template verify` را اجرا کنید. اگر مخزن خراب است، `row-template update` آن را دوباره نصب می‌کند؛ سپس دوباره امتحان کنید.",
-        "پشتیبانی که 1.1.0 ساخته با 1.2.0 بازگردانده نمی‌شود. [بازگردانی بین نسخه‌ها](/docs/management/rollback/#rolling-back-across-versions) را ببینید.",
+        "فهرست پشتیبان‌ها را ببینید — `ls /etc/3x-ui/sub_templates/row-template/backups/` در 3X-UI و `ls /etc/row-template/backups/` در PasarGuard و Rebecca — و با `row-template rollback --to <name>` پشتیبان دیگری انتخاب کنید.",
       ],
     },
   },
@@ -1662,7 +1645,7 @@ export const ENTRIES: ErrorEntry[] = [
       what: "`rollback` was given an option it does not know, or `--to` without a backup.",
       fix: [
         "Use `row-template rollback` (newest backup), `row-template rollback --auto` (the same), or `row-template rollback --to <name>`.",
-        "Backup names are the folders under `/etc/3x-ui/sub_templates/row-template/backups/`.",
+        "Backup names are the folders under `backups/` in the install directory: `/etc/3x-ui/sub_templates/row-template/backups/` on 3X-UI, `/etc/row-template/backups/` on PasarGuard and Rebecca.",
       ],
     },
     fa: {
@@ -1670,7 +1653,7 @@ export const ENTRIES: ErrorEntry[] = [
       what: "به `rollback` گزینه‌ای داده شده که آن را نمی‌شناسد، یا `--to` بدون نام پشتیبان آمده است.",
       fix: [
         "از `row-template rollback` (جدیدترین پشتیبان)، `row-template rollback --auto` (همان) یا `row-template rollback --to <name>` استفاده کنید.",
-        "نام پشتیبان‌ها همان نام پوشه‌های زیر `/etc/3x-ui/sub_templates/row-template/backups/` است.",
+        "نام پشتیبان‌ها همان نام پوشه‌های زیر `backups/` در پوشهٔ نصب است: `/etc/3x-ui/sub_templates/row-template/backups/` در 3X-UI و `/etc/row-template/backups/` در PasarGuard و Rebecca.",
       ],
     },
   },
@@ -1692,12 +1675,12 @@ export const ENTRIES: ErrorEntry[] = [
     texts: ["refusing to roll back from a path outside the backups tree."],
     en: {
       what: "`--to` pointed at a folder outside `backups/`. Only Row-Template's own backups can be restored. Nothing was changed.",
-      fix: ["Give a folder name from `/etc/3x-ui/sub_templates/row-template/backups/`, or use `row-template rollback --auto`."],
+      fix: ["Give a folder name from `backups/` in the install directory (`/etc/3x-ui/sub_templates/row-template/backups/` on 3X-UI, `/etc/row-template/backups/` on PasarGuard and Rebecca), or use `row-template rollback --auto`."],
     },
     fa: {
       tr: "بازگردانی از مسیری بیرون از پوشهٔ پشتیبان‌ها انجام نمی‌شود.",
       what: "`--to` به پوشه‌ای بیرون از `backups/` اشاره کرده است. فقط پشتیبان‌های خود Row-Template بازگردانده می‌شوند. هیچ تغییری اعمال نشده است.",
-      fix: ["نام یکی از پوشه‌های `/etc/3x-ui/sub_templates/row-template/backups/` را بدهید، یا از `row-template rollback --auto` استفاده کنید."],
+      fix: ["نام یکی از پوشه‌های `backups/` در پوشهٔ نصب را بدهید (`/etc/3x-ui/sub_templates/row-template/backups/` در 3X-UI و `/etc/row-template/backups/` در PasarGuard و Rebecca)، یا از `row-template rollback --auto` استفاده کنید."],
     },
   },
   {
@@ -1718,12 +1701,12 @@ export const ENTRIES: ErrorEntry[] = [
     texts: ["could not stage the backup; the running template is unchanged."],
     en: {
       what: "The backup could not be put in place — the line above says why. The page your subscribers see is unchanged.",
-      fix: ["Fix the problem named just above. If it says the backup matches no installed template, see that message."],
+      fix: ["Fix the problem named just above. If it says the backup was made for another panel, see that message."],
     },
     fa: {
       tr: "پشتیبان آماده نشد؛ تمپلیت در حال اجرا تغییری نکرده است.",
       what: "پشتیبان سر جایش قرار نگرفت — علت در خط بالا آمده است. صفحه‌ای که مشترکان می‌بینند تغییری نکرده است.",
-      fix: ["مشکلی را که درست در بالا نام برده شده برطرف کنید. اگر گفته پشتیبان با هیچ تمپلیت نصب‌شده‌ای مطابقت ندارد، توضیح همان پیام را ببینید."],
+      fix: ["مشکلی را که درست در بالا نام برده شده برطرف کنید. اگر گفته پشتیبان برای پنل دیگری ساخته شده، توضیح همان پیام را ببینید."],
     },
   },
   {
@@ -1771,7 +1754,7 @@ export const ENTRIES: ErrorEntry[] = [
       fix: ["Re-run the installer. If the directory is a symlink, replace it with a real directory first."],
     },
     fa: {
-      tr: "ریشهٔ نصب وجود ندارد یا یک پیوند نمادین است: `/etc/3x-ui/sub_templates/row-template`",
+      tr: "ریشهٔ نصب وجود ندارد یا یک پیوند نمادین است: ‹پوشهٔ نصب›",
       what: "پوشهٔ نصب وجود ندارد یا یک پیوند نمادین است. Row-Template به‌درستی نصب نشده است.",
       fix: ["نصب‌کننده را دوباره اجرا کنید. اگر پوشه symlink است، اول آن را با یک پوشهٔ واقعی جایگزین کنید."],
     },
@@ -1794,14 +1777,14 @@ export const ENTRIES: ErrorEntry[] = [
   },
   {
     group: "verify",
-    texts: ["a template in the store does not match its checksum."],
+    texts: ["a template in the store does not match its checksum:$corrupt."],
     en: {
-      what: "One of the designs in the template store was changed or damaged after installation.",
+      what: "One or more designs in the template store — named at the end of the message — were changed or damaged after installation.",
       fix: ["Run `row-template update` to reinstall every design."],
     },
     fa: {
-      tr: "یکی از تمپلیت‌های مخزن با چک‌سامش مطابقت ندارد.",
-      what: "یکی از تمپلیت‌های مخزن پس از نصب تغییر کرده یا خراب شده است.",
+      tr: "یکی از تمپلیت‌های مخزن با چک‌سامش مطابقت ندارد: ‹شناسه‌ها›.",
+      what: "یک یا چند تمپلیت در مخزن — که در انتهای پیام نام برده شده‌اند — پس از نصب تغییر کرده یا خراب شده‌اند.",
       fix: ["با `row-template update` همهٔ تمپلیت‌ها را دوباره نصب کنید."],
     },
   },
@@ -1835,13 +1818,13 @@ export const ENTRIES: ErrorEntry[] = [
     group: "verify",
     texts: ["template store missing or empty; run 'row-template update' to install it."],
     en: {
-      what: "The installation has no template store. This is expected after the **first** update from 1.1.0, which is performed by 1.1.0's updater and does not know about designs.",
-      fix: ["Run `row-template update` again. [Upgrading from 1.1.0 →](/docs/management/updating/#upgrading-from-110)"],
+      what: "The installation has no template store — the state right after 1.1.0's own updater installed a newer release, which it does not know how to complete. Run as root, `verify` completes the installation itself first (every design of the version you have), so this line means `verify` was not run as root, or that was not possible.",
+      fix: ["Run `row-template verify` as root, or run `row-template update`. [Upgrading from 1.1.0 or 1.2.0 →](/docs/management/updating/#upgrading-from-110-or-120)"],
     },
     fa: {
       tr: "مخزن تمپلیت‌ها وجود ندارد یا خالی است؛ برای نصب آن `row-template update` را اجرا کنید.",
-      what: "نصب مخزن تمپلیت ندارد. این وضعیت پس از **اولین** به‌روزرسانی از 1.1.0 طبیعی است، چون آن به‌روزرسانی را به‌روزرسان 1.1.0 انجام می‌دهد که تمپلیت‌ها را نمی‌شناسد.",
-      fix: ["`row-template update` را یک بار دیگر اجرا کنید. [ارتقا از 1.1.0 ←](/docs/management/updating/#upgrading-from-110)"],
+      what: "نصب مخزن تمپلیت ندارد — وضعیتی که درست پس از نصب نسخهٔ جدیدتر با به‌روزرسان خود 1.1.0 پیش می‌آید، چون آن به‌روزرسان نمی‌داند چطور نصب را کامل کند. `verify` وقتی با root اجرا شود، اول خودش نصب را کامل می‌کند (همهٔ تمپلیت‌های همان نسخه‌ای که دارید)؛ پس این خط یعنی `verify` با root اجرا نشده یا این کار ممکن نبوده است.",
+      fix: ["`row-template verify` را با root اجرا کنید، یا `row-template update` را اجرا کنید. [ارتقا از 1.1.0 یا 1.2.0 ←](/docs/management/updating/#upgrading-from-110-or-120)"],
     },
   },
   {
@@ -1888,12 +1871,12 @@ export const ENTRIES: ErrorEntry[] = [
     texts: ["config.env is other-writable (mode $perm); tighten to 640."],
     en: {
       what: "Any user on the server can modify your branding file. Row-Template itself always writes it with mode `640`.",
-      fix: ["`chmod 640 /etc/3x-ui/sub_templates/row-template/config.env`"],
+      fix: ["`chmod 640 /etc/3x-ui/sub_templates/row-template/config.env` on 3X-UI, or `chmod 640 /etc/row-template/config.env` on PasarGuard and Rebecca."],
     },
     fa: {
       tr: "`config.env` برای همه قابل نوشتن است (مجوز ‹مجوز›)؛ آن را به 640 محدود کنید.",
       what: "هر کاربری روی سرور می‌تواند فایل برندینگ شما را تغییر دهد. خود Row-Template همیشه آن را با مجوز `640` می‌نویسد.",
-      fix: ["`chmod 640 /etc/3x-ui/sub_templates/row-template/config.env`"],
+      fix: ["در 3X-UI: `chmod 640 /etc/3x-ui/sub_templates/row-template/config.env`؛ در PasarGuard و Rebecca: `chmod 640 /etc/row-template/config.env`."],
     },
   },
   {
@@ -1913,13 +1896,13 @@ export const ENTRIES: ErrorEntry[] = [
     group: "verify",
     texts: ["installer components are missing (lib/transaction.sh, panels/), as after an update from 1.1.0; run 'row-template update' to complete the installation."],
     en: {
-      what: "The installer's companion files are missing — the expected state after the first update from 1.1.0, whose updater copies only the library and the command. Everything else works.",
-      fix: ["Run `row-template update` once more. [Upgrading from 1.1.0 →](/docs/management/updating/#upgrading-from-110)"],
+      what: "The installer's companion files are missing — the state right after 1.1.0's own updater installed a newer release, since it copies only the library and the command. Run as root, `verify` completes the installation first, so this line means it was not run as root, or that was not possible. The page keeps working.",
+      fix: ["Run `row-template verify` as root, or `row-template update`. [Upgrading from 1.1.0 or 1.2.0 →](/docs/management/updating/#upgrading-from-110-or-120)"],
     },
     fa: {
       tr: "اجزای نصب‌کننده وجود ندارند (`lib/transaction.sh` و `panels/`)، مانند وضعیت پس از به‌روزرسانی از 1.1.0؛ برای کامل کردن نصب `row-template update` را اجرا کنید.",
-      what: "فایل‌های همراه نصب‌کننده وجود ندارند — وضعیتی که پس از اولین به‌روزرسانی از 1.1.0 انتظار می‌رود، چون به‌روزرسان آن فقط کتابخانه و فرمان را کپی می‌کند. بقیهٔ چیزها کار می‌کنند.",
-      fix: ["`row-template update` را یک بار دیگر اجرا کنید. [ارتقا از 1.1.0 ←](/docs/management/updating/#upgrading-from-110)"],
+      what: "فایل‌های همراه نصب‌کننده وجود ندارند — وضعیتی که درست پس از نصب نسخهٔ جدیدتر با به‌روزرسان خود 1.1.0 پیش می‌آید، چون آن فقط کتابخانه و فرمان را کپی می‌کند. `verify` وقتی با root اجرا شود اول نصب را کامل می‌کند؛ پس این خط یعنی با root اجرا نشده یا این کار ممکن نبوده است. صفحه کار می‌کند.",
+      fix: ["`row-template verify` را با root اجرا کنید، یا `row-template update` را اجرا کنید. [ارتقا از 1.1.0 یا 1.2.0 ←](/docs/management/updating/#upgrading-from-110-or-120)"],
     },
   },
   {
@@ -1973,7 +1956,7 @@ export const ENTRIES: ErrorEntry[] = [
     en: {
       what: "Temporary files starting with `.stage.` or `.live.` were left behind by an interrupted command. They are never used.",
       fix: [
-        "When no `row-template` command is running, delete them: `find /etc/3x-ui/sub_templates/row-template -maxdepth 2 \\( -name '.stage.*' -o -name '.live.*' \\) -delete`.",
+        "When no `row-template` command is running, delete them — on 3X-UI: `find /etc/3x-ui/sub_templates/row-template -maxdepth 2 \\( -name '.stage.*' -o -name '.live.*' \\) -delete` (on PasarGuard and Rebecca, use `/etc/row-template`).",
         "Then run `row-template verify` again.",
       ],
     },
@@ -1981,7 +1964,7 @@ export const ENTRIES: ErrorEntry[] = [
       tr: "فایل‌های موقت باقی‌مانده زیر ریشهٔ نصب پیدا شد (احتمالاً به‌روزرسانی نیمه‌کاره).",
       what: "فایل‌های موقتی که با `.stage.` یا `.live.` شروع می‌شوند از یک فرمان نیمه‌کاره باقی مانده‌اند. هرگز استفاده نمی‌شوند.",
       fix: [
-        "وقتی هیچ فرمان `row-template` در حال اجرا نیست، حذفشان کنید: `find /etc/3x-ui/sub_templates/row-template -maxdepth 2 \\( -name '.stage.*' -o -name '.live.*' \\) -delete`.",
+        "وقتی هیچ فرمان `row-template` در حال اجرا نیست، حذفشان کنید — در 3X-UI: `find /etc/3x-ui/sub_templates/row-template -maxdepth 2 \\( -name '.stage.*' -o -name '.live.*' \\) -delete` (در PasarGuard و Rebecca از `/etc/row-template` استفاده کنید).",
         "سپس `row-template verify` را دوباره اجرا کنید.",
       ],
     },
@@ -2062,15 +2045,15 @@ export const ENTRIES: ErrorEntry[] = [
     en: {
       what: "Before deleting anything, uninstall confirms the directory is a Row-Template installation (it must hold `VERSION` plus the design or the library) and is not a system path. That check failed, so nothing was deleted.",
       fix: [
-        "Check what is in `/etc/3x-ui/sub_templates/row-template`.",
+        "Check what is in the install directory (`/etc/3x-ui/sub_templates/row-template` on 3X-UI, `/etc/row-template` on PasarGuard and Rebecca).",
         "If it is a damaged Row-Template installation, re-run the installer to repair it, then uninstall — or [remove it by hand](/docs/management/uninstall/#if-uninstall-cannot-run).",
       ],
     },
     fa: {
-      tr: "`/etc/3x-ui/sub_templates/row-template` حذف نمی‌شود: به ریشهٔ نصب Row-Template شبیه نیست. / مسیر سیستمی حذف نمی‌شود: ‹مسیر›",
+      tr: "‹پوشهٔ نصب› حذف نمی‌شود: به ریشهٔ نصب Row-Template شبیه نیست. / مسیر سیستمی حذف نمی‌شود: ‹پوشهٔ نصب›",
       what: "حذف‌کننده پیش از پاک کردن هر چیزی تأیید می‌کند که پوشه نصب Row-Template است (باید `VERSION` و تمپلیت یا کتابخانه را داشته باشد) و مسیر سیستمی نیست. این بررسی رد شد، پس چیزی حذف نشد.",
       fix: [
-        "محتوای `/etc/3x-ui/sub_templates/row-template` را بررسی کنید.",
+        "محتوای پوشهٔ نصب را بررسی کنید (`/etc/3x-ui/sub_templates/row-template` در 3X-UI و `/etc/row-template` در PasarGuard و Rebecca).",
         "اگر نصب خراب Row-Template است، اول با اجرای دوبارهٔ نصب‌کننده تعمیرش کنید و بعد حذف کنید — یا [دستی حذفش کنید](/docs/management/uninstall/#if-uninstall-cannot-run).",
       ],
     },
@@ -2216,12 +2199,12 @@ export const ENTRIES: ErrorEntry[] = [
     group: "cli",
     texts: ["could not load panel interface", "could not load panel registry", "could not load the transaction engine"],
     en: {
-      what: "The installer files that come with the management library (`panels/`, `lib/transaction.sh`) exist but could not be loaded — they are damaged or were edited. Every `row-template` command stops here. (If they are missing altogether, as after the first update from 1.1.0, the command still runs and `verify` reports it.)",
+      what: "The installer files that come with the management library (`panels/`, `lib/transaction.sh`) exist but could not be loaded — they are damaged or were edited. Every `row-template` command stops here. (If they are missing altogether — as right after 1.1.0's own updater installed a newer release — the command still runs, completes the installation when it can, and `verify` reports what is missing.)",
       fix: ["Re-run the installer to repair the installation; it replaces these files."],
     },
     fa: {
       tr: "رابط پنل بارگذاری نشد / فهرست پنل‌ها بارگذاری نشد / موتور تراکنش بارگذاری نشد",
-      what: "فایل‌های همراه کتابخانهٔ مدیریتی (`panels/` و `lib/transaction.sh`) وجود دارند اما بارگذاری نشدند — خراب شده‌اند یا ویرایش شده‌اند. همهٔ فرمان‌های `row-template` همین‌جا متوقف می‌شوند. (اگر اصلاً وجود نداشته باشند، مثل پس از اولین به‌روزرسانی از 1.1.0، فرمان اجرا می‌شود و `verify` آن را گزارش می‌دهد.)",
+      what: "فایل‌های همراه کتابخانهٔ مدیریتی (`panels/` و `lib/transaction.sh`) وجود دارند اما بارگذاری نشدند — خراب شده‌اند یا ویرایش شده‌اند. همهٔ فرمان‌های `row-template` همین‌جا متوقف می‌شوند. (اگر اصلاً وجود نداشته باشند — مثل درست پس از نصب نسخهٔ جدیدتر با به‌روزرسان خود 1.1.0 — فرمان اجرا می‌شود، در صورت امکان نصب را کامل می‌کند و `verify` کمبودها را گزارش می‌دهد.)",
       fix: ["برای تعمیر، نصب‌کننده را دوباره اجرا کنید؛ این فایل‌ها را جایگزین می‌کند."],
     },
   },
@@ -2283,6 +2266,1380 @@ export const ENTRIES: ErrorEntry[] = [
         "برای دانلود: فرمان را دوباره اجرا کنید یا نسخه را دوباره دانلود کنید.",
         "برای فایل نصب‌شده: `row-template update` آن را دوباره نصب می‌کند.",
       ],
+    },
+  },
+
+  // --- choosing the panel (1.3.0) -----------------------------------------------
+  {
+    group: "panel",
+    texts: ["no supported panel was detected on this host: no 3x-ui installation, and no PasarGuard or Rebecca installation."],
+    en: {
+      what: "The installer looked for all three supported panels and found none. A panel counts as installed only when two independent signs of it agree — for example its configuration and its service, or its compose file and its data folder. Nothing was changed.",
+      fix: [
+        "Run the installer on the server that runs your panel, as root.",
+        "Install the panel with its official installer first. Rebecca must be the 1.x binary install.",
+        "If a line above says a panel *looks partly installed*, finish or repair that panel's installation, then run the installer again.",
+      ],
+    },
+    fa: {
+      tr: "هیچ پنل پشتیبانی‌شده‌ای روی این سرور پیدا نشد: نه نصبی از 3x-ui و نه نصبی از PasarGuard یا Rebecca.",
+      what: "نصب‌کننده هر سه پنل پشتیبانی‌شده را جست‌وجو کرد و هیچ‌کدام را پیدا نکرد. یک پنل فقط وقتی نصب‌شده به حساب می‌آید که دو نشانهٔ مستقل از آن با هم بخوانند — مثلاً پیکربندی و سرویسش، یا فایل compose و پوشهٔ داده‌اش. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "نصب‌کننده را روی سروری که پنل شما روی آن است و با root اجرا کنید.",
+        "اول پنل را با نصب‌کنندهٔ رسمی خودش نصب کنید. Rebecca باید نسخهٔ 1.x با نصب باینری باشد.",
+        "اگر خطی در بالا می‌گوید پنلی *نیمه‌نصب* به نظر می‌رسد، نصب آن پنل را کامل یا تعمیر کنید و نصب‌کننده را دوباره اجرا کنید.",
+      ],
+    },
+  },
+  {
+    group: "panel",
+    texts: ["${PANEL} looks partly installed (only one of its files was found); it is not treated as present."],
+    en: {
+      what: "Only one sign of this panel was found — for example its configuration file without its service, or its data folder without its compose file. Row-Template never guesses at a half-installed panel, so it treats it as absent. On its own this is a warning; the next line says whether another panel was found instead.",
+      fix: [
+        "If the panel is meant to be installed, finish or repair its installation with its official installer, then run the installer again.",
+        "If it is a leftover of a removed panel, you can ignore this warning.",
+      ],
+    },
+    fa: {
+      tr: "‹پنل› نیمه‌نصب به نظر می‌رسد (فقط یکی از فایل‌هایش پیدا شد)؛ موجود به حساب نمی‌آید.",
+      what: "فقط یک نشانه از این پنل پیدا شد — مثلاً فایل پیکربندی بدون سرویس، یا پوشهٔ داده بدون فایل compose. Row-Template هرگز دربارهٔ پنل نیمه‌نصب حدس نمی‌زند، پس آن را موجود حساب نمی‌کند. این پیام به‌تنهایی فقط هشدار است؛ خط بعد می‌گوید آیا به‌جای آن پنل دیگری پیدا شد یا نه.",
+      fix: [
+        "اگر این پنل باید نصب باشد، نصبش را با نصب‌کنندهٔ رسمی خودش کامل یا تعمیر کنید و نصب‌کننده را دوباره اجرا کنید.",
+        "اگر باقی‌ماندهٔ پنلی است که حذف کرده‌اید، می‌توانید این هشدار را نادیده بگیرید.",
+      ],
+    },
+  },
+  {
+    group: "panel",
+    texts: ["more than one panel is installed here (${PANELS}); choose one with RT_PANEL=3xui|pasarguard|rebecca."],
+    en: {
+      what: "More than one supported panel is installed on this server, and the installer is running without a terminal, so it cannot ask which one to serve. A scripted fresh install on such a server **must** name the panel. Nothing was changed.",
+      fix: [
+        "Run the installer again with `RT_PANEL` set to the panel Row-Template should serve, for example `RT_PANEL=pasarguard`.",
+        "Or run it in a terminal and choose the panel from the list. See [Environment variables](/docs/installation/environment/#panel-and-terminal).",
+      ],
+    },
+    fa: {
+      tr: "بیش از یک پنل اینجا نصب است (‹پنل‌ها›)؛ یکی را با `RT_PANEL=3xui|pasarguard|rebecca` انتخاب کنید.",
+      what: "بیش از یک پنل پشتیبانی‌شده روی این سرور نصب است و نصب‌کننده بدون ترمینال اجرا شده، پس نمی‌تواند بپرسد به کدام سرویس بدهد. نصب تازهٔ اسکریپتی روی چنین سروری **باید** پنل را نام ببرد. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "نصب‌کننده را دوباره با `RT_PANEL` اجرا کنید و پنلی را که Row-Template باید به آن سرویس بدهد نام ببرید، مثلاً `RT_PANEL=pasarguard`.",
+        "یا آن را در ترمینال اجرا کنید و پنل را از فهرست انتخاب کنید. [متغیرهای محیطی](/docs/installation/environment/#panel-and-terminal) را ببینید.",
+      ],
+    },
+  },
+  {
+    group: "panel",
+    texts: [
+      "RT_PANEL='$RT_PANEL' is not a panel Row-Template supports (3xui, pasarguard, rebecca).",
+      "RT_PANEL=$RT_PANEL, but ${PANEL} was not detected on this host.",
+    ],
+    en: {
+      what: "`RT_PANEL` names the panel to install for. It must be exactly `3xui`, `pasarguard` or `rebecca`, and that panel must be installed on this server. Nothing was changed.",
+      fix: [
+        "Correct the value — lowercase, no spaces — or unset it on a server with only one panel.",
+        "If the panel is installed but not detected, check that it was installed with its official installer (Rebecca: the 1.x binary install).",
+      ],
+    },
+    fa: {
+      tr: "`RT_PANEL='‹مقدار›'` پنلی نیست که Row-Template پشتیبانی کند (`3xui`، `pasarguard`، `rebecca`). / `RT_PANEL=‹مقدار›`، اما ‹پنل› روی این سرور پیدا نشد.",
+      what: "`RT_PANEL` پنلی را نام می‌برد که نصب برای آن انجام می‌شود. مقدارش باید دقیقاً `3xui`، `pasarguard` یا `rebecca` باشد و آن پنل باید روی همین سرور نصب باشد. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "مقدار را اصلاح کنید — با حروف کوچک و بدون فاصله — یا روی سروری که فقط یک پنل دارد آن را حذف کنید.",
+        "اگر پنل نصب است اما پیدا نمی‌شود، بررسی کنید با نصب‌کنندهٔ رسمی خودش نصب شده باشد (برای Rebecca: نصب باینری نسخهٔ 1.x).",
+      ],
+    },
+  },
+  {
+    group: "panel",
+    texts: ["no panel was chosen; nothing was changed."],
+    en: {
+      what: "The panel chooser was left without a choice (for example with `0` or at the end of input). Nothing was changed.",
+      fix: ["Run the installer again and choose the panel Row-Template should serve."],
+    },
+    fa: {
+      tr: "هیچ پنلی انتخاب نشد؛ هیچ تغییری اعمال نشد.",
+      what: "انتخابگر پنل بدون انتخاب رها شد (مثلاً با `0` یا با پایان ورودی). هیچ تغییری اعمال نشده است.",
+      fix: ["نصب‌کننده را دوباره اجرا کنید و پنلی را که Row-Template باید به آن سرویس بدهد انتخاب کنید."],
+    },
+  },
+  {
+    group: "panel",
+    texts: ["Row-Template is installed for ${PANEL} at $RT_ROOT; uninstall it before installing for ${PANEL}."],
+    en: {
+      what: "One installation serves one panel. Row-Template is already installed on this server for the first panel named, and `RT_PANEL` asks for another. A re-run or an update always keeps the panel the installation was made for. Nothing was changed.",
+      fix: [
+        "To keep serving the current panel, run the installer (or `row-template update`) without `RT_PANEL`.",
+        "To serve the other panel instead, run `row-template uninstall` first — it returns the current panel to its own page — then install again with `RT_PANEL`.",
+      ],
+    },
+    fa: {
+      tr: "Row-Template برای ‹پنل› در ‹پوشهٔ نصب› نصب شده است؛ پیش از نصب برای ‹پنل›، آن را حذف کنید.",
+      what: "هر نصب فقط به یک پنل سرویس می‌دهد. Row-Template روی این سرور برای پنل اول نصب شده و `RT_PANEL` پنل دیگری را خواسته است. اجرای دوباره یا به‌روزرسانی همیشه پنلی را که نصب برای آن انجام شده حفظ می‌کند. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "برای ادامهٔ سرویس به پنل فعلی، نصب‌کننده (یا `row-template update`) را بدون `RT_PANEL` اجرا کنید.",
+        "برای سرویس دادن به پنل دیگر، اول `row-template uninstall` را اجرا کنید — پنل فعلی را به صفحهٔ خودش برمی‌گرداند — و بعد دوباره با `RT_PANEL` نصب کنید.",
+      ],
+    },
+  },
+  {
+    group: "panel",
+    texts: ["Row-Template is installed twice ($found and $r); remove one with 'row-template uninstall' before continuing."],
+    en: {
+      what: "Both install directories exist — `/etc/3x-ui/sub_templates/row-template` (3X-UI) and `/etc/row-template` (PasarGuard and Rebecca) — each with a `VERSION` file. Which one to manage would be a guess, so nothing is done until one is removed.",
+      fix: [
+        "Decide which installation you keep. Run `row-template version` to see which panel the command manages now.",
+        "Remove the other one: run `row-template uninstall` for the installation the command manages, or, if the other is a stale leftover, move its folder away by hand after checking its panel no longer uses it.",
+      ],
+    },
+    fa: {
+      tr: "Row-Template دو بار نصب شده است (‹مسیر› و ‹مسیر›)؛ پیش از ادامه، یکی را با `row-template uninstall` حذف کنید.",
+      what: "هر دو پوشهٔ نصب وجود دارند — `/etc/3x-ui/sub_templates/row-template` (3X-UI) و `/etc/row-template` (PasarGuard و Rebecca) — و هر کدام فایل `VERSION` دارند. انتخاب اینکه کدام مدیریت شود حدس خواهد بود، پس تا یکی حذف نشود کاری انجام نمی‌شود.",
+      fix: [
+        "تصمیم بگیرید کدام نصب را نگه می‌دارید. با `row-template version` ببینید فرمان الان کدام پنل را مدیریت می‌کند.",
+        "دیگری را حذف کنید: برای نصبی که فرمان مدیریت می‌کند `row-template uninstall` را اجرا کنید، یا اگر دیگری باقی‌ماندهٔ قدیمی است، پس از اطمینان از اینکه پنلش دیگر از آن استفاده نمی‌کند، پوشه‌اش را دستی جابه‌جا کنید.",
+      ],
+    },
+  },
+  {
+    group: "panel",
+    texts: ["the panel record $RT_PANEL_FILE is not a panel this release knows; treating the install as 3X-UI."],
+    en: {
+      what: "Each installation records the panel it serves in a file named `PANEL`. This one holds something this release does not recognise — it was edited by hand or damaged — so the installation is handled as a 3X-UI one.",
+      fix: ["If this installation serves PasarGuard or Rebecca, do not run commands against it until the record is right: uninstall and install again, or restore the file to `pasarguard` or `rebecca`."],
+    },
+    fa: {
+      tr: "رکورد پنل در ‹مسیر› پنلی نیست که این نسخه بشناسد؛ نصب به‌عنوان 3X-UI در نظر گرفته می‌شود.",
+      what: "هر نصب پنلی را که به آن سرویس می‌دهد در فایلی به نام `PANEL` ثبت می‌کند. این فایل مقداری دارد که این نسخه نمی‌شناسد — دستی ویرایش یا خراب شده — پس نصب مانند نصب 3X-UI مدیریت می‌شود.",
+      fix: ["اگر این نصب به PasarGuard یا Rebecca سرویس می‌دهد، تا درست شدن رکورد فرمانی روی آن اجرا نکنید: آن را حذف و دوباره نصب کنید، یا مقدار فایل را به `pasarguard` یا `rebecca` برگردانید."],
+    },
+  },
+  {
+    group: "panel",
+    texts: ["nothing was changed."],
+    en: {
+      what: "The installer stopped at the panel check: the line just above says why — no panel found, more than one panel, an invalid `RT_PANEL`, an installation made for another panel, or a Rebecca edition this release cannot serve.",
+      fix: ["Fix the problem named on the line above, then run the installer again."],
+    },
+    fa: {
+      tr: "هیچ تغییری اعمال نشد.",
+      what: "نصب‌کننده در بررسی پنل متوقف شد: خط بالا علت را می‌گوید — پنلی پیدا نشد، بیش از یک پنل هست، `RT_PANEL` نامعتبر است، نصب برای پنل دیگری انجام شده، یا نسخه‌ای از Rebecca است که این نسخه نمی‌تواند به آن سرویس بدهد.",
+      fix: ["مشکلی را که در خط بالا نام برده شده برطرف کنید و نصب‌کننده را دوباره اجرا کنید."],
+    },
+  },
+  {
+    group: "panel",
+    texts: ["could not record the panel this install serves."],
+    en: {
+      what: "The file that records which panel this installation serves (`PANEL`, in the install directory) could not be written — usually a full disk or a read-only filesystem. The install stopped before activating anything.",
+      fix: ["Check `df -h /etc` and that `/etc` is writable, then run the installer again."],
+    },
+    fa: {
+      tr: "پنلی که این نصب به آن سرویس می‌دهد ثبت نشد.",
+      what: "فایلی که ثبت می‌کند این نصب به کدام پنل سرویس می‌دهد (`PANEL` در پوشهٔ نصب) نوشته نشد — معمولاً به‌دلیل پر بودن دیسک یا فقط‌خواندنی بودن فایل‌سیستم. نصب پیش از فعال کردن هر چیزی متوقف شد.",
+      fix: ["`df -h /etc` و قابل نوشتن بودن `/etc` را بررسی کنید و نصب‌کننده را دوباره اجرا کنید."],
+    },
+  },
+
+  // --- activation on PasarGuard and Rebecca (1.3.0) -------------------------------
+  {
+    group: "activation",
+    texts: ["the installer's panel components are missing; run 'row-template update'."],
+    en: {
+      what: "Generating or activating the page on PasarGuard or Rebecca needs the installer's companion files (`lib/transaction.sh` and `panels/`), and they are missing — for example right after 1.1.0's own updater installed a newer release. Nothing was changed.",
+      fix: ["Run `row-template update`, which installs them, then try again."],
+    },
+    fa: {
+      tr: "اجزای پنل نصب‌کننده وجود ندارند؛ `row-template update` را اجرا کنید.",
+      what: "ساخت یا فعال‌سازی صفحه روی PasarGuard یا Rebecca به فایل‌های همراه نصب‌کننده (`lib/transaction.sh` و `panels/`) نیاز دارد و این فایل‌ها وجود ندارند — مثلاً درست پس از آنکه به‌روزرسان خود 1.1.0 نسخهٔ جدیدتری را نصب کرده است. هیچ تغییری اعمال نشده است.",
+      fix: ["`row-template update` را اجرا کنید تا آن‌ها را نصب کند و بعد دوباره امتحان کنید."],
+    },
+  },
+  {
+    group: "activation",
+    texts: [
+      "could not update the page in ${PANEL}'s template directory.",
+      "could not put the previous page back at $RT_LIVE.",
+    ],
+    en: {
+      what: "On PasarGuard and Rebecca the page is generated in the install directory and then copied into the panel's own templates directory. That copy failed, so the previously generated page was put back and the panel keeps serving the page it had. The second message means putting the previous page back failed as well.",
+      fix: [
+        "Read the line above for the cause — often a full disk, or a templates directory that is a symlink.",
+        "Fix it and run the same command again; then run `row-template verify`.",
+      ],
+    },
+    fa: {
+      tr: "صفحه در پوشهٔ تمپلیت‌های ‹پنل› به‌روز نشد. / صفحهٔ قبلی به ‹مسیر› بازگردانده نشد.",
+      what: "روی PasarGuard و Rebecca صفحه در پوشهٔ نصب ساخته و سپس در پوشهٔ تمپلیت‌های خود پنل کپی می‌شود. این کپی شکست خورد، پس صفحهٔ ساخته‌شدهٔ قبلی سر جایش برگردانده شد و پنل همان صفحهٔ قبلی را ارائه می‌کند. پیام دوم یعنی برگرداندن صفحهٔ قبلی هم شکست خورده است.",
+      fix: [
+        "علت را در خط بالا ببینید — اغلب پر بودن دیسک یا پوشهٔ تمپلیتی که پیوند نمادین است.",
+        "آن را برطرف کنید و همان فرمان را دوباره اجرا کنید؛ سپس `row-template verify` را اجرا کنید.",
+      ],
+    },
+  },
+  {
+    group: "activation",
+    texts: [
+      "activation on ${PANEL} did not complete; the panel was restored to how it was.",
+      "Activation did not complete; ${PANEL} was restored to how it was.",
+      "${PANEL} was restored exactly to its state before the attempt.",
+      "Activation did not complete and was rolled back; run 'row-template' and choose Activate to retry.",
+    ],
+    en: {
+      what: "Activation on PasarGuard and Rebecca is a transaction: the panel's settings are snapshotted, changed and verified, and if any step fails they are restored from the snapshot. That happened here. `restored exactly to its state before the attempt` means the restore was confirmed by reading the panel's state back and comparing it with the snapshot; if the restore itself had failed, the lines above say `rollback also failed` instead (see that message). Row-Template itself stays installed.",
+      fix: [
+        "Read the lines just above for the step that failed — for example the panel could not be restarted, or the running panel did not pick up the page.",
+        "Fix the cause, then run `row-template` and choose **5 — Activate / Re-apply theme**.",
+      ],
+    },
+    fa: {
+      tr: "فعال‌سازی روی ‹پنل› کامل نشد؛ پنل به حالت قبلش بازگردانده شد. / ‹پنل› دقیقاً به وضعیت پیش از تلاش بازگردانده شد. / فعال‌سازی کامل نشد و بازگردانده شد؛ برای تلاش دوباره `row-template` را اجرا کنید و Activate را انتخاب کنید.",
+      what: "فعال‌سازی روی PasarGuard و Rebecca یک تراکنش است: از تنظیمات پنل عکس فوری (snapshot) گرفته می‌شود، تغییر اعمال و بررسی می‌شود، و اگر هر مرحله شکست بخورد تنظیمات از روی همان عکس فوری بازگردانده می‌شوند. اینجا همین اتفاق افتاد. پیام `restored exactly to its state before the attempt` یعنی بازگردانی با خواندن دوبارهٔ وضعیت پنل و مقایسه با عکس فوری تأیید شده است؛ اگر خود بازگردانی شکست خورده بود، خطوط بالا به‌جای آن `rollback also failed` را نشان می‌دادند (توضیح همان پیام را ببینید). خود Row-Template نصب باقی می‌ماند.",
+      fix: [
+        "در خطوط درست بالاتر ببینید کدام مرحله شکست خورد — مثلاً پنل ری‌استارت نشد، یا پنلِ در حال اجرا صفحه را اعمال نکرد.",
+        "علت را برطرف کنید، سپس `row-template` را اجرا کنید و **5 — Activate / Re-apply theme** را انتخاب کنید.",
+      ],
+    },
+  },
+  {
+    group: "activation",
+    texts: ["could not place the page for ${PANEL}."],
+    en: {
+      what: "Automatic activation is not possible here (Rebecca on MySQL/MariaDB, or without `sqlite3`), so Row-Template only places the page in the panel's templates directory for you to select — and placing it failed. Nothing in the panel was changed.",
+      fix: ["Read the line above for the cause, fix it, then choose **5 — Activate / Re-apply theme** in the manager again."],
+    },
+    fa: {
+      tr: "صفحه برای ‹پنل› جای‌گذاری نشد.",
+      what: "فعال‌سازی خودکار اینجا ممکن نیست (Rebecca با MySQL/MariaDB یا بدون `sqlite3`)، پس Row-Template فقط صفحه را در پوشهٔ تمپلیت‌های پنل می‌گذارد تا خودتان انتخابش کنید — و گذاشتن صفحه شکست خورد. هیچ چیزی در پنل تغییر نکرده است.",
+      fix: ["علت را در خط بالا ببینید، برطرفش کنید و دوباره در منوی مدیریت **5 — Activate / Re-apply theme** را انتخاب کنید."],
+    },
+  },
+  {
+    group: "activation",
+    texts: ["Automatic activation is unavailable here; the page will be placed for you to select."],
+    en: {
+      what: "Rebecca's subscription settings cannot be written here — the panel uses MySQL/MariaDB, or `sqlite3` is not installed — so the manager places the page and prints the two values to enter in the Rebecca dashboard.",
+      fix: ["In the Rebecca dashboard open **Settings → Subscription → Templates** and enter the values shown. See [Activation](/docs/installation/activation/#rebecca)."],
+    },
+    fa: {
+      tr: "فعال‌سازی خودکار اینجا در دسترس نیست؛ صفحه گذاشته می‌شود تا خودتان انتخابش کنید.",
+      what: "تنظیمات اشتراک Rebecca اینجا نوشته نمی‌شوند — پنل از MySQL/MariaDB استفاده می‌کند یا `sqlite3` نصب نیست — پس منوی مدیریت صفحه را می‌گذارد و دو مقداری را که باید در داشبورد Rebecca وارد شوند چاپ می‌کند.",
+      fix: ["در داشبورد Rebecca **Settings → Subscription → Templates** را باز کنید و مقادیر نمایش‌داده‌شده را وارد کنید. [فعال‌سازی](/docs/installation/activation/#rebecca) را ببینید."],
+    },
+  },
+  {
+    group: "activation",
+    texts: ["the page could not be generated; nothing was changed."],
+    en: {
+      what: "Before activating, the manager regenerates the page from your design and branding, and that failed — the line above says why. The panel was not touched.",
+      fix: ["Fix the problem named just above — often branding or disk space — and choose **5 — Activate / Re-apply theme** again."],
+    },
+    fa: {
+      tr: "صفحه ساخته نشد؛ هیچ تغییری اعمال نشد.",
+      what: "منوی مدیریت پیش از فعال‌سازی، صفحه را از روی تمپلیت و برندینگ شما دوباره می‌سازد و این کار شکست خورد — خط بالا علت را می‌گوید. به پنل دست زده نشده است.",
+      fix: ["مشکلی را که درست در بالا نام برده شده برطرف کنید — اغلب برندینگ یا فضای دیسک — و دوباره **5 — Activate / Re-apply theme** را انتخاب کنید."],
+    },
+  },
+  {
+    group: "activation",
+    texts: ["Live check: the running ${PANEL} does not use the Row-Template page yet; run 'row-template verify'."],
+    en: {
+      what: "After a change, the running panel was asked which subscription page it serves, and it is not Row-Template's yet. On PasarGuard this usually means the panel has not been restarted since `.env` changed.",
+      fix: [
+        "Run `row-template verify` — it names what does not match.",
+        "On PasarGuard, restart the panel with `pasarguard restart`, then verify again.",
+      ],
+    },
+    fa: {
+      tr: "بررسی زنده: ‹پنل›ِ در حال اجرا هنوز از صفحهٔ Row-Template استفاده نمی‌کند؛ `row-template verify` را اجرا کنید.",
+      what: "پس از یک تغییر، از پنلِ در حال اجرا پرسیده شد کدام صفحهٔ اشتراک را ارائه می‌کند و هنوز صفحهٔ Row-Template نیست. روی PasarGuard معمولاً یعنی پنل از زمان تغییر `.env` ری‌استارت نشده است.",
+      fix: [
+        "`row-template verify` را اجرا کنید — می‌گوید چه چیزی نمی‌خواند.",
+        "روی PasarGuard پنل را با `pasarguard restart` ری‌استارت کنید و دوباره بررسی کنید.",
+      ],
+    },
+  },
+  {
+    group: "activation",
+    texts: [
+      "transaction: template placement failed for panel '$panel' (status $rc)",
+      "transaction: static verification did not pass for panel '$panel' (status $rc)",
+      "transaction: live verification failed for panel '$panel' (status $rc)",
+    ],
+    en: {
+      what: "The step of the activation transaction that failed: placing the page in the panel's templates directory and selecting it, checking the files and the panel's settings afterwards, or asking the running panel which page it serves. Any of them makes the transaction restore the panel from its snapshot; the next message says whether that worked.",
+      fix: [
+        "Read the adapter's own message just above (it starts with `panel pasarguard:` or `panel rebecca:`) — it names the exact problem.",
+        "Fix it, then choose **5 — Activate / Re-apply theme** in the manager.",
+      ],
+    },
+    fa: {
+      tr: "تراکنش: گذاشتن تمپلیت برای پنل '‹پنل›' شکست خورد (وضعیت ‹وضعیت›) / تراکنش: بررسی ایستا برای پنل '‹پنل›' رد شد / تراکنش: بررسی زنده برای پنل '‹پنل›' شکست خورد",
+      what: "مرحله‌ای از تراکنش فعال‌سازی که شکست خورد: گذاشتن صفحه در پوشهٔ تمپلیت‌های پنل و انتخاب آن، بررسی فایل‌ها و تنظیمات پنل پس از آن، یا پرسیدن از پنلِ در حال اجرا که کدام صفحه را ارائه می‌کند. هر کدام باعث می‌شود تراکنش پنل را از روی عکس فوری‌اش بازگرداند؛ پیام بعدی می‌گوید این کار موفق بود یا نه.",
+      fix: [
+        "پیام خودِ آداپتور را درست در بالا بخوانید (با `panel pasarguard:` یا `panel rebecca:` شروع می‌شود) — مشکل دقیق را نام می‌برد.",
+        "آن را برطرف کنید و در منوی مدیریت **5 — Activate / Re-apply theme** را انتخاب کنید.",
+      ],
+    },
+  },
+  {
+    group: "activation",
+    texts: [
+      "transaction: live verification was unavailable for panel '$panel'; this is not a rollback trigger",
+      "transaction: live verification does not apply to panel '$panel'",
+    ],
+    en: {
+      what: "The last step of activation asks the running panel which page it serves. It could not be asked here, which is not a failure: the activation stands, and the files and settings were already verified.",
+      fix: ["Nothing to fix. To check the page subscribers receive, open a subscription link in a browser, or run `row-template verify` with `RT_SMOKE_URL` set to a subscription link."],
+    },
+    fa: {
+      tr: "تراکنش: بررسی زنده برای پنل '‹پنل›' در دسترس نبود؛ این دلیلی برای بازگردانی نیست / تراکنش: بررسی زنده برای پنل '‹پنل›' کاربرد ندارد",
+      what: "آخرین مرحلهٔ فعال‌سازی از پنلِ در حال اجرا می‌پرسد کدام صفحه را ارائه می‌کند. اینجا نمی‌شد پرسید، و این شکست حساب نمی‌شود: فعال‌سازی برقرار می‌ماند و فایل‌ها و تنظیمات پیش‌تر بررسی شده‌اند.",
+      fix: ["کاری لازم نیست. برای بررسی صفحه‌ای که مشترکان می‌گیرند، یک لینک اشتراک را در مرورگر باز کنید، یا `row-template verify` را با `RT_SMOKE_URL` برابر یک لینک اشتراک اجرا کنید."],
+    },
+  },
+  {
+    group: "activation",
+    texts: [
+      "transaction: the safety snapshot could not be created; nothing was changed",
+      "transaction: the safety snapshot did not validate; nothing was changed",
+    ],
+    en: {
+      what: "Before activation changes anything on PasarGuard or Rebecca, it takes a snapshot of the panel's settings (under `backups.v2/` in the install directory). The snapshot could not be written, or did not pass its own check, so activation stopped. Nothing was changed.",
+      fix: [
+        "Check free space with `df -h /etc` and that nothing under the install directory is a symlink.",
+        "Read any line above that starts with `panel` or names the snapshot, then activate again.",
+      ],
+    },
+    fa: {
+      tr: "تراکنش: عکس فوری ایمنی ساخته نشد؛ هیچ تغییری اعمال نشد / تراکنش: عکس فوری ایمنی در بررسی رد شد؛ هیچ تغییری اعمال نشد",
+      what: "فعال‌سازی پیش از هر تغییری روی PasarGuard یا Rebecca از تنظیمات پنل یک عکس فوری می‌گیرد (زیر `backups.v2/` در پوشهٔ نصب). عکس فوری نوشته نشد یا از بررسی خودش عبور نکرد، پس فعال‌سازی متوقف شد. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "فضای آزاد را با `df -h /etc` بررسی کنید و مطمئن شوید هیچ چیز زیر پوشهٔ نصب پیوند نمادین نیست.",
+        "هر خطی را در بالا که با `panel` شروع می‌شود یا نام عکس فوری را آورده بخوانید و دوباره فعال‌سازی کنید.",
+      ],
+    },
+  },
+  {
+    group: "activation",
+    texts: [
+      "transaction: another transaction holds the lock ($file)",
+      "transaction: flock is not available; refusing to run without single-flight protection",
+    ],
+    en: {
+      what: "Only one activation can run at a time, so each one takes a lock on the installation. Another `row-template` command is changing the panel right now — or `flock` (from util-linux) is not installed, and activation will not run without that protection. Nothing was changed.",
+      fix: [
+        "Wait for the other command to finish, then try again.",
+        "If `flock` is missing, install util-linux: `apt-get install -y util-linux` or `dnf install -y util-linux`.",
+      ],
+    },
+    fa: {
+      tr: "تراکنش: تراکنش دیگری قفل را در اختیار دارد (‹مسیر›) / تراکنش: `flock` در دسترس نیست؛ بدون محافظت اجرای تک‌نمونه اجرا نمی‌شود",
+      what: "در هر لحظه فقط یک فعال‌سازی می‌تواند اجرا شود، پس هر کدام روی نصب قفل می‌گیرد. یک فرمان `row-template` دیگر همین حالا در حال تغییر پنل است — یا `flock` (از بستهٔ util-linux) نصب نیست و فعال‌سازی بدون این محافظت اجرا نمی‌شود. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "صبر کنید فرمان دیگر تمام شود و دوباره امتحان کنید.",
+        "اگر `flock` نصب نیست، util-linux را نصب کنید: `apt-get install -y util-linux` یا `dnf install -y util-linux`.",
+      ],
+    },
+  },
+  {
+    group: "activation",
+    texts: [
+      "transaction: the original failure was status $original",
+      "transaction: rollback also failed ($why); the panel was left as the failed attempt left it",
+      "transaction: no further recovery is attempted automatically",
+    ],
+    en: {
+      what: "Activation failed, and restoring the panel from its snapshot also failed. The panel's settings may be half-changed. This needs two independent failures, and the lines above name both.",
+      fix: [
+        "Run `row-template verify` to see what the panel selects now.",
+        "Put the panel back by hand: on PasarGuard remove the `# >>> row-template` block from `/opt/pasarguard/.env` and run `pasarguard restart`; on Rebecca set **Subscription page template** back to your previous page in **Settings → Subscription → Templates**.",
+        "Then [report it](https://github.com/iitzSeriZdev/Row-Template/issues) with the full output.",
+      ],
+    },
+    fa: {
+      tr: "تراکنش: خطای اصلی وضعیت ‹وضعیت› بود / تراکنش: بازگردانی هم شکست خورد (‹علت›)؛ پنل همان‌طور ماند که تلاش ناموفق رهایش کرد / تراکنش: بازیابی خودکار دیگری انجام نمی‌شود",
+      what: "فعال‌سازی شکست خورد و بازگرداندن پنل از روی عکس فوری‌اش هم شکست خورد. ممکن است تنظیمات پنل نیمه‌کاره تغییر کرده باشند. این وضعیت به دو شکست مستقل نیاز دارد و خطوط بالا هر دو را نام می‌برند.",
+      fix: [
+        "برای دیدن اینکه پنل الان چه چیزی را انتخاب کرده `row-template verify` را اجرا کنید.",
+        "پنل را دستی برگردانید: روی PasarGuard بلوک `# >>> row-template` را از `/opt/pasarguard/.env` حذف کنید و `pasarguard restart` را اجرا کنید؛ روی Rebecca در **Settings → Subscription → Templates** مقدار **Subscription page template** را به صفحهٔ قبلی خودتان برگردانید.",
+        "سپس با خروجی کامل [گزارش دهید](https://github.com/iitzSeriZdev/Row-Template/issues).",
+      ],
+    },
+  },
+  {
+    group: "activation",
+    texts: [
+      "transaction: live verification after rollback was not available (status $rc)",
+      "transaction: live verification after rollback did not pass (status $rc)",
+    ],
+    en: {
+      what: "After restoring the panel from its snapshot, the transaction asks the running panel which page it serves. That check could not run, or did not match — typically because PasarGuard has not finished restarting. The restore itself is judged by reading the saved settings back, which the next message reports.",
+      fix: ["Run `row-template verify` in a minute, when the panel is up again."],
+    },
+    fa: {
+      tr: "تراکنش: بررسی زنده پس از بازگردانی در دسترس نبود (وضعیت ‹وضعیت›) / تراکنش: بررسی زنده پس از بازگردانی رد شد (وضعیت ‹وضعیت›)",
+      what: "پس از بازگرداندن پنل از روی عکس فوری، تراکنش از پنلِ در حال اجرا می‌پرسد کدام صفحه را ارائه می‌کند. این بررسی اجرا نشد یا نخواند — معمولاً چون ری‌استارت PasarGuard هنوز تمام نشده است. خود بازگردانی با خواندن دوبارهٔ تنظیمات ذخیره‌شده سنجیده می‌شود که پیام بعدی گزارش می‌دهد.",
+      fix: ["یک دقیقه بعد، وقتی پنل دوباره بالا آمد، `row-template verify` را اجرا کنید."],
+    },
+  },
+
+  // --- PasarGuard (1.3.0) ----------------------------------------------------------
+  {
+    group: "pasarguard",
+    texts: [
+      "panel pasarguard: the Row-Template block in $env is damaged; fix or remove it by hand",
+      "panel pasarguard: the Row-Template block in .env is damaged",
+      "panel pasarguard: the Row-Template block in .env is damaged; fix or remove it by hand",
+    ],
+    en: {
+      what: "Row-Template selects its page with one marked block at the end of `/opt/pasarguard/.env`, from `# >>> row-template` to `# <<< row-template <<<`. That block is incomplete or was edited — for example one of its marker lines is missing — so Row-Template will not rewrite `.env` rather than risk touching your own lines. Nothing was changed.",
+      fix: [
+        "Open `/opt/pasarguard/.env` and look for the `row-template` lines.",
+        "Delete the whole block — both marker lines and the two lines between them — or restore it exactly, then run the command again.",
+      ],
+    },
+    fa: {
+      tr: "پنل pasarguard: بلوک Row-Template در ‹مسیر› خراب است؛ آن را دستی اصلاح یا حذف کنید / پنل pasarguard: بلوک Row-Template در `.env` خراب است",
+      what: "Row-Template صفحه‌اش را با یک بلوک نشان‌دار در انتهای `/opt/pasarguard/.env` انتخاب می‌کند، از `# >>> row-template` تا `# <<< row-template <<<`. این بلوک ناقص است یا ویرایش شده — مثلاً یکی از خطوط نشانگرش وجود ندارد — پس Row-Template به‌جای خطر دست زدن به خطوط خودتان، `.env` را بازنویسی نمی‌کند. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "`/opt/pasarguard/.env` را باز کنید و خطوط `row-template` را پیدا کنید.",
+        "کل بلوک را حذف کنید — هر دو خط نشانگر و دو خط میان آن‌ها — یا آن را دقیقاً بازگردانید، و فرمان را دوباره اجرا کنید.",
+      ],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: ["panel pasarguard: .env is missing or a symlink: $env"],
+    en: {
+      what: "PasarGuard's `.env` (in `/opt/pasarguard`) is missing, or is a symbolic link. Row-Template writes only to a real `.env`, so nothing was changed.",
+      fix: ["Check your PasarGuard installation: `ls -l /opt/pasarguard/.env`. Replace a symlink with the real file, then run the command again."],
+    },
+    fa: {
+      tr: "پنل pasarguard: فایل `.env` وجود ندارد یا پیوند نمادین است: ‹مسیر›",
+      what: "فایل `.env` پنل PasarGuard (در `/opt/pasarguard`) وجود ندارد یا یک پیوند نمادین است. Row-Template فقط در `.env` واقعی می‌نویسد، پس هیچ تغییری اعمال نشده است.",
+      fix: ["نصب PasarGuard خود را بررسی کنید: `ls -l /opt/pasarguard/.env`. پیوند نمادین را با فایل واقعی جایگزین کنید و فرمان را دوباره اجرا کنید."],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: [
+      "panel pasarguard: CUSTOM_TEMPLATES_DIRECTORY is not a plain absolute path: $root",
+      "panel pasarguard: $root is outside $RT_PG_DATA_DIR, the directory the container shares with the host",
+    ],
+    en: {
+      what: "Your own `CUSTOM_TEMPLATES_DIRECTORY` in `.env` is where Row-Template places its page. It must be a plain absolute path, and on a Docker install it must be inside `/var/lib/pasarguard` — the only folder the container shares with the host, so a page anywhere else would never be seen by the panel. Nothing was changed.",
+      fix: [
+        "Set `CUSTOM_TEMPLATES_DIRECTORY` to an absolute path under `/var/lib/pasarguard` — or remove your line so the default `/var/lib/pasarguard/templates` is used.",
+        "Restart PasarGuard if you changed it, then run the command again.",
+      ],
+    },
+    fa: {
+      tr: "پنل pasarguard: `CUSTOM_TEMPLATES_DIRECTORY` یک مسیر مطلق ساده نیست: ‹مسیر› / پنل pasarguard: ‹مسیر› بیرون از `/var/lib/pasarguard` است، پوشه‌ای که کانتینر با میزبان به اشتراک می‌گذارد",
+      what: "Row-Template صفحه‌اش را در `CUSTOM_TEMPLATES_DIRECTORY` خودِ شما در `.env` می‌گذارد. این مقدار باید یک مسیر مطلق ساده باشد و در نصب Docker باید داخل `/var/lib/pasarguard` باشد — تنها پوشه‌ای که کانتینر با میزبان به اشتراک می‌گذارد؛ صفحه در هر جای دیگری هرگز به چشم پنل نمی‌آید. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "`CUSTOM_TEMPLATES_DIRECTORY` را روی یک مسیر مطلق زیر `/var/lib/pasarguard` بگذارید — یا خط خودتان را حذف کنید تا مقدار پیش‌فرض `/var/lib/pasarguard/templates` استفاده شود.",
+        "اگر آن را تغییر دادید PasarGuard را ری‌استارت کنید و فرمان را دوباره اجرا کنید.",
+      ],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: [
+      "panel pasarguard: the templates directory is a symlink: $root",
+      "panel pasarguard: $dir is a symlink",
+      "panel pasarguard: $dest exists and is not Row-Template's; it was left untouched",
+    ],
+    en: {
+      what: "The page is placed at `row-template/index.html` inside PasarGuard's templates directory. Either that directory (or the `row-template` folder in it) is a symbolic link, or a file Row-Template did not create is already at that path. Row-Template never writes through a link and never overwrites a file that is not its own. Nothing was changed.",
+      fix: [
+        "Replace the link with a real directory.",
+        "If the existing `row-template/index.html` is yours, move it elsewhere; then run the command again.",
+      ],
+    },
+    fa: {
+      tr: "پنل pasarguard: پوشهٔ تمپلیت‌ها پیوند نمادین است: ‹مسیر› / ‹مسیر› پیوند نمادین است / ‹مسیر› وجود دارد و مال Row-Template نیست؛ دست‌نخورده ماند",
+      what: "صفحه در `row-template/index.html` داخل پوشهٔ تمپلیت‌های PasarGuard قرار می‌گیرد. یا آن پوشه (یا پوشهٔ `row-template` داخلش) پیوند نمادین است، یا فایلی که Row-Template نساخته از قبل در همان مسیر هست. Row-Template هرگز از طریق پیوند نمی‌نویسد و هرگز فایلی را که مال خودش نیست بازنویسی نمی‌کند. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "پیوند را با یک پوشهٔ واقعی جایگزین کنید.",
+        "اگر `row-template/index.html` موجود مال شماست، آن را جای دیگری ببرید؛ سپس فرمان را دوباره اجرا کنید.",
+      ],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: ["panel pasarguard: the panel could not be restarted"],
+    en: {
+      what: "PasarGuard reads `.env` only when it starts, so after changing it Row-Template restarts a running panel once — with `docker compose up -d` for the Docker install, or `systemctl restart pasarguard` for a source install. That failed. During activation the change is then rolled back; during uninstall the block has already been removed, and the panel picks that up the next time it starts.",
+      fix: [
+        "Check the panel: `pasarguard status` on the official (Docker) install, or `systemctl status pasarguard` on a source install.",
+        "Restart it yourself (`pasarguard restart`), then run `row-template verify`.",
+      ],
+    },
+    fa: {
+      tr: "پنل pasarguard: پنل ری‌استارت نشد",
+      what: "PasarGuard فایل `.env` را فقط هنگام شروع می‌خواند، پس Row-Template پس از تغییر آن، پنلِ در حال اجرا را یک بار ری‌استارت می‌کند — در نصب Docker با `docker compose up -d` و در نصب از سورس با `systemctl restart pasarguard`. این کار شکست خورد. هنگام فعال‌سازی، تغییر سپس بازگردانده می‌شود؛ هنگام حذف، بلوک پیش‌تر حذف شده و پنل دفعهٔ بعد که شروع شود آن را اعمال می‌کند.",
+      fix: [
+        "پنل را بررسی کنید: `pasarguard status` در نصب رسمی (Docker)، یا `systemctl status pasarguard` در نصب از سورس.",
+        "خودتان آن را ری‌استارت کنید (`pasarguard restart`) و `row-template verify` را اجرا کنید.",
+      ],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: [
+      "panel pasarguard: the running panel does not use the Row-Template page yet (restart it)",
+      "panel pasarguard: the running panel cannot see $root/$RT_PG_PAGE",
+    ],
+    en: {
+      what: "The live check asks the running PasarGuard container which page it uses and whether it can see the page file. Either the container still has the old setting — it has not been recreated since `.env` changed — or the page is not visible inside the container, which means the templates directory is not in the folder the container shares with the host.",
+      fix: [
+        "Restart PasarGuard (`pasarguard restart`) and run `row-template verify` again.",
+        "If the page is still not visible, check that your `CUSTOM_TEMPLATES_DIRECTORY` is under `/var/lib/pasarguard`.",
+      ],
+    },
+    fa: {
+      tr: "پنل pasarguard: پنلِ در حال اجرا هنوز از صفحهٔ Row-Template استفاده نمی‌کند (ری‌استارتش کنید) / پنل pasarguard: پنلِ در حال اجرا ‹مسیر›/`row-template/index.html` را نمی‌بیند",
+      what: "بررسی زنده از کانتینرِ در حال اجرای PasarGuard می‌پرسد از کدام صفحه استفاده می‌کند و آیا فایل صفحه را می‌بیند. یا کانتینر هنوز تنظیم قبلی را دارد — از زمان تغییر `.env` دوباره ساخته نشده — یا صفحه داخل کانتینر دیده نمی‌شود؛ یعنی پوشهٔ تمپلیت‌ها در پوشه‌ای نیست که کانتینر با میزبان به اشتراک می‌گذارد.",
+      fix: [
+        "PasarGuard را ری‌استارت کنید (`pasarguard restart`) و `row-template verify` را دوباره اجرا کنید.",
+        "اگر صفحه هنوز دیده نمی‌شود، بررسی کنید `CUSTOM_TEMPLATES_DIRECTORY` شما زیر `/var/lib/pasarguard` باشد.",
+      ],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: [
+      "panel pasarguard: the page is not in place: $dest",
+      "panel pasarguard: the placed page differs from the generated one",
+      "panel pasarguard: .env does not select the Row-Template page",
+    ],
+    en: {
+      what: "PasarGuard is set up for Row-Template, but the pieces no longer agree: the page is missing from the templates directory, the copy there is not the page Row-Template generated last, or `.env` no longer selects it (the block was removed, or a later line of your own sets `SUBSCRIPTION_PAGE_TEMPLATE` again).",
+      fix: [
+        "Re-apply from the manager: `row-template`, then **5 — Activate / Re-apply theme**.",
+        "If you set `SUBSCRIPTION_PAGE_TEMPLATE` yourself below the Row-Template block, remove your line — the last assignment in `.env` wins.",
+      ],
+    },
+    fa: {
+      tr: "پنل pasarguard: صفحه سر جایش نیست: ‹مسیر› / صفحهٔ گذاشته‌شده با صفحهٔ ساخته‌شده فرق دارد / `.env` صفحهٔ Row-Template را انتخاب نمی‌کند",
+      what: "PasarGuard برای Row-Template تنظیم شده، اما اجزا دیگر با هم نمی‌خوانند: صفحه در پوشهٔ تمپلیت‌ها نیست، نسخهٔ موجود آنجا همان صفحه‌ای نیست که Row-Template آخرین بار ساخته، یا `.env` دیگر آن را انتخاب نمی‌کند (بلوک حذف شده، یا خطی از خودتان پایین‌تر دوباره `SUBSCRIPTION_PAGE_TEMPLATE` را تنظیم می‌کند).",
+      fix: [
+        "از منوی مدیریت دوباره اعمالش کنید: `row-template` و سپس **5 — Activate / Re-apply theme**.",
+        "اگر خودتان `SUBSCRIPTION_PAGE_TEMPLATE` را زیر بلوک Row-Template تنظیم کرده‌اید، خط خودتان را حذف کنید — آخرین مقداردهی در `.env` اعمال می‌شود.",
+      ],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: [
+      "panel pasarguard: the artifact is missing: $RT_DIST",
+      "panel pasarguard: the artifact is not a valid PasarGuard page",
+      "panel pasarguard: the artifact does not match its recorded checksum",
+      "panel pasarguard: the generated page is missing or invalid: $RT_LIVE",
+      "panel pasarguard: SOURCE is not a PasarGuard page this release can serve",
+    ],
+    en: {
+      what: "Row-Template's own files for PasarGuard are not right: the installed design (`dist/template.html`) is missing, damaged, not built for PasarGuard, or does not match its checksum, or the generated page (`sub.html`) is missing or incomplete. Nothing in the panel was changed by this check.",
+      fix: ["Run `row-template update` to reinstall the designs and regenerate the page, then `row-template verify`."],
+    },
+    fa: {
+      tr: "پنل pasarguard: فایل صفحه وجود ندارد / صفحهٔ معتبر PasarGuard نیست / با چک‌سام ثبت‌شده‌اش نمی‌خواند / صفحهٔ ساخته‌شده وجود ندارد یا نامعتبر است: ‹مسیر› / منبع، صفحهٔ PasarGuardی نیست که این نسخه بتواند ارائه کند",
+      what: "فایل‌های خود Row-Template برای PasarGuard درست نیستند: تمپلیت نصب‌شده (`dist/template.html`) وجود ندارد، خراب است، برای PasarGuard ساخته نشده یا با چک‌سامش نمی‌خواند؛ یا صفحهٔ ساخته‌شده (`sub.html`) وجود ندارد یا ناقص است. این بررسی چیزی را در پنل تغییر نداده است.",
+      fix: ["با `row-template update` تمپلیت‌ها را دوباره نصب کنید و صفحه را دوباره بسازید، سپس `row-template verify` را اجرا کنید."],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: ["panel pasarguard: $n admin(s) set their own subscription page (sub_template); their users keep that page."],
+    en: {
+      what: "In PasarGuard an admin can have their own subscription template, which wins over the panel-wide setting Row-Template uses. The users of those admins keep seeing that page. This is your panel's configuration, so Row-Template reports it and changes nothing.",
+      fix: ["If those users should see Row-Template too, clear the admin's subscription template in PasarGuard's admin settings."],
+    },
+    fa: {
+      tr: "پنل pasarguard: ‹n› ادمین صفحهٔ اشتراک خودشان را تنظیم کرده‌اند (`sub_template`)؛ کاربرانشان همان صفحه را می‌بینند.",
+      what: "در PasarGuard هر ادمین می‌تواند تمپلیت اشتراک خودش را داشته باشد که بر تنظیم کلی پنل — همان که Row-Template استفاده می‌کند — مقدم است. کاربرانِ آن ادمین‌ها همچنان همان صفحه را می‌بینند. این پیکربندی پنل خودتان است، پس Row-Template فقط گزارشش می‌دهد و چیزی را تغییر نمی‌دهد.",
+      fix: ["اگر آن کاربران هم باید Row-Template را ببینند، تمپلیت اشتراک آن ادمین را در تنظیمات ادمین PasarGuard پاک کنید."],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: ["panel pasarguard: the panel's 'disable subscription template' setting is on, so browsers get the raw subscription instead of any page."],
+    en: {
+      what: "PasarGuard's **disable subscription template** setting is on, so the panel sends browsers the subscription itself rather than any page — Row-Template's included. Row-Template reports it and changes nothing.",
+      fix: ["Turn the setting off in PasarGuard's subscription settings if subscribers should see the page."],
+    },
+    fa: {
+      tr: "پنل pasarguard: تنظیم 'disable subscription template' پنل روشن است، پس مرورگرها به‌جای هر صفحه‌ای خود اشتراک خام را دریافت می‌کنند.",
+      what: "تنظیم **disable subscription template** در PasarGuard روشن است، پس پنل به‌جای هر صفحه‌ای — از جمله صفحهٔ Row-Template — خود اشتراک را برای مرورگرها می‌فرستد. Row-Template فقط گزارشش می‌دهد و چیزی را تغییر نمی‌دهد.",
+      fix: ["اگر مشترکان باید صفحه را ببینند، این تنظیم را در تنظیمات اشتراک PasarGuard خاموش کنید."],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: ["panel pasarguard: $dest is not Row-Template's; left in place"],
+    en: {
+      what: "While removing its page, Row-Template found a file at its page's path that it did not create, and left it where it is.",
+      fix: ["Nothing to fix. Delete the file yourself if you do not need it."],
+    },
+    fa: {
+      tr: "پنل pasarguard: ‹مسیر› مال Row-Template نیست؛ سر جایش ماند",
+      what: "Row-Template هنگام حذف صفحه‌اش، در مسیر صفحه فایلی پیدا کرد که خودش نساخته بود و آن را سر جایش گذاشت.",
+      fix: ["کاری لازم نیست. اگر به آن فایل نیازی ندارید، خودتان حذفش کنید."],
+    },
+  },
+  {
+    group: "pasarguard",
+    texts: [
+      "panel pasarguard: after restoring, the Row-Template block is '$now_block', expected '$block'",
+      "panel pasarguard: after restoring, the block's directory is not the recorded value",
+      "panel pasarguard: after restoring, $RT_PG_KEY_PAGE is set, but the record says it was unset",
+      "panel pasarguard: after restoring, $RT_PG_KEY_PAGE is not the recorded value",
+    ],
+    en: {
+      what: "After putting `.env` back from a snapshot, Row-Template reads it again and compares it with what was recorded — and it does not match. The restore is therefore reported as failed rather than assumed to have worked.",
+      fix: [
+        "Open `/opt/pasarguard/.env` and compare the `row-template` block and your `SUBSCRIPTION_PAGE_TEMPLATE` line with what you expect.",
+        "Remove the block by hand if activation did not succeed, restart PasarGuard, and run `row-template verify`.",
+      ],
+    },
+    fa: {
+      tr: "پنل pasarguard: پس از بازگردانی، بلوک Row-Template '‹وضعیت›' است، در حالی که '‹وضعیت›' انتظار می‌رفت / پس از بازگردانی، پوشهٔ بلوک مقدار ثبت‌شده نیست / پس از بازگردانی، `SUBSCRIPTION_PAGE_TEMPLATE` تنظیم شده اما رکورد می‌گوید تنظیم نبوده / پس از بازگردانی، `SUBSCRIPTION_PAGE_TEMPLATE` مقدار ثبت‌شده نیست",
+      what: "Row-Template پس از بازگرداندن `.env` از روی عکس فوری، آن را دوباره می‌خواند و با آنچه ثبت شده مقایسه می‌کند — و نمی‌خواند. پس بازگردانی به‌جای اینکه موفق فرض شود، ناموفق گزارش می‌شود.",
+      fix: [
+        "`/opt/pasarguard/.env` را باز کنید و بلوک `row-template` و خط `SUBSCRIPTION_PAGE_TEMPLATE` خودتان را با آنچه انتظار دارید مقایسه کنید.",
+        "اگر فعال‌سازی موفق نبوده، بلوک را دستی حذف کنید، PasarGuard را ری‌استارت کنید و `row-template verify` را اجرا کنید.",
+      ],
+    },
+  },
+
+  // --- Rebecca (1.3.0) ----------------------------------------------------------------
+  {
+    group: "rebecca",
+    texts: ["panel rebecca: this is Rebecca 0.0.x, the Python edition (Docker image ${IMAGE}). Row-Template's Rebecca page is built for Rebecca 1.x, the Go edition, which Rebecca publishes for its binary install (rebecca-binary.sh); Rebecca's own 'rebecca migrate-binary' moves a Docker install to it."],
+    en: {
+      what: "Row-Template supports Rebecca **1.x**, the Go edition. Docker Hub's `rebeccapanel/rebecca` image is still the **0.0.x Python edition**, which renders pages from a different context: it would accept the setting and silently keep serving its own page. So the installer refuses it before changing anything — the panel is not modified.",
+      fix: [
+        "Install Rebecca 1.x with Rebecca's binary installer (`rebecca-binary.sh`) — the install Row-Template is tested against.",
+        "Then run the Row-Template installer again.",
+        "The refusal message also names Rebecca's `rebecca migrate-binary`; Row-Template has not verified it, and in Rebecca's current scripts that command is not routed by the `rebecca` command, so it may only print its usage text.",
+      ],
+    },
+    fa: {
+      tr: "پنل rebecca: این Rebecca نسخهٔ 0.0.x، یعنی نسخهٔ پایتونی است (ایمیج Docker ‹ایمیج›). صفحهٔ Rebecca در Row-Template برای Rebecca 1.x، یعنی نسخهٔ Go ساخته شده که Rebecca برای نصب باینری‌اش (`rebecca-binary.sh`) منتشر می‌کند؛ دستور `rebecca migrate-binary` خود Rebecca نصب Docker را به آن منتقل می‌کند.",
+      what: "Row-Template از Rebecca **1.x**، یعنی نسخهٔ Go پشتیبانی می‌کند. ایمیج `rebeccapanel/rebecca` در Docker Hub هنوز **نسخهٔ پایتونی 0.0.x** است که صفحه‌ها را از زمینهٔ دیگری رندر می‌کند: تنظیم را می‌پذیرفت و بی‌صدا همان صفحهٔ خودش را ارائه می‌داد. پس نصب‌کننده پیش از هر تغییری آن را رد می‌کند — پنل تغییری نمی‌کند.",
+      fix: [
+        "Rebecca نسخهٔ 1.x را با نصب‌کنندهٔ باینری Rebecca (`rebecca-binary.sh`) نصب کنید — نصبی که Row-Template روی آن آزموده شده.",
+        "سپس نصب‌کنندهٔ Row-Template را دوباره اجرا کنید.",
+        "پیام رد، دستور `rebecca migrate-binary` خود Rebecca را هم نام می‌برد؛ Row-Template آن را تأیید نکرده است، و در اسکریپت‌های فعلی Rebecca این دستور به فرمان `rebecca` وصل نیست، پس ممکن است فقط راهنمای استفاده‌اش را چاپ کند.",
+      ],
+    },
+  },
+  {
+    group: "rebecca",
+    texts: ["panel rebecca: cannot tell which Rebecca edition this is (the Docker image could not be inspected); refusing rather than placing a page Rebecca may not be able to render."],
+    en: {
+      what: "For a Docker install, Row-Template reads the image to tell the 1.x Go edition from the 0.0.x Python edition. The image could not be inspected — Docker is not running, or the image named in the compose file is not present — so rather than guess, it stops. Nothing was changed.",
+      fix: [
+        "Check Docker and the panel: `docker ps`, `rebecca status`.",
+        "Pull or start the panel's image, then run the command again. Rebecca's binary install (1.x) needs no image check.",
+      ],
+    },
+    fa: {
+      tr: "پنل rebecca: مشخص نیست این کدام نسخهٔ Rebecca است (ایمیج Docker بررسی نشد)؛ به‌جای گذاشتن صفحه‌ای که شاید Rebecca نتواند رندرش کند، ادامه نمی‌دهد.",
+      what: "در نصب Docker، Row-Template ایمیج را می‌خواند تا نسخهٔ Go (1.x) را از نسخهٔ پایتونی (0.0.x) تشخیص دهد. ایمیج بررسی نشد — Docker در حال اجرا نیست یا ایمیجی که در فایل compose آمده موجود نیست — پس به‌جای حدس زدن متوقف می‌شود. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "Docker و پنل را بررسی کنید: `docker ps` و `rebecca status`.",
+        "ایمیج پنل را دریافت یا اجرا کنید و فرمان را دوباره اجرا کنید. نصب باینری Rebecca (1.x) به بررسی ایمیج نیازی ندارد.",
+      ],
+    },
+  },
+  {
+    group: "rebecca",
+    texts: [
+      "panel rebecca: custom_templates_directory is not a usable absolute path",
+      "panel rebecca: $root is outside $RT_RB_DATA_DIR, the directory the container shares with the host",
+    ],
+    en: {
+      what: "When Rebecca already has a **Custom templates directory**, Row-Template places its page there. The value set in Rebecca is not a plain absolute path, or — for a Docker install — is outside `/var/lib/rebecca`, the folder the container shares with the host. Nothing was changed.",
+      fix: ["In the Rebecca dashboard, set **Settings → Subscription → Templates → Custom templates directory** to an absolute path under `/var/lib/rebecca` (or clear it), then run the command again."],
+    },
+    fa: {
+      tr: "پنل rebecca: `custom_templates_directory` مسیر مطلق قابل استفاده‌ای نیست / ‹مسیر› بیرون از `/var/lib/rebecca` است، پوشه‌ای که کانتینر با میزبان به اشتراک می‌گذارد",
+      what: "وقتی Rebecca از قبل **Custom templates directory** دارد، Row-Template صفحه‌اش را همان‌جا می‌گذارد. مقداری که در Rebecca تنظیم شده مسیر مطلق ساده‌ای نیست، یا — در نصب Docker — بیرون از `/var/lib/rebecca` است، پوشه‌ای که کانتینر با میزبان به اشتراک می‌گذارد. هیچ تغییری اعمال نشده است.",
+      fix: ["در داشبورد Rebecca مقدار **Settings → Subscription → Templates → Custom templates directory** را روی یک مسیر مطلق زیر `/var/lib/rebecca` بگذارید (یا خالی‌اش کنید) و فرمان را دوباره اجرا کنید."],
+    },
+  },
+  {
+    group: "rebecca",
+    texts: [
+      "panel rebecca: cannot read subscription_settings",
+      "panel rebecca: cannot read custom_templates_directory",
+      "panel rebecca: cannot read the panel selection (sqlite3 and a SQLite database are needed)",
+    ],
+    en: {
+      what: "Rebecca's subscription settings could not be read from its database. Automatic activation and these checks need Rebecca's default SQLite database and the `sqlite3` command. Nothing was changed.",
+      fix: [
+        "Install `sqlite3` (`apt-get install -y sqlite3`) and run the command again.",
+        "With MySQL/MariaDB, activation is manual: see [Activation](/docs/installation/activation/#rebecca).",
+      ],
+    },
+    fa: {
+      tr: "پنل rebecca: `subscription_settings` خوانده نشد / `custom_templates_directory` خوانده نشد / انتخاب پنل خوانده نشد (به `sqlite3` و پایگاه‌دادهٔ SQLite نیاز است)",
+      what: "تنظیمات اشتراک Rebecca از پایگاه‌داده‌اش خوانده نشد. فعال‌سازی خودکار و این بررسی‌ها به پایگاه‌دادهٔ پیش‌فرض SQLite پنل Rebecca و فرمان `sqlite3` نیاز دارند. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "`sqlite3` را نصب کنید (`apt-get install -y sqlite3`) و فرمان را دوباره اجرا کنید.",
+        "با MySQL/MariaDB فعال‌سازی دستی است: [فعال‌سازی](/docs/installation/activation/#rebecca) را ببینید.",
+      ],
+    },
+  },
+  {
+    group: "rebecca",
+    texts: [
+      "panel rebecca: the templates directory is a symlink: $root",
+      "panel rebecca: $dir is a symlink",
+      "panel rebecca: $dest exists and is not Row-Template's; it was left untouched",
+    ],
+    en: {
+      what: "The page is placed at `row-template/index.html` inside Rebecca's templates directory. Either that directory (or the `row-template` folder in it) is a symbolic link, or a file Row-Template did not create is already at that path. Row-Template never writes through a link and never overwrites a file that is not its own. Nothing was changed.",
+      fix: [
+        "Replace the link with a real directory.",
+        "If the existing `row-template/index.html` is yours, move it elsewhere; then run the command again.",
+      ],
+    },
+    fa: {
+      tr: "پنل rebecca: پوشهٔ تمپلیت‌ها پیوند نمادین است: ‹مسیر› / ‹مسیر› پیوند نمادین است / ‹مسیر› وجود دارد و مال Row-Template نیست؛ دست‌نخورده ماند",
+      what: "صفحه در `row-template/index.html` داخل پوشهٔ تمپلیت‌های Rebecca قرار می‌گیرد. یا آن پوشه (یا پوشهٔ `row-template` داخلش) پیوند نمادین است، یا فایلی که Row-Template نساخته از قبل در همان مسیر هست. Row-Template هرگز از طریق پیوند نمی‌نویسد و هرگز فایلی را که مال خودش نیست بازنویسی نمی‌کند. هیچ تغییری اعمال نشده است.",
+      fix: [
+        "پیوند را با یک پوشهٔ واقعی جایگزین کنید.",
+        "اگر `row-template/index.html` موجود مال شماست، آن را جای دیگری ببرید؛ سپس فرمان را دوباره اجرا کنید.",
+      ],
+    },
+  },
+  {
+    group: "rebecca",
+    texts: [
+      "panel rebecca: the page is not in place: $dest",
+      "panel rebecca: the placed page differs from the generated one",
+      "panel rebecca: the panel does not select the Row-Template page",
+    ],
+    en: {
+      what: "Rebecca is set up for Row-Template, but the pieces no longer agree: the page is missing from the templates directory, the copy there is not the page Row-Template generated last, or Rebecca's **Subscription page template** no longer names it (someone chose another page in the dashboard).",
+      fix: ["Re-apply from the manager: `row-template`, then **5 — Activate / Re-apply theme**. If you chose another page on purpose, leave it."],
+    },
+    fa: {
+      tr: "پنل rebecca: صفحه سر جایش نیست: ‹مسیر› / صفحهٔ گذاشته‌شده با صفحهٔ ساخته‌شده فرق دارد / پنل صفحهٔ Row-Template را انتخاب نمی‌کند",
+      what: "Rebecca برای Row-Template تنظیم شده، اما اجزا دیگر با هم نمی‌خوانند: صفحه در پوشهٔ تمپلیت‌ها نیست، نسخهٔ موجود آنجا همان صفحه‌ای نیست که Row-Template آخرین بار ساخته، یا **Subscription page template** در Rebecca دیگر آن را نام نمی‌برد (کسی در داشبورد صفحهٔ دیگری انتخاب کرده است).",
+      fix: ["از منوی مدیریت دوباره اعمالش کنید: `row-template` و سپس **5 — Activate / Re-apply theme**. اگر عمداً صفحهٔ دیگری انتخاب کرده‌اید، دست نزنید."],
+    },
+  },
+  {
+    group: "rebecca",
+    texts: [
+      "panel rebecca: the artifact is missing: $RT_DIST",
+      "panel rebecca: the artifact is not a valid Rebecca page",
+      "panel rebecca: the artifact does not match its recorded checksum",
+      "panel rebecca: the generated page is missing or invalid: $RT_LIVE",
+      "panel rebecca: SOURCE is not a Rebecca page this release can serve",
+    ],
+    en: {
+      what: "Row-Template's own files for Rebecca are not right: the installed design (`dist/template.html`) is missing, damaged, not built for Rebecca, or does not match its checksum, or the generated page (`sub.html`) is missing or incomplete. Nothing in the panel was changed by this check.",
+      fix: ["Run `row-template update` to reinstall the designs and regenerate the page, then `row-template verify`."],
+    },
+    fa: {
+      tr: "پنل rebecca: فایل صفحه وجود ندارد / صفحهٔ معتبر Rebecca نیست / با چک‌سام ثبت‌شده‌اش نمی‌خواند / صفحهٔ ساخته‌شده وجود ندارد یا نامعتبر است: ‹مسیر› / منبع، صفحهٔ Rebeccaای نیست که این نسخه بتواند ارائه کند",
+      what: "فایل‌های خود Row-Template برای Rebecca درست نیستند: تمپلیت نصب‌شده (`dist/template.html`) وجود ندارد، خراب است، برای Rebecca ساخته نشده یا با چک‌سامش نمی‌خواند؛ یا صفحهٔ ساخته‌شده (`sub.html`) وجود ندارد یا ناقص است. این بررسی چیزی را در پنل تغییر نداده است.",
+      fix: ["با `row-template update` تمپلیت‌ها را دوباره نصب کنید و صفحه را دوباره بسازید، سپس `row-template verify` را اجرا کنید."],
+    },
+  },
+  {
+    group: "rebecca",
+    texts: ["panel rebecca: $n admin(s) override the subscription page for their own users; those users keep the admin's page."],
+    en: {
+      what: "In Rebecca an admin can have their own subscription template settings, which win over the panel-wide ones Row-Template sets. The users of those admins keep seeing that page. Row-Template reports it and changes nothing.",
+      fix: ["If those users should see Row-Template too, clear that admin's subscription template settings in Rebecca."],
+    },
+    fa: {
+      tr: "پنل rebecca: ‹n› ادمین صفحهٔ اشتراک را برای کاربران خودشان جایگزین کرده‌اند؛ آن کاربران صفحهٔ ادمین را می‌بینند.",
+      what: "در Rebecca هر ادمین می‌تواند تنظیمات تمپلیت اشتراک خودش را داشته باشد که بر تنظیمات کلی پنل — همان که Row-Template تنظیم می‌کند — مقدم است. کاربرانِ آن ادمین‌ها همچنان همان صفحه را می‌بینند. Row-Template فقط گزارشش می‌دهد و چیزی را تغییر نمی‌دهد.",
+      fix: ["اگر آن کاربران هم باید Row-Template را ببینند، تنظیمات تمپلیت اشتراک آن ادمین را در Rebecca پاک کنید."],
+    },
+  },
+  {
+    group: "rebecca",
+    texts: ["panel rebecca: $dest is not Row-Template's; left in place"],
+    en: {
+      what: "While removing its page, Row-Template found a file at its page's path that it did not create, and left it where it is.",
+      fix: ["Nothing to fix. Delete the file yourself if you do not need it."],
+    },
+    fa: {
+      tr: "پنل rebecca: ‹مسیر› مال Row-Template نیست؛ سر جایش ماند",
+      what: "Row-Template هنگام حذف صفحه‌اش، در مسیر صفحه فایلی پیدا کرد که خودش نساخته بود و آن را سر جایش گذاشت.",
+      fix: ["کاری لازم نیست. اگر به آن فایل نیازی ندارید، خودتان حذفش کنید."],
+    },
+  },
+  {
+    group: "rebecca",
+    texts: [
+      "panel rebecca: cannot read subscription_page_template back after restoring",
+      "panel rebecca: after restoring, subscription_page_template is '$nowpage', expected '$page'",
+      "panel rebecca: cannot read custom_templates_directory back after restoring",
+      "panel rebecca: after restoring, custom_templates_directory is not the recorded value",
+    ],
+    en: {
+      what: "After writing Rebecca's two subscription settings back from a snapshot, Row-Template reads them again and compares them with what was recorded — and they do not match, or cannot be read. The restore is therefore reported as failed rather than assumed to have worked.",
+      fix: [
+        "In the Rebecca dashboard open **Settings → Subscription → Templates** and check **Subscription page template** and **Custom templates directory**.",
+        "Set them to the values you want (Rebecca's own page is `subscription/index.html`), then run `row-template verify`.",
+      ],
+    },
+    fa: {
+      tr: "پنل rebecca: `subscription_page_template` پس از بازگردانی خوانده نشد / پس از بازگردانی، `subscription_page_template` برابر '‹مقدار›' است، در حالی که '‹مقدار›' انتظار می‌رفت / `custom_templates_directory` پس از بازگردانی خوانده نشد / پس از بازگردانی، `custom_templates_directory` مقدار ثبت‌شده نیست",
+      what: "Row-Template پس از نوشتن دوبارهٔ دو تنظیم اشتراک Rebecca از روی عکس فوری، آن‌ها را دوباره می‌خواند و با آنچه ثبت شده مقایسه می‌کند — و نمی‌خوانند، یا خوانده نمی‌شوند. پس بازگردانی به‌جای اینکه موفق فرض شود، ناموفق گزارش می‌شود.",
+      fix: [
+        "در داشبورد Rebecca **Settings → Subscription → Templates** را باز کنید و **Subscription page template** و **Custom templates directory** را بررسی کنید.",
+        "آن‌ها را روی مقادیر دلخواه بگذارید (صفحهٔ خود Rebecca `subscription/index.html` است) و `row-template verify` را اجرا کنید.",
+      ],
+    },
+  },
+
+  // --- 1.3.0: releases, designs, pages, updates, backups ----------------------------
+  {
+    group: "download",
+    texts: ["payload template $id is not a ${PANEL} page"],
+    en: {
+      what: "Every design in a release comes in a version for each panel. The version for this server's panel failed the check that it really is a page for that panel — it is damaged, or belongs to another panel — so the release is refused. Nothing was changed.",
+      fix: ["Download the release again from the official release page; the four files must come from the same release."],
+    },
+    fa: {
+      tr: "تمپلیت ‹شناسه› در محتوای نسخه صفحه‌ای برای ‹پنل› نیست",
+      what: "هر تمپلیت در نسخه، برای هر پنل یک نسخهٔ جداگانه دارد. نسخهٔ مربوط به پنل این سرور در بررسی اینکه واقعاً صفحه‌ای برای همان پنل است رد شد — یا خراب است یا متعلق به پنل دیگری است — پس نسخه رد می‌شود. هیچ تغییری اعمال نشده است.",
+      fix: ["نسخه را دوباره از صفحهٔ رسمی نسخه دانلود کنید؛ هر چهار فایل باید از یک نسخه باشند."],
+    },
+  },
+  {
+    group: "download",
+    texts: [
+      "this release carries no ${PANEL} pages; nothing was activated.",
+      "this release carries no ${PANEL} pages; nothing was changed.",
+    ],
+    en: {
+      what: "The release has no pages built for this server's panel. Every release from 1.3.0 on carries pages for 3X-UI, PasarGuard and Rebecca; releases before 1.3.0 carry none for PasarGuard or Rebecca. So the release is incomplete or too old for this panel. Nothing was activated, and the page your subscribers see is unchanged.",
+      fix: [
+        "Use Row-Template 1.3.0 or newer — download it again from the official release page.",
+        "With `RT_RELEASE_DIR` or `RT_RELEASE_URL`, check they point at a 1.3.0 or newer release.",
+      ],
+    },
+    fa: {
+      tr: "این نسخه هیچ صفحه‌ای برای ‹پنل› ندارد؛ چیزی فعال نشد. / …؛ هیچ تغییری اعمال نشد.",
+      what: "نسخه هیچ صفحه‌ای ندارد که برای پنل این سرور ساخته شده باشد. هر نسخه از 1.3.0 به بعد صفحه‌هایی برای 3X-UI، PasarGuard و Rebecca دارد؛ نسخه‌های پیش از 1.3.0 هیچ صفحه‌ای برای PasarGuard یا Rebecca ندارند. پس نسخه ناقص است یا برای این پنل قدیمی است. چیزی فعال نشد و صفحه‌ای که مشترکان می‌بینند تغییری نکرده است.",
+      fix: [
+        "از Row-Template نسخهٔ 1.3.0 یا جدیدتر استفاده کنید — آن را دوباره از صفحهٔ رسمی نسخه دانلود کنید.",
+        "اگر از `RT_RELEASE_DIR` یا `RT_RELEASE_URL` استفاده می‌کنید، مطمئن شوید به نسخهٔ 1.3.0 یا جدیدتر اشاره می‌کنند.",
+      ],
+    },
+  },
+  {
+    group: "templates",
+    texts: [
+      "the template store path is a symlink; refusing to repair it: $RT_TEMPLATE_STORE",
+      "the template store path is not a directory: $RT_TEMPLATE_STORE",
+    ],
+    en: {
+      what: "The template store — `dist/templates/` in the install directory — is a symbolic link or a file instead of a directory, so Row-Template will not write the designs into it. Nothing was changed.",
+      fix: ["Remove the link or file named in the message (it is inside the install directory) and run the same command again; the store is recreated with every design."],
+    },
+    fa: {
+      tr: "مسیر مخزن تمپلیت‌ها یک پیوند نمادین است؛ تعمیر نمی‌شود: ‹مسیر› / مسیر مخزن تمپلیت‌ها پوشه نیست: ‹مسیر›",
+      what: "مخزن تمپلیت‌ها — یعنی `dist/templates/` در پوشهٔ نصب — به‌جای پوشه، یک پیوند نمادین یا فایل است؛ پس Row-Template تمپلیت‌ها را در آن نمی‌نویسد. هیچ تغییری اعمال نشده است.",
+      fix: ["پیوند یا فایلی را که در پیام آمده (داخل پوشهٔ نصب) حذف کنید و همان فرمان را دوباره اجرا کنید؛ مخزن با همهٔ تمپلیت‌ها دوباره ساخته می‌شود."],
+    },
+  },
+  {
+    group: "templates",
+    texts: [
+      "not reading templates from $src: it is not a plain directory.",
+      "the copy of design '$id' in $src fails its checksum or structural check; it was not moved.",
+      "left $src in place: it holds files Row-Template does not recognise.",
+    ],
+    en: {
+      what: "Designs left outside the template store — where an update from an earlier release could put them — are moved back into `dist/templates/`. These warnings mean part of that could not be done safely: the folder is a link or special file, one copy is damaged and was left where it was, or the folder also holds files Row-Template does not recognise, so it was not removed. The designs in the store are unaffected.",
+      fix: [
+        "Run `row-template verify` as root to see the state of the store; `row-template update` reinstalls any design that is missing.",
+        "Once the store is complete, you can delete the leftover folder named in the message by hand.",
+      ],
+    },
+    fa: {
+      tr: "تمپلیت‌ها از ‹مسیر› خوانده نمی‌شوند: پوشهٔ معمولی نیست. / نسخهٔ تمپلیت '‹شناسه›' در ‹مسیر› در بررسی چک‌سام یا ساختار رد شد؛ جابه‌جا نشد. / ‹مسیر› سر جایش ماند: فایل‌هایی دارد که Row-Template نمی‌شناسد.",
+      what: "تمپلیت‌هایی که بیرون از مخزن تمپلیت‌ها مانده‌اند — جایی که به‌روزرسانی از نسخه‌های قبلی ممکن است آن‌ها را گذاشته باشد — به `dist/templates/` بازگردانده می‌شوند. این هشدارها یعنی بخشی از این کار با اطمینان انجام نشد: آن پوشه پیوند یا فایل ویژه است، یکی از نسخه‌ها خراب است و سر جایش ماند، یا پوشه فایل‌هایی دارد که Row-Template نمی‌شناسد و به همین دلیل حذف نشد. تمپلیت‌های داخل مخزن آسیبی ندیده‌اند.",
+      fix: [
+        "`row-template verify` را با root اجرا کنید تا وضعیت مخزن را ببینید؛ `row-template update` هر تمپلیت ناموجود را دوباره نصب می‌کند.",
+        "وقتی مخزن کامل شد، می‌توانید پوشهٔ باقی‌مانده‌ای را که در پیام آمده دستی حذف کنید.",
+      ],
+    },
+  },
+  {
+    group: "page",
+    texts: ["refusing to install an artifact that is not a ${PANEL} page"],
+    en: {
+      what: "A design file about to be installed is not built for this server's panel — each panel has its own template engine, so a page made for one cannot be served by another. It was not installed, and nothing was changed.",
+      fix: ["Run `row-template update` to reinstall this release's designs."],
+    },
+    fa: {
+      tr: "فایلی که صفحهٔ ‹پنل› نیست نصب نمی‌شود",
+      what: "فایل تمپلیتی که قرار بود نصب شود برای پنل این سرور ساخته نشده است — هر پنل موتور قالب خودش را دارد، پس صفحه‌ای که برای یک پنل ساخته شده در پنل دیگر ارائه نمی‌شود. نصب نشد و هیچ تغییری اعمال نشده است.",
+      fix: ["با `row-template update` تمپلیت‌های این نسخه را دوباره نصب کنید."],
+    },
+  },
+  {
+    group: "update",
+    texts: [
+      "could not download Row-Template $ver to complete the installation. It will be retried the next time the manager opens; 'row-template update' also completes it.",
+      "the release source offers ${pver:-an unknown version}, not the installed $ver; nothing was changed. Run 'row-template update' to update.",
+      "the installation is still incomplete; run 'row-template verify' for details.",
+      "this installation is incomplete and its version is unknown; run 'row-template update' to repair it.",
+    ],
+    en: {
+      what: "1.1.0's own updater copies only part of a newer release. So the first time you open `row-template`, or run `row-template config` or `row-template verify` as root, after such an update, Row-Template downloads the rest of **the same version** you have installed — every design and the remaining installer files — before doing anything else. That did not work: the release source could not be reached, it offered a different version (it never installs another version this way), the version installed could not be read, or something is still missing afterwards. Your page, branding, design and backups are unchanged.",
+      fix: [
+        "Make sure the server can reach the release source, then open the manager again.",
+        "Or run `row-template update`, which installs the latest release in full.",
+      ],
+    },
+    fa: {
+      tr: "Row-Template نسخهٔ ‹نسخه› برای کامل کردن نصب دانلود نشد. دفعهٔ بعد که منوی مدیریت باز شود دوباره تلاش می‌شود؛ `row-template update` هم آن را کامل می‌کند. / منبع نسخه ‹نسخه› را ارائه می‌کند، نه نسخهٔ نصب‌شدهٔ ‹نسخه› را؛ هیچ تغییری اعمال نشد. برای به‌روزرسانی `row-template update` را اجرا کنید. / نصب هنوز ناقص است؛ برای جزئیات `row-template verify` را اجرا کنید. / این نصب ناقص است و نسخه‌اش نامعلوم است؛ برای تعمیر `row-template update` را اجرا کنید.",
+      what: "به‌روزرسان خود 1.1.0 فقط بخشی از نسخهٔ جدیدتر را کپی می‌کند. پس نخستین باری که پس از چنین به‌روزرسانی‌ای `row-template` را باز می‌کنید، یا `row-template config` یا `row-template verify` را با root اجرا می‌کنید، Row-Template پیش از هر کاری بقیهٔ **همان نسخه‌ای** را که نصب دارید دانلود می‌کند — همهٔ تمپلیت‌ها و بقیهٔ فایل‌های نصب‌کننده. این کار انجام نشد: منبع نسخه در دسترس نبود، نسخهٔ دیگری ارائه می‌کرد (این مسیر هرگز نسخهٔ دیگری نصب نمی‌کند)، نسخهٔ نصب‌شده خوانده نشد، یا پس از آن هنوز چیزی کم است. صفحه، برندینگ، تمپلیت و پشتیبان‌های شما تغییری نکرده‌اند.",
+      fix: [
+        "مطمئن شوید سرور به منبع نسخه دسترسی دارد و منوی مدیریت را دوباره باز کنید.",
+        "یا `row-template update` را اجرا کنید که آخرین نسخه را کامل نصب می‌کند.",
+      ],
+    },
+  },
+  {
+    group: "rollback",
+    texts: ["could not create a new backup directory under $RT_BACKUPS"],
+    en: {
+      what: "Backups are named by the time they are taken, to the second. No free name could be claimed in `backups/` — the disk is full, the folder is not writable, or names kept colliding. The operation that needed the backup says on the next line what it did next.",
+      fix: [
+        "Check free space with `df -h /etc`, and that `backups/` in the install directory is a writable directory.",
+        "Run the command again.",
+      ],
+    },
+    fa: {
+      tr: "پوشهٔ پشتیبان جدیدی زیر ‹مسیر› ساخته نشد",
+      what: "نام پشتیبان‌ها از زمان گرفتنشان تا دقت ثانیه ساخته می‌شود. هیچ نام آزادی در `backups/` گرفته نشد — دیسک پر است، پوشه قابل نوشتن نیست، یا نام‌ها پشت سر هم تکراری بودند. عملیاتی که به پشتیبان نیاز داشت در خط بعد می‌گوید چه کرد.",
+      fix: [
+        "فضای آزاد را با `df -h /etc` بررسی کنید و مطمئن شوید `backups/` در پوشهٔ نصب، پوشه‌ای قابل نوشتن است.",
+        "فرمان را دوباره اجرا کنید.",
+      ],
+    },
+  },
+  {
+    group: "rollback",
+    texts: ["backup ${BACKUP} was made for ${PANEL}, not ${PANEL}; refusing to restore it."],
+    en: {
+      what: "Every backup records the panel it was made on, and is only ever restored onto that panel: a page built for one panel's template engine cannot be served by another. Backups made before 1.3.0 count as 3X-UI backups. Nothing was changed.",
+      fix: ["Choose a backup made on this panel: list the `backups/` folder in the install directory and use `row-template rollback --to <name>`."],
+    },
+    fa: {
+      tr: "پشتیبان ‹پشتیبان› برای ‹پنل› ساخته شده، نه ‹پنل›؛ بازگردانده نمی‌شود.",
+      what: "هر پشتیبان پنلی را که روی آن ساخته شده ثبت می‌کند و فقط روی همان پنل بازگردانده می‌شود: صفحه‌ای که برای موتور قالب یک پنل ساخته شده، در پنل دیگر ارائه نمی‌شود. پشتیبان‌های ساخته‌شده پیش از 1.3.0 پشتیبان 3X-UI به حساب می‌آیند. هیچ تغییری اعمال نشده است.",
+      fix: ["پشتیبانی را انتخاب کنید که روی همین پنل ساخته شده: فهرست پوشهٔ `backups/` در پوشهٔ نصب را ببینید و از `row-template rollback --to <name>` استفاده کنید."],
+    },
+  },
+  {
+    group: "rollback",
+    texts: [
+      "backup artifact has no store match and no recorded template; defaulting to Row.",
+      "backup artifact recorded template '$tpl_id' is not installed; defaulting to Row.",
+    ],
+    en: {
+      what: "The backup's page is not byte-identical to any design of the current release — an older release made it — so rollback uses the design the backup records instead. This backup records none (older releases did not), or one this release does not ship, so Row is restored. The page is taken from the designs installed now; the backup's version number is restored, and your current branding is kept.",
+      fix: ["Nothing to fix. To use another design afterwards, choose it from the manager (**2 — Reconfigure branding → 4 — Template**)."],
+    },
+    fa: {
+      tr: "صفحهٔ پشتیبان با هیچ تمپلیتی در مخزن مطابقت ندارد و تمپلیتی هم ثبت نکرده؛ Row استفاده می‌شود. / تمپلیت ثبت‌شده در پشتیبان ('‹شناسه›') نصب نیست؛ Row استفاده می‌شود.",
+      what: "صفحهٔ داخل پشتیبان بایت‌به‌بایت با هیچ تمپلیتی از نسخهٔ فعلی یکی نیست — نسخهٔ قدیمی‌تری آن را ساخته — پس بازگردانی به‌جای آن از تمپلیتی استفاده می‌کند که پشتیبان ثبت کرده است. این پشتیبان هیچ تمپلیتی ثبت نکرده (نسخه‌های قدیمی‌تر ثبت نمی‌کردند) یا تمپلیتی را ثبت کرده که این نسخه ندارد؛ پس Row بازگردانده می‌شود. صفحه از تمپلیت‌های نصب‌شدهٔ فعلی برداشته می‌شود، شمارهٔ نسخهٔ پشتیبان بازگردانده می‌شود و برندینگ فعلی شما حفظ می‌شود.",
+      fix: ["کاری لازم نیست. اگر بعداً تمپلیت دیگری می‌خواهید، از منوی مدیریت انتخابش کنید (**2 — Reconfigure branding → 4 — Template**)."],
+    },
+  },
+
+  // --- 1.3.0: verify ------------------------------------------------------------------
+  {
+    group: "verify",
+    texts: ["templates were found outside the store at $RT_ROOT/$rel; run 'row-template verify' as root to move them."],
+    en: {
+      what: "Designs were found in the install directory but outside the template store, where an update from an earlier release could leave them. They are harmless but not used. `verify` only moves them when it runs as root.",
+      fix: ["Run `row-template verify` as root: it moves them into `dist/templates/` and changes nothing else."],
+    },
+    fa: {
+      tr: "تمپلیت‌هایی بیرون از مخزن در ‹پوشهٔ نصب›/‹مسیر› پیدا شد؛ برای جابه‌جا کردنشان `row-template verify` را با root اجرا کنید.",
+      what: "تمپلیت‌هایی در پوشهٔ نصب اما بیرون از مخزن تمپلیت‌ها پیدا شد؛ جایی که به‌روزرسانی از نسخه‌های قبلی ممکن است آن‌ها را جا گذاشته باشد. بی‌خطرند اما استفاده نمی‌شوند. `verify` فقط وقتی با root اجرا شود آن‌ها را جابه‌جا می‌کند.",
+      fix: ["`row-template verify` را با root اجرا کنید: آن‌ها را به `dist/templates/` منتقل می‌کند و چیز دیگری را تغییر نمی‌دهد."],
+    },
+  },
+  {
+    group: "verify",
+    texts: ["template store is incomplete (${N_PRESENT} of $n_avail designs); missing:$missing. Run 'row-template update' to restore them."],
+    en: {
+      what: "Some of the designs this release ships are missing from the installation's template store. The live page keeps working; the missing designs cannot be chosen until they are restored. Run as root, `verify` downloads them from the installed release first, so this line means that was not possible.",
+      fix: ["Run `row-template update` — it reinstalls every design."],
+    },
+    fa: {
+      tr: "مخزن تمپلیت‌ها ناقص است (‹n› از ‹n› تمپلیت)؛ ناموجود: ‹شناسه‌ها›. برای بازگرداندنشان `row-template update` را اجرا کنید.",
+      what: "برخی از تمپلیت‌هایی که این نسخه ارائه می‌کند در مخزن تمپلیت‌های نصب وجود ندارند. صفحهٔ زنده کار می‌کند؛ تا بازگردانده نشوند، تمپلیت‌های ناموجود قابل انتخاب نیستند. `verify` وقتی با root اجرا شود اول آن‌ها را از نسخهٔ نصب‌شده دانلود می‌کند؛ پس این خط یعنی این کار ممکن نبود.",
+      fix: ["`row-template update` را اجرا کنید — همهٔ تمپلیت‌ها را دوباره نصب می‌کند."],
+    },
+  },
+  {
+    group: "verify",
+    texts: ["the panel components are missing; run 'row-template update'."],
+    en: {
+      what: "On PasarGuard and Rebecca, `verify` checks the panel through the installer's companion files (`lib/transaction.sh`, `panels/`), and they are missing, so the panel could not be checked. This is a hard failure.",
+      fix: ["Run `row-template update`, which installs them, then `row-template verify` again."],
+    },
+    fa: {
+      tr: "اجزای پنل وجود ندارند؛ `row-template update` را اجرا کنید.",
+      what: "روی PasarGuard و Rebecca، `verify` پنل را از طریق فایل‌های همراه نصب‌کننده (`lib/transaction.sh` و `panels/`) بررسی می‌کند و این فایل‌ها وجود ندارند، پس پنل بررسی نشد. این یک خطای جدی است.",
+      fix: ["`row-template update` را اجرا کنید تا آن‌ها را نصب کند و بعد دوباره `row-template verify` را اجرا کنید."],
+    },
+  },
+  {
+    group: "verify",
+    texts: [
+      "${PANEL} was not detected on this host.",
+      "the ${PANEL} configuration could not be read.",
+    ],
+    en: {
+      what: "The panel this installation serves could not be found on the server, or its configuration (PasarGuard's `.env`, or Rebecca's subscription settings) could not be read. The page files are checked anyway.",
+      fix: [
+        "Run `verify` as root, on the server that runs the panel.",
+        "Check the panel itself: `rebecca status`, or for PasarGuard `pasarguard status` (official Docker install) or `systemctl status pasarguard` (source install). If it was removed, remove Row-Template too with `row-template uninstall`.",
+      ],
+    },
+    fa: {
+      tr: "‹پنل› روی این سرور پیدا نشد. / پیکربندی ‹پنل› خوانده نشد.",
+      what: "پنلی که این نصب به آن سرویس می‌دهد روی سرور پیدا نشد، یا پیکربندی‌اش (فایل `.env` پنل PasarGuard یا تنظیمات اشتراک Rebecca) خوانده نشد. فایل‌های صفحه به هر حال بررسی می‌شوند.",
+      fix: [
+        "`verify` را با root و روی سروری که پنل روی آن است اجرا کنید.",
+        "خود پنل را بررسی کنید: `rebecca status`، یا برای PasarGuard فرمان `pasarguard status` (نصب رسمی Docker) یا `systemctl status pasarguard` (نصب از سورس). اگر پنل حذف شده، Row-Template را هم با `row-template uninstall` حذف کنید.",
+      ],
+    },
+  },
+  {
+    group: "verify",
+    texts: ["${PANEL} does not select the Row-Template page; activate it from the manager."],
+    en: {
+      what: "Row-Template is installed, but the panel does not select its page — it was never activated, or another page was chosen in the panel since. Subscribers see the panel's own page.",
+      fix: ["Run `row-template` and choose **5 — Activate / Re-apply theme**. See [Activation](/docs/installation/activation/)."],
+    },
+    fa: {
+      tr: "‹پنل› صفحهٔ Row-Template را انتخاب نمی‌کند؛ از منوی مدیریت فعالش کنید.",
+      what: "Row-Template نصب است، اما پنل صفحه‌اش را انتخاب نمی‌کند — هرگز فعال نشده، یا از آن زمان صفحهٔ دیگری در پنل انتخاب شده است. مشترکان صفحهٔ خود پنل را می‌بینند.",
+      fix: ["`row-template` را اجرا کنید و **5 — Activate / Re-apply theme** را انتخاب کنید. [فعال‌سازی](/docs/installation/activation/) را ببینید."],
+    },
+  },
+  {
+    group: "verify",
+    texts: ["${PANEL}'s Row-Template page is out of step (see above); re-apply it from the manager (Activate)."],
+    en: {
+      what: "The panel selects Row-Template, but one of the checks just above failed — the page is missing from the panel's templates directory, differs from the generated one, or Row-Template's own files are damaged. This is a hard failure.",
+      fix: ["Read the `panel …` line just above, then run `row-template` and choose **5 — Activate / Re-apply theme**. If Row-Template's files are damaged, run `row-template update` first."],
+    },
+    fa: {
+      tr: "صفحهٔ Row-Template در ‹پنل› با بقیه هماهنگ نیست (بالا را ببینید)؛ از منوی مدیریت دوباره اعمالش کنید (Activate).",
+      what: "پنل Row-Template را انتخاب کرده، اما یکی از بررسی‌های درست بالاتر رد شد — صفحه در پوشهٔ تمپلیت‌های پنل نیست، با صفحهٔ ساخته‌شده فرق دارد، یا فایل‌های خود Row-Template خراب‌اند. این یک خطای جدی است.",
+      fix: ["خط `panel …` درست بالاتر را بخوانید، سپس `row-template` را اجرا کنید و **5 — Activate / Re-apply theme** را انتخاب کنید. اگر فایل‌های Row-Template خراب‌اند، اول `row-template update` را اجرا کنید."],
+    },
+  },
+  {
+    group: "verify",
+    texts: ["the running ${PANEL} does not use the Row-Template page yet; restart the panel."],
+    en: {
+      what: "The files and settings are correct, but the running panel still uses its previous page. On PasarGuard this means the container was not recreated after `.env` changed.",
+      fix: ["Restart the panel (`pasarguard restart`), then run `row-template verify` again."],
+    },
+    fa: {
+      tr: "‹پنل›ِ در حال اجرا هنوز از صفحهٔ Row-Template استفاده نمی‌کند؛ پنل را ری‌استارت کنید.",
+      what: "فایل‌ها و تنظیمات درست‌اند، اما پنلِ در حال اجرا هنوز از صفحهٔ قبلی‌اش استفاده می‌کند. روی PasarGuard یعنی کانتینر پس از تغییر `.env` دوباره ساخته نشده است.",
+      fix: ["پنل را ری‌استارت کنید (`pasarguard restart`) و `row-template verify` را دوباره اجرا کنید."],
+    },
+  },
+
+  // --- 1.3.0: uninstall ---------------------------------------------------------------
+  {
+    group: "uninstall",
+    texts: [
+      "the panel components are missing, so ${PANEL} cannot be reverted automatically; run 'row-template update' first.",
+      "could not revert ${PANEL}.",
+      "uninstall stopped before removing anything; the panel and Row-Template are unchanged.",
+    ],
+    en: {
+      what: "On PasarGuard and Rebecca, uninstall first puts the panel back on the page it had before Row-Template, and only then removes Row-Template's files. The panel could not be reverted — the lines above say why — so uninstall stopped before removing anything. Both the panel and Row-Template are exactly as they were.",
+      fix: [
+        "If the installer's components are missing, run `row-template update`, then uninstall again.",
+        "Otherwise fix the problem named above (for example a damaged `.env` block, or a panel that could not be restarted) and run `row-template uninstall` again.",
+      ],
+    },
+    fa: {
+      tr: "اجزای پنل وجود ندارند، پس ‹پنل› به‌صورت خودکار برگردانده نمی‌شود؛ اول `row-template update` را اجرا کنید. / ‹پنل› برگردانده نشد. / حذف پیش از پاک کردن هر چیزی متوقف شد؛ پنل و Row-Template تغییری نکرده‌اند.",
+      what: "روی PasarGuard و Rebecca، حذف اول پنل را به صفحه‌ای که پیش از Row-Template داشت برمی‌گرداند و فقط بعد از آن فایل‌های Row-Template را پاک می‌کند. پنل برگردانده نشد — خطوط بالا علت را می‌گویند — پس حذف پیش از پاک کردن هر چیزی متوقف شد. پنل و Row-Template هر دو دقیقاً مثل قبل‌اند.",
+      fix: [
+        "اگر اجزای نصب‌کننده وجود ندارند، `row-template update` را اجرا کنید و دوباره حذف کنید.",
+        "در غیر این صورت مشکلی را که در بالا نام برده شده برطرف کنید (مثلاً بلوک خراب در `.env` یا پنلی که ری‌استارت نشد) و `row-template uninstall` را دوباره اجرا کنید.",
+      ],
+    },
+  },
+  {
+    group: "uninstall",
+    texts: ["${PANEL}'s selection cannot be changed automatically here."],
+    en: {
+      what: "Uninstall cannot change the panel's page selection here — on Rebecca because its settings cannot be written (MySQL/MariaDB, or no `sqlite3`), on PasarGuard because `.env` could not be read — so it removes Row-Template's files and asks you to switch the page back yourself. Until you do, the panel points at a page that no longer exists.",
+      fix: [
+        "Rebecca: in the dashboard open **Settings → Subscription → Templates** and set **Subscription page template** back to `subscription/index.html` (Rebecca's own page) or your own page.",
+        "PasarGuard: remove the `# >>> row-template` block from `/opt/pasarguard/.env`, then run `pasarguard restart`.",
+      ],
+    },
+    fa: {
+      tr: "انتخاب ‹پنل› اینجا به‌صورت خودکار تغییر نمی‌کند.",
+      what: "حذف‌کننده اینجا نمی‌تواند صفحهٔ انتخاب‌شدهٔ پنل را تغییر دهد — در Rebecca چون تنظیماتش نوشته نمی‌شوند (MySQL/MariaDB یا نبود `sqlite3`)، در PasarGuard چون `.env` خوانده نشد — پس فایل‌های Row-Template را پاک می‌کند و از شما می‌خواهد صفحه را خودتان برگردانید. تا این کار را نکنید، پنل به صفحه‌ای اشاره می‌کند که دیگر وجود ندارد.",
+      fix: [
+        "Rebecca: در داشبورد **Settings → Subscription → Templates** را باز کنید و **Subscription page template** را به `subscription/index.html` (صفحهٔ خود Rebecca) یا صفحهٔ دلخواهتان برگردانید.",
+        "PasarGuard: بلوک `# >>> row-template` را از `/opt/pasarguard/.env` حذف کنید و سپس `pasarguard restart` را اجرا کنید.",
+      ],
+    },
+  },
+
+  // --- 1.3.0: the command -------------------------------------------------------------
+  {
+    group: "cli",
+    texts: [
+      "panel registry: the 3xui adapter exists but could not be loaded",
+      "panel registry: the pasarguard adapter exists but could not be loaded",
+      "panel registry: the rebecca adapter exists but could not be loaded",
+    ],
+    en: {
+      what: "One of the panel adapters under `panels/` in the install directory exists but could not be loaded — it is damaged or was edited. The command stops here.",
+      fix: ["Re-run the installer to repair the installation; it replaces these files and keeps your configuration."],
+    },
+    fa: {
+      tr: "فهرست پنل‌ها: آداپتور 3xui / pasarguard / rebecca وجود دارد اما بارگذاری نشد",
+      what: "یکی از آداپتورهای پنل زیر `panels/` در پوشهٔ نصب وجود دارد اما بارگذاری نشد — خراب شده یا ویرایش شده است. فرمان همین‌جا متوقف می‌شود.",
+      fix: ["برای تعمیر نصب، نصب‌کننده را دوباره اجرا کنید؛ این فایل‌ها را جایگزین می‌کند و پیکربندی شما را نگه می‌دارد."],
+    },
+  },
+
+  // --- 1.3.0: internal checks of the panel layer ---------------------------------------
+  {
+    group: "safety",
+    texts: [
+      "refusing to write through a symlink: $RT_BACKUPS_V2",
+      "could not create a temporary snapshot",
+      "snapshot already exists: $final",
+      "the new snapshot failed validation and was discarded",
+      "refusing to stage a symlink: $panel/$f",
+      "refusing to manifest a snapshot containing a symlink",
+      "path cannot be represented in a manifest: $rel",
+      "snapshot records two different formats (format file '$canon', meta '$legacy')",
+      "unknown panel id: $panel",
+      "no staged state for panel: $panel",
+      "panel $panel: staged state has no files list",
+      "panel write: no staging directory given",
+      "panel write: unknown panel id: $panel",
+      "panel write: state must be absent|empty|present, got '$state'",
+      "panel write: mechanism must be db|env|api, got '$mech'",
+      "panel write: was_running must be 0 or 1, got '$running'",
+      "panel write: state=present requires a value",
+      "panel write: empty placed-file path",
+      "panel write: placed file is not a legal relative path: $p",
+      "aux: unknown panel id: $panel",
+      "aux: not a legal key: $key",
+      "aux: panel $panel is not staged",
+    ],
+    en: {
+      what: "Before activation changes anything on PasarGuard or Rebecca, it writes a snapshot of the panel's settings to `backups.v2/` in the install directory, with a manifest of every file in it. These are the snapshot writer's own checks. A few have a cause on the server — `backups.v2/` is a symbolic link, the disk is full, or a snapshot with the same name already exists; the rest guard the snapshot's format and should never appear. In every case activation stops before changing the panel.",
+      fix: [
+        "Check free space with `df -h /etc`, and that `backups.v2/` in the install directory is a real directory, not a link. Then activate again from the manager.",
+        "If a message names a field (`state`, `mechanism`, `aux`, …), [report it](https://github.com/iitzSeriZdev/Row-Template/issues) with the full output.",
+      ],
+    },
+    fa: {
+      tr: "بررسی‌های نویسندهٔ عکس فوری: از طریق پیوند نمادین نوشته نمی‌شود / عکس فوری موقت ساخته نشد / عکس فوری از قبل وجود دارد / عکس فوری جدید در بررسی رد شد و کنار گذاشته شد / … و بررسی‌های قالب رکوردهای پنل (`panel write:`، `aux:`)",
+      what: "فعال‌سازی پیش از هر تغییری روی PasarGuard یا Rebecca، از تنظیمات پنل یک عکس فوری در `backups.v2/` داخل پوشهٔ نصب می‌نویسد، همراه با فهرستی (manifest) از همهٔ فایل‌های آن. این‌ها بررسی‌های خودِ نویسندهٔ عکس فوری‌اند. چندتایشان علتی روی سرور دارند — `backups.v2/` پیوند نمادین است، دیسک پر است، یا عکس فوری‌ای با همان نام از قبل هست؛ بقیه از قالب عکس فوری محافظت می‌کنند و نباید هرگز دیده شوند. در همهٔ حالت‌ها فعال‌سازی پیش از تغییر پنل متوقف می‌شود.",
+      fix: [
+        "فضای آزاد را با `df -h /etc` بررسی کنید و مطمئن شوید `backups.v2/` در پوشهٔ نصب پوشهٔ واقعی است، نه پیوند. سپس دوباره از منوی مدیریت فعال‌سازی کنید.",
+        "اگر پیام یک فیلد را نام می‌برد (`state`، `mechanism`، `aux` و…)، با خروجی کامل [گزارش دهید](https://github.com/iitzSeriZdev/Row-Template/issues).",
+      ],
+    },
+  },
+  {
+    group: "safety",
+    texts: [
+      "transaction: RT_ROOT is unset; refusing to lock",
+      "transaction: refusing a symlinked install root: $RT_ROOT",
+      "transaction: could not create the lock directory: $dir",
+      "transaction: refusing a symlinked lock directory: $dir",
+      "transaction: refusing a symlinked lock file: $file",
+      "transaction: fd 9 is already open; refusing to reuse the lock descriptor",
+      "transaction: could not open the lock file: $file",
+      "transaction: RT_PANEL_STAGE is unset; refusing to clear it",
+      "transaction: refusing to clear /",
+      "transaction: refusing to clear a symlinked stage: $d",
+      "transaction: unexpected stage path (expected a .panel-stage directory): $d",
+      "transaction: refusing to clear a stage outside the install root: $d",
+      "transaction: could not clear the stage: $d",
+    ],
+    en: {
+      what: "The activation transaction locks the installation and uses a scratch folder, `.panel-stage`, inside it. These checks refuse to lock or clear anything through a symbolic link, outside the install directory, or with a missing path. A link or a full disk can cause them; otherwise they should never appear. Activation stops before changing the panel.",
+      fix: [
+        "Make sure nothing under the install directory is a symbolic link and that the disk has free space, then activate again.",
+        "If it repeats, [report it](https://github.com/iitzSeriZdev/Row-Template/issues) with the full output.",
+      ],
+    },
+    fa: {
+      tr: "تراکنش: بررسی‌های قفل و پوشهٔ کاری (`.panel-stage`) — قفل یا پاک‌سازی از طریق پیوند نمادین، بیرون از پوشهٔ نصب یا با مسیر خالی انجام نمی‌شود",
+      what: "تراکنش فعال‌سازی روی نصب قفل می‌گیرد و از یک پوشهٔ کاری به نام `.panel-stage` داخل آن استفاده می‌کند. این بررسی‌ها اجازه نمی‌دهند چیزی از طریق پیوند نمادین، بیرون از پوشهٔ نصب یا با مسیر خالی قفل یا پاک شود. یک پیوند یا دیسک پر می‌تواند باعثشان شود؛ در غیر این صورت نباید هرگز دیده شوند. فعال‌سازی پیش از تغییر پنل متوقف می‌شود.",
+      fix: [
+        "مطمئن شوید هیچ چیز زیر پوشهٔ نصب پیوند نمادین نیست و دیسک فضای آزاد دارد، سپس دوباره فعال‌سازی کنید.",
+        "اگر تکرار شد، با خروجی کامل [گزارش دهید](https://github.com/iitzSeriZdev/Row-Template/issues).",
+      ],
+    },
+  },
+  {
+    group: "safety",
+    texts: [
+      "transaction: unknown state '$to'",
+      "transaction: invalid transition $RT_TXN_STATE -> $to",
+      "transaction: unknown panel id '${panel}' (known: $RT_PANEL_IDS)",
+      "transaction: SOURCE is required",
+      "transaction: panel '$panel' is not present on this host (status $rc)",
+      "transaction: panel '$panel' cannot be identified in this build (status $rc)",
+      "transaction: detection failed for panel '$panel' (status $rc)",
+      "transaction: capabilities are unavailable for panel '$panel' (status $rc)",
+      "transaction: panel '$panel' reported an unknown capability '$tok'",
+      "transaction: panel '$panel' does not declare the required capability '$need'",
+      "transaction: panel '$panel' declares no apply capability (needs one of: $RT_TXN_REQUIRED_APPLY_CAPABILITIES)",
+      "transaction: could not capture the state of panel '$panel' (status $rc)",
+    ],
+    en: {
+      what: "The activation transaction's checks before it changes anything: the panel must be present and identified, its adapter must declare the capabilities activation needs, and its current settings must be read for the snapshot. `could not capture the state` has a cause on the server — the adapter's own message just above names it (for example Rebecca's database cannot be read). The others guard the engine itself. Activation stops, and nothing is changed.",
+      fix: [
+        "Read the `panel …` line just above, if there is one, and fix what it names.",
+        "Otherwise [report it](https://github.com/iitzSeriZdev/Row-Template/issues) with the full output.",
+      ],
+    },
+    fa: {
+      tr: "تراکنش: بررسی‌های پیش از تغییر — شناسهٔ پنل، حضور پنل روی سرور، قابلیت‌های اعلام‌شدهٔ آداپتور، و خواندن وضعیت فعلی پنل برای عکس فوری",
+      what: "بررسی‌های تراکنش فعال‌سازی پیش از هر تغییری: پنل باید موجود و شناسایی‌شده باشد، آداپتورش باید قابلیت‌هایی را که فعال‌سازی لازم دارد اعلام کند، و تنظیمات فعلی‌اش باید برای عکس فوری خوانده شود. `could not capture the state` علتی روی سرور دارد — پیام خود آداپتور درست بالاتر آن را نام می‌برد (مثلاً پایگاه‌دادهٔ Rebecca خوانده نمی‌شود). بقیه از خود موتور تراکنش محافظت می‌کنند. فعال‌سازی متوقف می‌شود و هیچ تغییری اعمال نمی‌شود.",
+      fix: [
+        "اگر خط `panel …` در بالا هست، آن را بخوانید و مشکلی را که نام می‌برد برطرف کنید.",
+        "در غیر این صورت با خروجی کامل [گزارش دهید](https://github.com/iitzSeriZdev/Row-Template/issues).",
+      ],
+    },
+  },
+  {
+    group: "safety",
+    texts: [
+      "panel pasarguard: malformed selection.state",
+      "panel pasarguard: malformed panel meta",
+      "panel pasarguard: mechanism is '$mech', expected 'env'",
+      "panel pasarguard: malformed files record",
+      "panel pasarguard: refusing to restore: the record lists a file this adapter never places: $f",
+      "panel pasarguard: malformed block record",
+      "panel pasarguard: malformed root record",
+      "panel pasarguard: malformed dir record",
+      "panel rebecca: subscription_page_template cannot have been absent (state '$st')",
+      "panel rebecca: malformed dir_state record",
+      "panel rebecca: malformed selection.state",
+      "panel rebecca: malformed panel meta",
+      "panel rebecca: mechanism is '$mech', expected 'db'",
+      "panel rebecca: malformed files record",
+      "panel rebecca: refusing to restore: the record lists a file this adapter never places: $f",
+      "panel rebecca: malformed root record",
+    ],
+    en: {
+      what: "A snapshot of the panel's settings is read back before it is restored, and every record in it must be exactly what the adapter wrote. This one is not — it was edited or damaged, or comes from something other than Row-Template — so it is not restored at all rather than half-restored. The panel is left as it is.",
+      fix: [
+        "Do not edit files under `backups.v2/`.",
+        "Check the panel's selection yourself (PasarGuard: the `row-template` block in `/opt/pasarguard/.env`; Rebecca: **Settings → Subscription → Templates**), then run `row-template verify`.",
+      ],
+    },
+    fa: {
+      tr: "پنل pasarguard / rebecca: رکوردهای عکس فوری نامعتبرند (`selection.state`، اطلاعات پنل، فهرست فایل‌ها، بلوک، ریشه یا پوشه) یا فایلی را نام می‌برند که آداپتور هرگز نمی‌گذارد",
+      what: "عکس فوری تنظیمات پنل پیش از بازگردانی دوباره خوانده می‌شود و هر رکورد آن باید دقیقاً همان باشد که آداپتور نوشته است. این یکی نیست — ویرایش یا خراب شده، یا از جایی غیر از Row-Template آمده — پس به‌جای بازگردانی نیمه‌کاره، اصلاً بازگردانده نمی‌شود. پنل همان‌طور که هست می‌ماند.",
+      fix: [
+        "فایل‌های زیر `backups.v2/` را ویرایش نکنید.",
+        "انتخاب پنل را خودتان بررسی کنید (PasarGuard: بلوک `row-template` در `/opt/pasarguard/.env`؛ Rebecca: **Settings → Subscription → Templates**) و `row-template verify` را اجرا کنید.",
+      ],
+    },
+  },
+  {
+    group: "safety",
+    texts: [
+      "panel pasarguard: SOURCE is required",
+      "panel pasarguard: refusing a symlinked SOURCE",
+      "panel pasarguard: SOURCE is not a regular file: $src",
+      "panel pasarguard: SOURCE is outside $RT_ROOT",
+      "panel pasarguard: unknown verification mode '$mode'",
+      "panel rebecca: SOURCE is required",
+      "panel rebecca: refusing a symlinked SOURCE",
+      "panel rebecca: SOURCE is not a regular file: $src",
+      "panel rebecca: SOURCE is outside $RT_ROOT",
+      "panel rebecca: unknown verification mode '$mode'",
+      "panel dispatch: no dispatch arm for implementation '$impl' verb '$verb'",
+      "panel $verb: unknown panel id '${panel}' (known: $RT_PANEL_IDS)",
+      "panel install_template: SOURCE is required",
+      "panel verify: takes exactly PANEL MODE, got $# arguments",
+      "panel verify: MODE must be static|live, got '${2:-}'",
+      "panel restore_state: SNAPSHOT is required",
+    ],
+    en: {
+      what: "Argument checks of the panel interface: the page given to an adapter must be a regular file inside the install directory, never a link, and every call must name a known panel and operation. Row-Template's own commands always pass valid arguments, so these should never appear; the operation stops without changing anything.",
+      fix: ["[Report it](https://github.com/iitzSeriZdev/Row-Template/issues) with the full output and the command you ran."],
+    },
+    fa: {
+      tr: "بررسی‌های ورودی رابط پنل: منبع (SOURCE) باید فایل معمولی داخل پوشهٔ نصب باشد و پیوند نمادین نباشد؛ هر فراخوانی باید پنل و عملیات شناخته‌شده‌ای را نام ببرد",
+      what: "بررسی‌های ورودی رابط پنل: صفحه‌ای که به آداپتور داده می‌شود باید فایل معمولی داخل پوشهٔ نصب باشد و هرگز پیوند نباشد، و هر فراخوانی باید پنل و عملیات شناخته‌شده‌ای را نام ببرد. فرمان‌های خود Row-Template همیشه ورودی معتبر می‌دهند، پس این پیام‌ها نباید هرگز دیده شوند؛ عملیات بدون هیچ تغییری متوقف می‌شود.",
+      fix: ["با خروجی کامل و فرمانی که اجرا کردید [گزارش دهید](https://github.com/iitzSeriZdev/Row-Template/issues)."],
+    },
+  },
+  {
+    group: "safety",
+    texts: [
+      "panel 3xui: the stored selection contains a newline and cannot be recorded exactly",
+      "panel 3xui: SOURCE is required",
+      "panel 3xui: refusing a symlinked SOURCE: $src",
+      "panel 3xui: SOURCE is not a regular file: $src",
+      "panel 3xui: SOURCE is outside the Row-Template root ($RT_ROOT): $src",
+      "panel 3xui: unknown verification mode '$mode'",
+      "panel 3xui: the artifact is missing: $RT_DIST",
+      "panel 3xui: the artifact failed structural validation",
+      "panel 3xui: the recorded checksum is unreadable",
+      "panel 3xui: the artifact does not match its recorded checksum",
+      "panel 3xui: cannot read the panel selection",
+      "panel 3xui: subThemeDir is '$cur', expected '$RT_ROOT'",
+      "panel 3xui: the snapshot's selection.state is malformed",
+      "panel 3xui: selection.state must be absent|empty|present, got '$st'",
+      "panel 3xui: the snapshot's panel meta is malformed",
+      "panel 3xui: mechanism is '$mech', expected 'db'",
+      "panel 3xui: was_running must be 0|1, got '$was_running'",
+      "panel 3xui: the snapshot's files record is malformed",
+      "panel 3xui: refusing to restore: this panel places no file, but the snapshot lists one",
+      "panel 3xui: state=present but the selection value is unreadable",
+      "panel 3xui: cannot read the selection back after restoring",
+      "panel 3xui: after restoring, the selection state is '$now', expected '$st'",
+      "panel 3xui: cannot read the selection value back after restoring",
+      "panel 3xui: after restoring, subThemeDir is not the recorded value",
+    ],
+    en: {
+      what: "Checks inside the 3X-UI adapter of the panel interface. In 1.3.0 the `row-template` commands set up 3X-UI directly — they write `subThemeDir` themselves, exactly as before — and do not go through this adapter, so these messages are not printed by any command. They are listed here because they are in the installer's source.",
+      fix: ["If you ever see one, [report it](https://github.com/iitzSeriZdev/Row-Template/issues) with the full output and the command you ran."],
+    },
+    fa: {
+      tr: "پنل 3xui: بررسی‌های داخلی آداپتور 3X-UI (منبع، فایل صفحه و چک‌سامش، خواندن `subThemeDir`، و رکوردهای عکس فوری)",
+      what: "بررسی‌های داخل آداپتور 3X-UI در رابط پنل. در 1.3.0 فرمان‌های `row-template`، 3X-UI را مستقیم تنظیم می‌کنند — دقیقاً مثل قبل خودشان `subThemeDir` را می‌نویسند — و از این آداپتور استفاده نمی‌کنند؛ پس هیچ فرمانی این پیام‌ها را چاپ نمی‌کند. فقط چون در سورس نصب‌کننده هستند اینجا آمده‌اند.",
+      fix: ["اگر روزی یکی از آن‌ها را دیدید، با خروجی کامل و فرمانی که اجرا کردید [گزارش دهید](https://github.com/iitzSeriZdev/Row-Template/issues)."],
     },
   },
 ];

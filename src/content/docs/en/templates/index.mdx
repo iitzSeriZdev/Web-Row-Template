@@ -1,18 +1,18 @@
 ---
 title: Templates
 nav: Gallery
-description: Fifteen designs for your subscription page. Every one is the same product with a different layout and look — open any of them to try it live.
+description: Seventeen designs for your subscription page. Every one is the same product with a different layout and look — open any of them to try it live.
 ---
 
-Row-Template 1.2.0 ships fifteen designs. **Row is the default.** Each design is a complete, self-contained page; you can switch between them at any time without losing your branding.
+Row-Template 1.3.0 ships seventeen designs. **Row is the default.** Each design is a complete, self-contained page, built for each supported panel — 3X-UI, PasarGuard and Rebecca — and you can switch between them at any time without losing your branding.
 
 <TemplateGallery />
 
 ## What every design has in common
 
-A design changes the layout and the look — never the features, the data or the safety checks. All fifteen are built from the same runtime and translations, so in every one of them:
+A design changes the layout and the look — never the features, the data or the safety checks. All seventeen are built from the same runtime and translations, so in every one of them:
 
-- **Status, traffic and expiry** come from your panel and refresh while the page is open.
+- **Status, traffic and expiry** come from your panel. On 3X-UI they refresh while the page is open; on PasarGuard and Rebecca they are the figures as of when the page was opened.
 - **Connect** offers one-tap import into the apps for the subscriber's platform, and **Copy** and **QR** work the same way.
 - The **Configuration Explorer** lists every server on its own row, with search for long lists.
 - **Five languages** — English, Persian, Arabic, Russian and Chinese — with full right-to-left layout.
@@ -22,9 +22,11 @@ A design changes the layout and the look — never the features, the data or the
 
 Each design ships in the release with its own SHA-256 checksum, and `row-template verify` checks every installed design against it.
 
+The design IDs, for `RT_TEMPLATE` and the manager: `row`, `editorial`, `canvas`, `prism`, `terminal`, `pulse`, `brutal`, `arcade`, `sketch`, `signature`, `saffron`, `pulsenova`, `prismnova`, `terminalnova`, `arcadenova`, `meter` and `notebook`. Meter and Notebook are new in 1.3.0.
+
 ## About the previews
 
-The previews on these pages are the real design files, rendered by Row-Template's own fixture renderer from the project's placeholder data — a fictional service called *Aurora* with sample usage and configurations. Controls such as language, theme, Copy and the Configuration Explorer work; there is no real subscription behind them.
+The previews on these pages are the real design files, rendered by Row-Template's own fixture renderer from the project's placeholder data — a fictional service called *Aurora* with sample usage and configurations. Controls such as language, theme, Copy and the Configuration Explorer work; there is no real subscription behind them. They show the 3X-UI version of each design; the PasarGuard and Rebecca versions look the same.
 
 On each design's page you can switch the preview between mobile and desktop sizes, change its language and theme, or open it full-screen in a new tab.
 

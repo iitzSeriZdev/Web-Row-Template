@@ -21,6 +21,7 @@ const meta = LOCALE_META[locale];
 const fullTitle = title ? `${title} – ${s.siteTitle}` : `${s.siteTitle} – ${locale === "fa" ? "مستندات" : "Documentation"}`;
 const desc = description ?? s.siteDescription;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const socialImage = new URL(withBase("/branding/row-template-social.png"), Astro.site).href;
 ---
 <!doctype html>
 <html lang={meta.lang} dir={meta.dir}>
@@ -43,7 +44,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0a" />
     {noindex && <meta name="robots" content="noindex" />}
-    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1254" />
+    <meta property="og:image:height" content="1254" />
+    <meta property="og:image:alt" content="Row-Template" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content={socialImage} />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase("/branding/row-template-app-icon-32.png")} />
+    <link rel="apple-touch-icon" sizes="180x180" href={withBase("/branding/row-template-app-icon-180.png")} />
     <script is:inline>
       (function () {
         var theme = null;

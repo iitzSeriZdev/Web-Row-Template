@@ -10,14 +10,15 @@ Bug reports, translations and documentation fixes are all welcome. Please read [
 Open an issue at [github.com/iitzSeriZdev/Row-Template/issues](https://github.com/iitzSeriZdev/Row-Template/issues) and include:
 
 - `row-template version` and `row-template verify` output;
+- your panel (3X-UI, PasarGuard or Rebecca) and its version;
 - the operating system, its version and the CPU architecture;
 - clear steps to reproduce, what you expected and what happened.
 
-**Never include secrets** — subscription links, `subId` values, client UUIDs, panel credentials, cookies, tokens, `webBasePath`, TLS keys or real server addresses. Security problems go through [private reporting](/docs/reference/security/#reporting-a-vulnerability), not issues.
+**Never include secrets** — subscription links, `subId` values, client UUIDs, panel credentials, cookies, tokens, `webBasePath`, the contents of `.env`, database URLs, TLS keys or real server addresses. Security problems go through [private reporting](/docs/reference/security/#reporting-a-vulnerability), not issues.
 
 ## Working on Row-Template
 
-You need Node.js 22 or newer, and Go 1.22 or newer to run the tests.
+You need Node.js 22 or newer. To run the tests you also need Go 1.22 or newer and Python 3 with Jinja2 (`pip install jinja2`), which render the PasarGuard and Rebecca pages with those panels' real template engines.
 
 ```bash
 git clone https://github.com/iitzSeriZdev/Row-Template
@@ -44,7 +45,7 @@ npm run dev            # http://localhost:4321/Web-Row-Template/
 
 - Pages are MDX files in `src/content/docs/en/` and `src/content/docs/fa/`, one per language with the same path.
 - The template catalogue, the screenshots and the live previews are **copied from Row-Template**, never edited here. To refresh them, render the fixtures in a Row-Template checkout (`npm run fixtures:all`) and run `npm run sync -- ../Row-Template`.
-- The same sync records every error and warning the installer can print. `npm run check` fails if one of them is missing from the [error reference](/docs/help/errors/) or if the reference lists one the installer no longer prints — so a new installer message cannot go undocumented.
+- The same sync records every error and warning the installer can print — the management library, the command, and every companion it declares (the transaction engine and the panel adapters). `npm run check` fails if one of them is missing from the [error reference](/docs/help/errors/) or if the reference lists one the installer no longer prints — so a new installer message cannot go undocumented.
 - `npm run build` builds the site and its search index into `dist/`.
 
 When you change a page, change it in both languages. Every command, path and message must stay exactly as the installer prints it.
