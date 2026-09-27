@@ -5,9 +5,50 @@ description: What changed in each Row-Template release, with the notes that matt
 
 The full changelog, including internal and development changes, is [`CHANGELOG.md`](https://github.com/iitzSeriZdev/Row-Template/blob/main/CHANGELOG.md) in the repository.
 
+## 1.3.0
+
+<Badge variant="solid">Latest</Badge> *Released 26 September 2026.* Row-Template installs on **PasarGuard** and **Rebecca** as well as 3X-UI, and ships two more designs. Nothing changes for an existing 3X-UI install except what is listed below, and Row stays the default design. It also carries every fix prepared for 1.2.1, which was not released on its own.
+
+### Added
+
+- **PasarGuard support** (5.x, the official Docker install or a source install): detect, install, activate, verify, back up, restore and uninstall. The page is placed in PasarGuard's templates directory and selected by one marked block appended to `/opt/pasarguard/.env`; a running panel is restarted once, none of your own lines is edited, and uninstall returns `.env` to its exact previous bytes. [Activation →](/docs/installation/activation/#pasarguard)
+- **Rebecca support** (1.x, the Go edition from Rebecca's binary install), with the same operations. The page is placed in Rebecca's templates directory and selected in its subscription settings, which Rebecca reads on every request — nothing is restarted. Automatic with the default SQLite database and `sqlite3`; with MySQL/MariaDB you enter two values in the dashboard. [Activation →](/docs/installation/activation/#rebecca)
+- **Panel detection and choice.** The installer finds the panel on the server; a panel counts only when two independent signs agree. On a server with more than one it asks, or reads `RT_PANEL` in a script.
+- **Transactional activation on PasarGuard and Rebecca:** the panel's settings are snapshotted, changed and verified, and restored exactly if any step fails.
+- **Two new designs, Meter and Notebook** — seventeen in all, on every panel. [See them →](/docs/templates/)
+- **Every design for every panel:** each release carries a PasarGuard and a Rebecca version of every design, checksum-verified like the 3X-UI pages.
+
+### Fixed
+
+- **Rolling back to a backup taken under 1.1.0 works.** A backup that names its design is restored as that design; one whose page is none of this release's designs is restored as Row, and `verify`, switching and updates keep working afterwards.
+- **One `row-template update` is enough to move from 1.1.0**: the manager, `config` or `verify` completes the installation from the same release. Misplaced designs are moved back, and `verify` names missing and damaged designs.
+- A rollback made in the same second as the change before it now undoes that change; the live check after `config`, `update` and `rollback` runs on 3X-UI; a page change that cannot reach PasarGuard or Rebecca changes nothing; and a valid page is never refused on a busy server.
+
+### Security
+
+- Every PasarGuard and Rebecca page wraps its body in an explicit autoescape block, so every value is escaped on every panel, and branding can never open a template tag.
+- PasarGuard's `.env` and Rebecca's database settings are read only for the keys the installer needs, never printed, and never copied into a backup.
+- Backups record their panel and are never restored onto another one.
+
+### Changed
+
+- `row-template version` shows the panel it serves.
+- `row-template uninstall` returns each panel to the page it had before Row-Template, and leaves a page you chose afterwards alone.
+- **A scripted fresh install on a server with more than one supported panel needs `RT_PANEL`.** It stops before changing anything rather than guess.
+
+### Known limitations
+
+Live refresh is 3X-UI only; Rebecca's Docker image (0.0.x) is refused; Rebecca on MySQL/MariaDB needs its page selected by hand; PasarGuard's page title and Clash templates are not produced. [All limitations →](/docs/reference/compatibility/#limitations-in-130)
+
+### Upgrading
+
+- **From 1.2.0 or 1.1.0** on 3X-UI: run `row-template update` once. [Details →](/docs/management/updating/#upgrading-from-110-or-120)
+- **On PasarGuard or Rebecca:** run the installer — earlier releases did not install on these panels.
+- A rollback restores the page and the recorded version, not the manager itself, and only the two newest backups are kept. [Details →](/docs/management/rollback/)
+
 ## 1.2.0
 
-<Badge variant="solid">Latest</Badge> *Released 24 September 2026.* Row-Template becomes a collection of designs. Row stays the default, and 3X-UI 3.6.0 or newer stays the only supported panel.
+*Released 24 September 2026.* Row-Template becomes a collection of designs. Row stays the default, and 3X-UI 3.6.0 or newer stays the only supported panel.
 
 ### Added
 
@@ -15,7 +56,7 @@ The full changelog, including internal and development changes, is [`CHANGELOG.m
 - **Choosing a design:** a chooser on fresh interactive installs, `RT_TEMPLATE` for unattended ones, and **Reconfigure branding → Template** in the manager. Updates keep the choice.
 - **Checksummed designs:** each design ships with its own SHA-256, and `verify` checks all of them and confirms the live page is the selected design.
 - **Painted flags** for Germany, France, the Netherlands, Japan, Sweden and the United States, so they show on Windows too.
-- **Panel shells for research** (PasarGuard, Rebecca) packaged under `shells/`. The installer does not install them.
+- **Page shells for PasarGuard and Rebecca** packaged under `shells/`, not yet installed by 1.2.0 — support for both panels arrived in 1.3.0.
 
 ### Changed
 
@@ -25,11 +66,9 @@ The full changelog, including internal and development changes, is [`CHANGELOG.m
 
 ### Upgrading
 
-<Callout type="warning" title="From 1.1.0: run the update twice">
-  The first `row-template update` is performed by 1.1.0's updater and installs only Row. The second installs every design and the remaining files. `row-template verify` tells you when the second run is needed. [Details →](/docs/management/updating/#upgrading-from-110)
-</Callout>
+In 1.2.0, the first `row-template update` from 1.1.0 — performed by 1.1.0's own updater — installed only Row, and a second update installed every design and the remaining files. Updating from 1.1.0 straight to 1.3.0 takes one update. [Details →](/docs/management/updating/#upgrading-from-110-or-120)
 
-Rolling back from 1.2.0 to a backup made by 1.1.0 is not possible with `rollback`. [Details →](/docs/management/rollback/#rolling-back-across-versions)
+In 1.2.0, rolling back to a backup made by 1.1.0 was refused; 1.3.0 restores it. [Details →](/docs/management/rollback/#rolling-back-across-versions)
 
 ## 1.1.0
 

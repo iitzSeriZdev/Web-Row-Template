@@ -1,13 +1,13 @@
 ---
 title: Updating
-description: How row-template update works, what it keeps, how a failed update restores itself, and the two-step upgrade from 1.1.0.
+description: How row-template update works, what it keeps, how a failed update restores itself, and upgrading from 1.1.0 or 1.2.0 to 1.3.0.
 ---
 
 ```bash
 row-template update
 ```
 
-This downloads the **latest stable release**, verifies it, and applies it. Your branding and your chosen design are kept.
+This downloads the **latest stable release**, verifies it, and applies it. Your branding, your chosen design and the panel your installation serves are kept.
 
 <Callout type="info" title="The command always applies the latest release">
   `row-template update` does not compare versions: it re-applies the latest release even when you already run it, which makes it a dependable repair. The manager's **1 — Update** is the one that checks first and asks — see [The interactive manager](/docs/management/manager/#manager-or-commands).
@@ -23,7 +23,7 @@ The release is fetched from GitHub (or from `RT_RELEASE_DIR` / `RT_RELEASE_URL`)
 
 ### Check the new release
 
-The new page is validated, every installer file the release declares must be present and match its checksum, and all of the release's designs are verified into the template store. Any problem stops the update here, **before anything is changed**.
+The new page is validated, every installer file the release declares must be present and match its checksum, and all of the release's designs — in the version for your panel — are verified into the template store. Any problem stops the update here, **before anything is changed**.
 
 ### Keep your design
 
@@ -35,15 +35,15 @@ A snapshot of the current installation is taken. If it cannot be, the update sto
 
 ### Stage and activate
 
-The new page, `VERSION`, the management library, its components and the `row-template` command are installed, then the live page is regenerated from the new version with your branding, validated, and swapped in.
+The new page, `VERSION`, the management library, its components and the `row-template` command are installed, then the live page is regenerated from the new version with your branding, validated, and swapped in. On PasarGuard and Rebecca the copy in the panel's templates directory is replaced too.
 
 </Steps>
 
 A successful update prints:
 
 ```text
-  Updating Row-Template 1.1.0 -> 1.2.0
-  ok   Update complete: now running 1.2.0.
+  Updating Row-Template 1.2.0 -> 1.3.0
+  ok   Update complete: now running 1.3.0.
 ```
 
 followed by the live checks. Old backups are then pruned to the two newest.
@@ -54,49 +54,34 @@ The previous version is restored from the snapshot automatically:
 
 ```text
   FAIL activation of the new version failed; rolling back.
-  warn rolled back to 1.1.0; no changes are live.
+  warn rolled back to 1.2.0; no changes are live.
 ```
 
 The command exits with status `1`. Your subscribers keep seeing the previous page throughout. If the automatic restore also fails — which needs two independent failures — you are told to run `row-template rollback`.
 
-## Upgrading from 1.1.0
+## Upgrading from 1.1.0 or 1.2.0
 
-Updating from 1.1.0 takes **two runs** of `row-template update`:
-
-<Steps>
-
-### First run — done by 1.1.0's updater
+The published upgrade paths to 1.3.0 are from **1.1.0** and from **1.2.0**. Both take one command:
 
 ```bash
 row-template update
 ```
 
-The command you run is still 1.1.0's. It installs 1.2.0: the page updates and your branding is kept. But 1.1.0's updater only copies the library and the command, so the template store and the new installer components are not installed yet, and only Row is available.
-
-### Check
-
-```bash
-row-template verify
-```
-
-It tells you the second run is needed:
+- **From 1.2.0**, the 1.2.0 updater installs 1.3.0 completely: every design and every installer file.
+- **From 1.1.0**, the command you run is still 1.1.0's, and its updater copies only part of the new release: the page updates and your branding is kept, but the designs and the installer's companion files are not installed yet. The next time you open `row-template`, or run `row-template config` or `row-template verify` as root, 1.3.0 downloads the rest of **that same release** — every design, checksum-verified — before doing anything else:
 
 ```text
-  FAIL template store missing or empty; run 'row-template update' to install it.
-  warn installer components are missing (lib/transaction.sh, panels/), as after an update from 1.1.0; run 'row-template update' to complete the installation.
+  Completing the Row-Template 1.3.0 installation (designs and installer files)...
+  ok   Installation completed: 17 design(s) available.
 ```
 
-### Second run — done by 1.2.0
+It never downloads a newer version this way, and leaves your page, branding, selected design and backups as they are. If the release cannot be reached, it says so and tries again the next time; `row-template update` also completes the installation.
 
-```bash
-row-template update
-```
+Your design, branding and panel wiring are kept either way. An installation made before 1.3.0 is a 3X-UI installation — earlier releases did not install on PasarGuard or Rebecca, so on those panels you [install](/docs/installation/installer/) 1.3.0 rather than update.
 
-Now the 1.2.0 updater runs. It installs every design and the remaining installer files. `row-template verify` then passes, and you can [choose a design](/docs/templates/choosing/).
-
-</Steps>
-
-In the manager, **1 — Update** recognises this state and offers `Re-install 1.2.0 now to complete it?`.
+<Callout type="info" title="1.2.1">
+  There was no public 1.2.1 release. The fixes prepared under that number — including the one-step upgrade from 1.1.0 above — shipped in 1.3.0.
+</Callout>
 
 ## Updating without GitHub access
 
@@ -112,7 +97,7 @@ See [Manual installation](/docs/installation/manual/#updating-an-offline-server)
 
 - Your **branding** (`config.env`).
 - Your **design**, while the new release ships it.
-- Your **panel settings** — `subThemeDir` already points at the install directory, which does not move.
+- The **panel** the installation serves, and the panel's selection: on 3X-UI `subThemeDir` already points at the install directory, which does not move; on PasarGuard and Rebecca the placed page is replaced in place, the selection is not touched, and nothing is restarted.
 - Your existing **backups**, apart from pruning to the two newest valid ones.
 
 To go back to the version you had before an update, use [rollback](/docs/management/rollback/).

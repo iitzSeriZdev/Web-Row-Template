@@ -16,8 +16,9 @@ import { ENTRIES } from "../data/errors";
 import type { Locale } from "./i18n";
 
 export type Group =
-  | "host" | "download" | "install" | "activation" | "templates" | "branding"
-  | "page" | "update" | "rollback" | "verify" | "uninstall" | "cli" | "safety";
+  | "host" | "panel" | "download" | "install" | "activation" | "pasarguard" | "rebecca"
+  | "templates" | "branding" | "page" | "update" | "rollback" | "verify" | "uninstall"
+  | "cli" | "safety";
 
 export interface ErrorEntry {
   id?: string;
@@ -29,9 +30,12 @@ export interface ErrorEntry {
 
 export const GROUPS: { key: Group; en: string; fa: string; icon: string }[] = [
   { key: "host", en: "Server and panel", fa: "سرور و پنل", icon: "server" },
+  { key: "panel", en: "Choosing the panel", fa: "انتخاب پنل", icon: "server-cog" },
   { key: "download", en: "Downloading and checking a release", fa: "دانلود و بررسی نسخه", icon: "download" },
   { key: "install", en: "Installing", fa: "نصب", icon: "package" },
   { key: "activation", en: "Activation and live checks", fa: "فعال‌سازی و بررسی زنده", icon: "plug" },
+  { key: "pasarguard", en: "PasarGuard", fa: "PasarGuard", icon: "container" },
+  { key: "rebecca", en: "Rebecca", fa: "Rebecca", icon: "database" },
   { key: "templates", en: "Designs and switching", fa: "تمپلیت‌ها و تعویض", icon: "panels-top-left" },
   { key: "branding", en: "Branding and configuration", fa: "برندینگ و پیکربندی", icon: "palette" },
   { key: "page", en: "Generating the page", fa: "ساخت صفحه", icon: "file-code" },
@@ -43,17 +47,23 @@ export const GROUPS: { key: Group; en: string; fa: string; icon: string }[] = [
   { key: "safety", en: "Internal safety checks", fa: "بررسی‌های ایمنی داخلی", icon: "shield-check" },
 ];
 
-/** Values the installer substitutes that are the same on every server. */
+/** Values the installer substitutes that are the same on every server. The
+ *  install directory is not one of them: it is /etc/3x-ui/sub_templates/row-template
+ *  on 3X-UI and /etc/row-template on PasarGuard and Rebecca, so it is shown as a
+ *  placeholder. */
 export const CONSTANTS: Record<string, string> = {
   RT_MIN_XUI: "3.6.0",
   RT_NAME: "row-template",
   RT_LOGO_MAX_BYTES: "262144",
-  RT_ROOT: "/etc/3x-ui/sub_templates/row-template",
   RT_BIN: "/usr/local/bin/row-template",
-  RT_DIST: "/etc/3x-ui/sub_templates/row-template/dist/template.html",
-  RT_LIVE: "/etc/3x-ui/sub_templates/row-template/sub.html",
   RT_TEMPLATES_AVAILABLE:
-    "row editorial canvas prism terminal pulse brutal arcade sketch signature saffron pulsenova prismnova terminalnova arcadenova",
+    "row editorial canvas prism terminal pulse brutal arcade sketch signature saffron pulsenova prismnova terminalnova arcadenova meter notebook",
+  RT_PANEL_IDS: "3xui pasarguard rebecca",
+  RT_PG_DATA_DIR: "/var/lib/pasarguard",
+  RT_PG_PAGE: "row-template/index.html",
+  RT_PG_KEY_PAGE: "SUBSCRIPTION_PAGE_TEMPLATE",
+  RT_RB_DATA_DIR: "/var/lib/rebecca",
+  RT_TXN_REQUIRED_APPLY_CAPABILITIES: "file_placement selection_write",
 };
 
 /** Labels for the values that change from run to run. */
@@ -66,6 +76,7 @@ const PLACEHOLDERS: Record<string, Record<Locale, string>> = {
   template: { en: "id", fa: "شناسه" },
   id: { en: "id", fa: "شناسه" },
   tpl: { en: "id", fa: "شناسه" },
+  tpl_id: { en: "id", fa: "شناسه" },
   picked: { en: "id", fa: "شناسه" },
   sel_id: { en: "id", fa: "شناسه" },
   RT_TEMPLATE: { en: "value", fa: "مقدار" },
@@ -94,6 +105,64 @@ const PLACEHOLDERS: Record<string, Record<Locale, string>> = {
   cmd: { en: "command", fa: "فرمان" },
   LINENO: { en: "line", fa: "خط" },
   s: { en: "path", fa: "مسیر" },
+  // 1.3.0: the install directory depends on the panel
+  RT_ROOT: { en: "install dir", fa: "پوشهٔ نصب" },
+  RT_DIST: { en: "path", fa: "مسیر" },
+  RT_LIVE: { en: "path", fa: "مسیر" },
+  RT_BACKUPS: { en: "path", fa: "مسیر" },
+  RT_BACKUPS_V2: { en: "path", fa: "مسیر" },
+  RT_TEMPLATE_STORE: { en: "path", fa: "مسیر" },
+  RT_PANEL_FILE: { en: "path", fa: "مسیر" },
+  // command substitutions, named by the sync script
+  PANEL: { en: "panel", fa: "پنل" },
+  PANELS: { en: "panels", fa: "پنل‌ها" },
+  BACKUP: { en: "backup", fa: "پشتیبان" },
+  IMAGE: { en: "image", fa: "ایمیج" },
+  N_PRESENT: { en: "n", fa: "n" },
+  // 1.3.0 variables
+  RT_PANEL: { en: "value", fa: "مقدار" },
+  panel: { en: "panel", fa: "پنل" },
+  name: { en: "file", fa: "فایل" },
+  src: { en: "path", fa: "مسیر" },
+  dest: { en: "path", fa: "مسیر" },
+  root: { en: "path", fa: "مسیر" },
+  env: { en: "path", fa: "مسیر" },
+  file: { en: "path", fa: "مسیر" },
+  final: { en: "path", fa: "مسیر" },
+  found: { en: "path", fa: "مسیر" },
+  r: { en: "path", fa: "مسیر" },
+  p: { en: "path", fa: "مسیر" },
+  ver: { en: "version", fa: "نسخه" },
+  pver: { en: "version", fa: "نسخه" },
+  corrupt: { en: "ids", fa: "شناسه‌ها" },
+  missing: { en: "ids", fa: "شناسه‌ها" },
+  n_avail: { en: "n", fa: "n" },
+  n: { en: "n", fa: "n" },
+  canon: { en: "format", fa: "قالب" },
+  legacy: { en: "format", fa: "قالب" },
+  state: { en: "state", fa: "وضعیت" },
+  st: { en: "state", fa: "وضعیت" },
+  now: { en: "state", fa: "وضعیت" },
+  to: { en: "state", fa: "وضعیت" },
+  RT_TXN_STATE: { en: "state", fa: "وضعیت" },
+  block: { en: "state", fa: "وضعیت" },
+  now_block: { en: "state", fa: "وضعیت" },
+  mech: { en: "mechanism", fa: "سازوکار" },
+  running: { en: "value", fa: "مقدار" },
+  was_running: { en: "value", fa: "مقدار" },
+  key: { en: "key", fa: "کلید" },
+  cur: { en: "value", fa: "مقدار" },
+  page: { en: "value", fa: "مقدار" },
+  nowpage: { en: "value", fa: "مقدار" },
+  "2": { en: "value", fa: "مقدار" },
+  rc: { en: "status", fa: "وضعیت" },
+  original: { en: "status", fa: "وضعیت" },
+  why: { en: "reason", fa: "علت" },
+  tok: { en: "capability", fa: "قابلیت" },
+  need: { en: "capability", fa: "قابلیت" },
+  impl: { en: "adapter", fa: "آداپتور" },
+  verb: { en: "operation", fa: "عملیات" },
+  mode: { en: "mode", fa: "حالت" },
 };
 
 const TOKEN = /\$\{([#A-Za-z_0-9@\[\]]+)(?::[^}]*)?\}|\$([A-Za-z_][A-Za-z_0-9]*|\d)|%(s)/g;
@@ -197,6 +266,62 @@ const CONTEXT: Record<string, string[]> = {
   rt_install_pick_template: ["installer"],
   rt_panels_load: ["any command"],
   rt_transaction_load: ["any command"],
+  // 1.3.0: panels, and completing an installation
+  "(top)": ["any command"],
+  rt_repair_template_store: ["installer", "config", "update", "verify", "manager"],
+  rt_complete_install: ["config", "verify", "manager"],
+  rt_activate: ["installer", "config", "update", "rollback", "manager"],
+  rt_print_activation_note: ["installer"],
+  rt_installed_panel: ["any command"],
+  rt_existing_root: ["installer"],
+  rt_panel_choose: ["installer"],
+  rt_panel_report_partial: ["installer"],
+  rt_panel_activate: ["installer", "manager"],
+  rt_install_activate_panel: ["installer"],
+  rt_verify_panel: ["verify"],
+  rt_uninstall_panel: ["uninstall"],
+  rt_manager_activate_panel: ["manager"],
+  rt_backup_format: ["installer", "manager", "uninstall"],
+  rt_backup_panel_write: ["installer", "manager"],
+  rt_backup_panel_aux_set: ["installer", "manager"],
+  rt_backup_manifest_write: ["installer", "manager"],
+  rt_backup_create_v2: ["installer", "manager"],
+  rt_transaction_state_set: ["installer", "manager"],
+  rt_transaction_lock_acquire: ["installer", "manager"],
+  rt_transaction_stage_reset: ["installer", "manager"],
+  rt_transaction_rollback_report_failure: ["installer", "manager"],
+  rt_transaction_rollback: ["installer", "manager"],
+  rt_transaction_body: ["installer", "manager"],
+  rt_panel_pasarguard_env_rewrite: ["installer", "manager", "uninstall"],
+  rt_panel_pasarguard_root: ["installer", "config", "update", "rollback", "verify", "uninstall", "manager"],
+  rt_panel_pasarguard_db_notes: ["installer", "verify", "manager"],
+  rt_panel_pasarguard_backup_state: ["installer", "manager"],
+  rt_panel_pasarguard_place: ["installer", "config", "update", "rollback", "manager"],
+  rt_panel_pasarguard_install_template: ["installer", "config", "update", "rollback", "manager"],
+  rt_panel_pasarguard_verify: ["installer", "verify", "manager"],
+  rt_panel_pasarguard_remove_page: ["installer", "uninstall", "manager"],
+  rt_panel_pasarguard_restore_state: ["installer", "manager"],
+  rt_panel_pasarguard_uninstall_template: ["uninstall"],
+  rt_panel_rebecca_edition_ok: ["installer", "config", "update", "rollback", "verify", "manager"],
+  rt_panel_rebecca_root: ["installer", "config", "update", "rollback", "verify", "uninstall", "manager"],
+  rt_panel_rebecca_backup_state: ["installer", "manager"],
+  rt_panel_rebecca_place: ["installer", "config", "update", "rollback", "manager"],
+  rt_panel_rebecca_install_template: ["installer", "config", "update", "rollback", "manager"],
+  rt_panel_rebecca_verify: ["installer", "verify", "manager"],
+  rt_panel_rebecca_remove_page: ["installer", "uninstall", "manager"],
+  rt_panel_rebecca_restore_record: ["installer", "uninstall", "manager"],
+  rt_panel_rebecca_restore_state: ["installer", "uninstall", "manager"],
+  // checks no row-template command reaches in 1.3.0 (the 3X-UI adapter, and
+  // the interface's own argument checks)
+  rt_panel_3xui_backup_state: ["internal"],
+  rt_panel_3xui_install_template: ["internal"],
+  rt_panel_3xui_verify: ["internal"],
+  rt_panel_3xui_restore_state: ["internal"],
+  rt_panel_dispatch: ["internal"],
+  rt_panel_arg_ok: ["internal"],
+  rt_panel_install_template: ["internal"],
+  rt_panel_verify: ["internal"],
+  rt_panel_restore_state: ["internal"],
 };
 
 export function contextsOf(e: ErrorEntry): string[] {
@@ -210,7 +335,7 @@ export function contextsOf(e: ErrorEntry): string[] {
       ctx.forEach((c) => set.add(c));
     }
   }
-  const order = ["installer", "config", "update", "rollback", "verify", "uninstall", "manager", "any command"];
+  const order = ["installer", "config", "update", "rollback", "verify", "uninstall", "manager", "any command", "internal"];
   return [...set].sort((a, b) => order.indexOf(a) - order.indexOf(b));
 }
 
@@ -223,6 +348,7 @@ export const CONTEXT_LABEL: Record<string, Record<Locale, string>> = {
   uninstall: { en: "row-template uninstall", fa: "row-template uninstall" },
   manager: { en: "manager", fa: "منوی مدیریت" },
   "any command": { en: "any command", fa: "هر فرمانی" },
+  internal: { en: "no command (internal check)", fa: "هیچ فرمانی (بررسی داخلی)" },
 };
 
 export { ENTRIES };

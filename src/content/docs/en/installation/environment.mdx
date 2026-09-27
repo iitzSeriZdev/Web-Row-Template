@@ -1,6 +1,6 @@
 ---
 title: Environment Variables
-description: Every variable the installer and the row-template command read — for unattended installs, offline sources and automation.
+description: Every variable the installer and the row-template command read — for unattended installs, servers with more than one panel, offline sources and automation.
 ---
 
 Row-Template has no configuration file for the installer itself. Anything you would answer at a prompt, or any choice about where the release comes from, can be given as an environment variable on the command line. A variable applies only to the command it prefixes; nothing is remembered between runs.
@@ -18,6 +18,8 @@ RT_ASSUME_NONINTERACTIVE=1 RT_TEMPLATE=prism bash install.sh
 | `RT_SUPPORT_URL` | installer, `config` | The support link: `https://`, `http://`, `tg://` or `mailto:`. Empty clears it. |
 | `RT_LOGO_PATH` | installer, `config` | Path to a PNG, JPEG or WebP logo, at most 256 KiB, identified by its content. Symlinks are refused. |
 | `RT_LOGO_REMOVE` | installer, `config` | Any non-empty value removes the logo. Takes precedence over `RT_LOGO_PATH`. |
+
+The design IDs are `row`, `editorial`, `canvas`, `prism`, `terminal`, `pulse`, `brutal`, `arcade`, `sketch`, `signature`, `saffron`, `pulsenova`, `prismnova`, `terminalnova`, `arcadenova`, `meter` and `notebook`.
 
 When one of these is set, the matching question is not asked. The installer reads the branding variables only on a **first** install; a repair keeps the existing configuration. To change branding later, use them with `row-template config`:
 
@@ -50,13 +52,16 @@ Whatever the source, the SHA-256 check is always performed. There is no variable
 
 | Variable | Effect |
 |---|---|
-| `XUI_DB_FOLDER` | The folder holding the panel's `x-ui.db`, when it is not in a default location. If a database file is there, it is the only one considered — it is never skipped in favour of another. |
+| `RT_PANEL` | The panel to install for: `3xui`, `pasarguard` or `rebecca`. It must name a panel installed on this server. **Required for a scripted (non-interactive) fresh install on a server with more than one supported panel** — without it the installer stops before changing anything. An existing installation always keeps the panel it was installed for; naming another one is refused, so serving a different panel means `row-template uninstall` first. |
+| `RT_SMOKE_URL` | A subscription link for the live checks of `verify` and of the commands that change the page. On 3X-UI it replaces the test link otherwise found in the panel database. On PasarGuard and Rebecca — where Row-Template never looks up a subscription link itself — it is the only way to have the page a browser receives, and the content a VPN app receives, checked. |
+| `XUI_DB_FOLDER` | 3X-UI only: the folder holding the panel's `x-ui.db`, when it is not in a default location. If a database file is there, it is the only one considered — it is never skipped in favour of another. |
 | `NO_COLOR` | Any non-empty value turns off coloured output. Colour is also off whenever output is not a terminal. |
 
 ## A complete unattended install
 
 ```bash
 RT_ASSUME_NONINTERACTIVE=1 \
+RT_PANEL=pasarguard \
 RT_TEMPLATE=signature \
 RT_SERVICE_NAME="Aurora VPN" \
 RT_SUPPORT_URL="mailto:support@example.com" \
@@ -64,4 +69,4 @@ RT_LOGO_PATH=/root/logo.webp \
 bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
 ```
 
-The exit status is `0` on success and non-zero on any failure, so it can be checked by provisioning tools. Follow it with `row-template verify`, which exits non-zero only when a hard check fails.
+`RT_PANEL` is needed only when the server runs more than one supported panel; with a single panel it may be left out. The exit status is `0` on success and non-zero on any failure, so it can be checked by provisioning tools. Follow it with `row-template verify`, which exits non-zero only when a hard check fails.

@@ -4,25 +4,33 @@ nav: FAQ
 description: Short answers to the questions people ask before and after installing Row-Template.
 ---
 
-## Does Row-Template change or patch 3X-UI?
+## Which panels are supported?
 
-No. It installs into its own directory and changes exactly one panel setting, `subThemeDir`. It never edits 3X-UI's files, and never touches inbounds, clients, users or certificates.
+**3X-UI** (MHSanaei) 3.6.0 or newer, **PasarGuard 5.x**, and **Rebecca 1.x** — the Go edition, from Rebecca's binary install. Rebecca's Docker image is still the 0.0.x Python edition, which cannot render the page; the installer refuses it without changing anything. See [Compatibility](/docs/reference/compatibility/).
+
+## Does Row-Template change or patch my panel?
+
+No. It installs into its own directory and changes as little as possible: on 3X-UI one setting, `subThemeDir`; on PasarGuard one marked block at the end of `.env`; on Rebecca two fields of its subscription settings. It never edits the panel's files, and never touches users, inbounds, clients, nodes or certificates. Uninstall puts each change back.
 
 ## Will my subscribers' VPN apps keep working?
 
-Yes. The page is served only to browsers; when a VPN app fetches the same link, 3X-UI returns normal subscription content. `row-template verify` checks this for you.
+Yes. The page is served only to browsers; when a VPN app fetches the same link, the panel returns normal subscription content. `row-template verify` checks this for you on 3X-UI, and on PasarGuard and Rebecca when you give it a subscription link in `RT_SMOKE_URL`.
 
-## Which panels are supported?
+## I run more than one panel on one server. Which one does Row-Template serve?
 
-3X-UI (MHSanaei) version 3.6.0 or newer — and only 3X-UI. PasarGuard and Rebecca are research targets with no installation path. See [Compatibility](/docs/reference/compatibility/).
+The one you choose. An interactive install asks; a scripted fresh install must name it with `RT_PANEL=3xui`, `pasarguard` or `rebecca`, and stops before changing anything if it does not. One installation serves one panel, and updates keep it. To move it to another panel, run `row-template uninstall` first, then install again.
 
 ## Does the page send data anywhere?
 
-No. It makes no third-party requests — no CDNs, web fonts, analytics, or external QR and geolocation services. Its only request is the status refresh to the panel it was served from.
+No. It makes no third-party requests — no CDNs, web fonts, analytics, or external QR and geolocation services. On 3X-UI its only request is the status refresh to the panel it was served from; on PasarGuard and Rebecca it makes none.
+
+## Why do the figures not refresh on PasarGuard and Rebecca?
+
+Both panels serve live status on a path of their own, rather than the address the page asks. In 1.3.0 the page shows the figures as of when it was opened; reloading it shows newer ones.
 
 ## Do I need sqlite3?
 
-No. Without it, you set Sub Theme Directory in the panel yourself, once. With it, Row-Template can do that for you and `verify` can check it.
+Not necessarily. On 3X-UI, without it you set Sub Theme Directory in the panel yourself, once; with it, Row-Template does that for you and `verify` can check it. On Rebecca it is needed, with Rebecca's default SQLite database, for automatic activation; otherwise you set two values in the dashboard. PasarGuard does not need it.
 
 ## Can I switch designs later?
 
@@ -30,7 +38,11 @@ Yes, as often as you like: `row-template` → **2 — Reconfigure branding** →
 
 ## Do updates keep my branding and design?
 
-Yes. Branding is never touched by an update, and your design is kept as long as the new release ships it.
+Yes. Branding is never touched by an update, your design is kept as long as the new release ships it, and the panel your installation serves stays the same.
+
+## How do I upgrade from 1.1.0 or 1.2.0?
+
+Run `row-template update` once. From 1.1.0, the next time you open the manager, or run `config` or `verify` as root, the rest of the release is downloaded automatically. [Updating →](/docs/management/updating/#upgrading-from-110-or-120)
 
 ## Why does `row-template update` reinstall the version I already have?
 
@@ -38,11 +50,11 @@ On the command line, `update` always applies the latest release — that makes i
 
 ## Can I use my own design?
 
-Not in 1.2.0: only the fifteen shipped designs can be installed, each verified by its checksum. A proposal for custom templates is recorded in the project's design notes.
+Not in 1.3.0: only the seventeen shipped designs can be installed, each verified by its checksum. A proposal for custom templates is recorded in the project's design notes.
 
 ## Can I use it behind a reverse proxy or CDN?
 
-Yes, if the proxy passes requests through unchanged: the page requests its own address with `?format=info` for live status, and 3X-UI needs the original request headers to tell browsers from VPN apps. `verify` checks both from the server.
+Yes, if the proxy passes requests through unchanged: the panel needs the original request headers to tell browsers from VPN apps, and on 3X-UI the page requests its own address with `?format=info` for live status. `verify` checks both from the server.
 
 ## How much disk space does it use?
 
@@ -56,9 +68,13 @@ No. Every command reports to the terminal. `row-template verify` is the place to
 
 `row-template version` and `row-template help` work for any user. Installing and every command that changes something need root.
 
-## Can I go back to 1.1.0?
+## Can I go back to an older version?
 
-Not with `rollback` — see [Rolling back across versions](/docs/management/rollback/#rolling-back-across-versions).
+`rollback` restores the page and the version number recorded in a backup, but not the manager itself, and only the two newest backups are kept. To run 1.1.0 or 1.2.0 again, you would uninstall and install that release — on 3X-UI only. See [Rolling back across versions](/docs/management/rollback/#rolling-back-across-versions).
+
+## Was there a 1.2.1?
+
+Not as a public release. The fixes prepared under that number shipped in 1.3.0.
 
 ## Is it free?
 

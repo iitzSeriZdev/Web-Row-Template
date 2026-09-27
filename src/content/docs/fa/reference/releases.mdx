@@ -10,12 +10,12 @@ description: هر نسخهٔ Row-Template چه چیزهایی دارد، چطو�
 
 | فایل | کاربرد |
 |---|---|
-| `row-template-<version>.tar.gz` | محتوای اصلی: همهٔ طرح‌ها، کتابخانهٔ مدیریتی و اجزای آن، فرمان `row-template`، `install.sh` و `VERSION` |
+| `row-template-<version>.tar.gz` | محتوای اصلی: همهٔ طرح‌ها، ساخته‌شده برای هر پنل، کتابخانهٔ مدیریتی و اجزای آن، فرمان `row-template`، `install.sh` و `VERSION` |
 | `SHA256SUMS` | چک‌سام SHA-256 فایل tarball |
-| `manifest.txt` | `name`، `version`، `artifact`، `min_xui` و `created` — به‌عنوان داده خوانده می‌شود، هرگز اجرا نمی‌شود |
+| `manifest.txt` | `name`، `version`، `artifact`، `min_xui` و `created` — به‌عنوان داده خوانده می‌شود، هرگز اجرا نمی‌شود. `min_xui` فقط به 3X-UI مربوط است. |
 | `install.sh` | راه‌اندازی که در نصب یک‌خطی استفاده می‌شود |
 
-داخل tarball، یک `SHA256SUMS` دوم چک‌سام همهٔ فایل‌ها را فهرست می‌کند و هر طرح فایل `template.html.sha256` مخصوص خودش را دارد.
+داخل tarball، یک `SHA256SUMS` دوم چک‌سام همهٔ فایل‌ها را فهرست می‌کند و هر طرح چک‌سام خودش را دارد — `templates/<id>/template.html.sha256` برای 3X-UI و `shells/<panel>/<id>/shell.html.sha256` برای هر پنل. نصب‌کننده صفحهٔ مخصوص پنل شما را با چک‌سامش بررسی می‌کند و صفحه‌ای را که برای پنل دیگری ساخته شده رد می‌کند.
 
 ## بررسی دانلود
 
@@ -26,14 +26,14 @@ sha256sum -c SHA256SUMS
 ```
 
 ```text
-row-template-1.2.0.tar.gz: OK
+row-template-1.3.0.tar.gz: OK
 ```
 
 سپس، به‌طور اختیاری، همهٔ فایل‌های داخل آن:
 
 ```bash
-tar -xzf row-template-1.2.0.tar.gz
-cd row-template-1.2.0 && sha256sum -c SHA256SUMS --quiet && echo "all files OK"
+tar -xzf row-template-1.3.0.tar.gz
+cd row-template-1.3.0 && sha256sum -c SHA256SUMS --quiet && echo "all files OK"
 ```
 
 نصب‌کننده بررسی اول را در هر نصب و به‌روزرسانی خودش انجام می‌دهد و در صورت عدم تطابق ادامه نمی‌دهد.
@@ -56,9 +56,9 @@ cd row-template-1.2.0 && sha256sum -c SHA256SUMS --quiet && echo "all files OK"
 ```bash
 git clone https://github.com/iitzSeriZdev/Row-Template
 cd Row-Template
-git tag -v v1.2.0
+git tag -v v1.3.0
 ```
 
 ## ساخت بازتولیدپذیر
 
-نسخه‌ها با `tools/make-release.sh` ساخته می‌شوند و ساخت قطعی است: منابع یکسان، طرح‌هایی بایت‌به‌بایت یکسان تولید می‌کنند. با گرفتن تگ همان نسخه می‌توانید طرح‌ها را دوباره بسازید و چک‌سام هر کدام را با چک‌سام عرضه‌شده در نسخه مقایسه کنید.
+نسخه‌ها با `tools/make-release.sh` ساخته می‌شوند و ساخت قطعی است: منابع یکسان، طرح‌هایی بایت‌به‌بایت یکسان — برای هر پنل — تولید می‌کنند. با گرفتن تگ همان نسخه می‌توانید طرح‌ها را دوباره بسازید و چک‌سام هر کدام را با چک‌سام عرضه‌شده در نسخه مقایسه کنید.

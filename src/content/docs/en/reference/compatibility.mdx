@@ -1,31 +1,51 @@
 ---
 title: Compatibility
-description: The panels, operating systems, browsers and apps Row-Template 1.2.0 supports — and what is research only.
+description: The panels, operating systems, browsers and apps Row-Template 1.3.0 supports, what it changes on each panel, and the limitations of 1.3.0.
 ---
 
 ## Panels
 
-| Panel | Status | Notes |
+| Panel | Status | Versions |
 |---|---|---|
-| [3X-UI](https://github.com/MHSanaei/3x-ui) (MHSanaei) | **Supported** | Version **3.6.0 or newer**. Validated against stock 3.7.0. |
-| [PasarGuard](https://github.com/PasarGuard/panel) | Research | Not supported. No installation path. |
-| [Rebecca](https://github.com/rebeccapanel/Rebecca) | Research | Not supported. No installation path. |
+| [3X-UI](https://github.com/MHSanaei/3x-ui) (MHSanaei) | **Supported** since 1.0.0 | **3.6.0 or newer** |
+| [PasarGuard](https://github.com/PasarGuard/panel) | **Supported** since 1.3.0 | **5.x** — the official Docker install, or a source install (`pasarguard.service`) |
+| [Rebecca](https://github.com/rebeccapanel/Rebecca) | **Supported** since 1.3.0 | **1.x**, the Go edition — Rebecca's binary install (`rebecca-binary.sh`, run as `rebecca.service`) |
+| Rebecca Docker image (`rebeccapanel/rebecca`) | **Not supported** | 0.0.x, the Python edition. The installer identifies it and refuses it before changing anything; Rebecca's own `rebecca migrate-binary` moves a Docker install to 1.x. |
 
-3X-UI is the only supported panel. Every instruction on this site is for 3X-UI.
+**Supported** means every capability is in place on that panel — detect, install, activate, verify, back up, restore and uninstall — and each is exercised by Row-Template's test suite, with each panel's pages rendered by that panel's real template engine.
 
-### Why other panels are research only
+| | 3X-UI | PasarGuard | Rebecca |
+|---|---|---|---|
+| **Template engine** | Go `html/template` | Jinja2 | pongo2 (Django-style, in Go) |
+| **Install directory** | `/etc/3x-ui/sub_templates/row-template` | `/etc/row-template` | `/etc/row-template` |
+| **What activation changes** | `subThemeDir` | one marked block in `/opt/pasarguard/.env` | two fields of the newest subscription settings row |
+| **Automatic activation needs** | `sqlite3` and the panel database | nothing extra | the default SQLite database and `sqlite3` |
+| **Restart on activation** | yes, briefly | once, only if running | never |
+| **Live status refresh** | yes | no — figures as of page load | no — figures as of page load |
 
-The three panels use different template engines — Go `html/template` for 3X-UI, Jinja2 for PasarGuard, pongo2 for Rebecca — and a page written for one is not valid in another. The visual layer is plain CSS and carries over; the page shell does not. Each design's shell is already built for PasarGuard and Rebecca and packaged under `shells/` in the release for study, but the installer never places it.
+The installer detects which panel is on the server. A panel counts as installed only when two independent signs of it agree (its configuration, its compose file or service, its command, its data folder); a panel that is only partly there is refused rather than guessed at. On a server with more than one supported panel, an interactive install asks which to serve, and a **scripted fresh install must set `RT_PANEL=3xui|pasarguard|rebecca`** — without it, the installer stops before changing anything. One installation serves one panel; re-runs and updates keep it.
 
-Live status is the other open question: 3X-UI serves it at `?format=info`, while the other two use a path suffix, which needs either a runtime change or a reverse proxy. That decision is deferred.
+Why each design is built three times: the three panels do not share a template engine, and a page written for one is not valid in another. The visual layer is plain CSS and identical everywhere; for PasarGuard and Rebecca each design is wrapped in a small prelude that maps the panel's own data onto the page, inside an explicit autoescape block, so every value is escaped on every panel.
+
+## Limitations in 1.3.0
+
+- **Live refresh is 3X-UI only.** 3X-UI serves live status at `?format=info`; PasarGuard and Rebecca serve it on a path of their own, so on those panels the page shows usage and expiry as of when it was opened. Wiring that up needs a runtime change, and that decision is deferred.
+- **Rebecca's Docker image is refused** (0.0.x, the Python edition), as above.
+- **Rebecca on MySQL/MariaDB** — or without `sqlite3` — needs its page selected by hand in **Settings → Subscription → Templates**; the page itself is still placed. 3X-UI without `sqlite3` likewise needs **Sub Theme Directory** set by hand.
+- **Panel settings that still take precedence:** an admin's own subscription template, on PasarGuard and Rebecca, and PasarGuard's **disable subscription template** setting. They are yours to change; `row-template verify` reports them.
+- **PasarGuard's page title** (`subTitle`) and **Clash templates** are not produced — only the subscription page is.
+- **One-tap import** on PasarGuard offers no sing-box or Clash apps (the page is not given those addresses); on Rebecca the Clash apps use its Clash Meta subscription, and sing-box is not offered.
+- **On-hold subscriptions** are shown as active. On PasarGuard, which tells the page how long the hold lasts, the expiry says it starts on first connection; on Rebecca, which does not, the expiry is shown as unknown rather than guessed.
+- **One panel per server.** An installation serves the panel it was installed for; serving another means `row-template uninstall` first.
+- **Rollback** restores Row-Template's page and recorded version, not the `row-template` manager itself, and never the panel; only the two newest backups are kept. See [Backups & Rollback](/docs/management/rollback/).
 
 ## Server
 
 | | |
 |---|---|
 | **Operating system** | Linux. Recommended: Ubuntu 24.04 LTS (x86_64). |
-| **Shell and tools** | `bash`, coreutils, `tar`, `sha256sum` or `shasum`, `curl`, `awk`, `sed`, `od`, `base64` |
-| **Optional** | `sqlite3` (automatic activation and extra checks), `systemd` (service restart around activation) |
+| **Shell and tools** | `bash`, coreutils, `tar`, `sha256sum` or `shasum`, `curl`, `awk`, `sed`, `od`, `base64`; `flock` (util-linux) for PasarGuard and Rebecca |
+| **Optional** | `sqlite3` (automatic activation on 3X-UI and Rebecca, and extra checks), `systemd` (3X-UI service restart around activation) |
 | **Runtime** | None — no Node.js, Python or database |
 
 ## Subscribers
@@ -35,13 +55,16 @@ Live status is the other open question: 3X-UI serves it at `?format=info`, while
 | **Browsers** | Current desktop and mobile browsers. |
 | **Languages** | English, Persian, Arabic, Russian, Simplified Chinese — with right-to-left layout for Persian and Arabic. |
 | **Themes** | System, Light, Dark. |
-| **One-tap import** | v2rayNG, Happ and sing-box on Android; Streisand, V2Box and Shadowrocket on iOS; Clash Verge Rev, Mihomo Party and v2rayN (copy) on Windows; Clash Verge Rev, Streisand and V2Box on macOS. |
+| **One-tap import** | v2rayNG, Happ and sing-box on Android; Streisand, V2Box and Shadowrocket on iOS; Clash Verge Rev, Mihomo Party and v2rayN (copy) on Windows; Clash Verge Rev, Streisand and V2Box on macOS — each where the panel gives the page the address it needs. |
 | **Protocols labelled** | VLESS, VMess, Trojan, Shadowsocks, Hysteria/Hysteria2, WireGuard, AmneziaWG, Telegram MTProto. |
 
 ## Versions
 
-| Row-Template | 3X-UI | Notes |
+| Row-Template | Panels | Notes |
 |---|---|---|
-| 1.2.0 | ≥ 3.6.0 | Fifteen designs. From 1.1.0: [update twice](/docs/management/updating/#upgrading-from-110). |
-| 1.1.0 | ≥ 3.6.0 | Configuration Explorer. |
-| 1.0.0 | ≥ 3.6.0 | First stable release. |
+| 1.3.0 | 3X-UI ≥ 3.6.0, PasarGuard 5.x, Rebecca 1.x | PasarGuard and Rebecca support; Meter and Notebook — seventeen designs. From 1.1.0 or 1.2.0: [one update](/docs/management/updating/#upgrading-from-110-or-120). |
+| 1.2.0 | 3X-UI ≥ 3.6.0 | Fifteen designs. |
+| 1.1.0 | 3X-UI ≥ 3.6.0 | Configuration Explorer. |
+| 1.0.0 | 3X-UI ≥ 3.6.0 | First stable release. |
+
+There was no public 1.2.1 release; its fixes shipped in 1.3.0.

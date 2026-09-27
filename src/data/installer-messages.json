@@ -1,6 +1,6 @@
 {
   "source": "Row-Template installer",
-  "count": 226,
+  "count": 455,
   "messages": [
     {
       "file": "installer/install.sh",
@@ -144,1445 +144,3048 @@
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 209,
+      "line": 290,
       "fn": "rt_config_write",
       "level": "warn",
       "text": "config.env stores an unknown template id (${template}); resetting the selection to Row."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 214,
+      "line": 295,
       "fn": "rt_config_write",
       "level": "FAIL",
       "text": "unknown template id: $template"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 281,
+      "line": 364,
       "fn": "rt_template_effective",
       "level": "warn",
       "text": "config.env stores an unknown template id (${id}); using Row."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 289,
+      "line": 372,
       "fn": "rt_config_set_template",
       "level": "FAIL",
       "text": "unknown template id: $id"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 327,
+      "line": 410,
       "fn": "rt_reconcile_artifact_to_selection",
       "level": "FAIL",
       "text": "the effective template '$tpl' is missing from the template store"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 330,
+      "line": 413,
       "fn": "rt_reconcile_artifact_to_selection",
       "level": "FAIL",
       "text": "the effective template '$tpl' failed its store checksum"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 440,
+      "line": 532,
       "fn": "rt_stage_template_store",
       "level": "warn",
       "text": "payload template directory is not a plain id: $id (skipped)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 442,
+      "line": 534,
       "fn": "rt_stage_template_store",
       "level": "warn",
-      "text": "payload template $id has no template.html (skipped)"
+      "text": "payload template $id has no $name (skipped)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 443,
+      "line": 536,
       "fn": "rt_stage_template_store",
       "level": "FAIL",
       "text": "payload template $id has no checksum sidecar"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 445,
+      "line": 538,
       "fn": "rt_stage_template_store",
       "level": "FAIL",
       "text": "payload template $id failed its checksum"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 446,
+      "line": 539,
       "fn": "rt_stage_template_store",
       "level": "FAIL",
       "text": "payload template $id failed structural validation"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 461,
+      "line": 541,
+      "fn": "rt_stage_template_store",
+      "level": "FAIL",
+      "text": "payload template $id is not a ${PANEL} page"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 642,
+      "fn": "rt_repair_template_store",
+      "level": "FAIL",
+      "text": "the template store path is a symlink; refusing to repair it: $RT_TEMPLATE_STORE"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 646,
+      "fn": "rt_repair_template_store",
+      "level": "FAIL",
+      "text": "the template store path is not a directory: $RT_TEMPLATE_STORE"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 658,
+      "fn": "rt_repair_template_store",
+      "level": "warn",
+      "text": "not reading templates from $src: it is not a plain directory."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 668,
+      "fn": "rt_repair_template_store",
+      "level": "warn",
+      "text": "the copy of design '$id' in $src fails its checksum or structural check; it was not moved."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 683,
+      "fn": "rt_repair_template_store",
+      "level": "warn",
+      "text": "left $src in place: it holds files Row-Template does not recognise."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 698,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "unknown template id: $id (available: $RT_TEMPLATES_AVAILABLE)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 463,
+      "line": 700,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "template '$id' is not installed; re-run the installer to refresh the template store"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 468,
+      "line": 705,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "template $id failed its checksum; refusing to switch"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 476,
+      "line": 713,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "the $id template failed to generate with the current branding"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 481,
+      "line": 718,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "could not snapshot the current state; aborting"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 485,
+      "line": 722,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "could not stage the selected template; the previous state was restored"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 490,
+      "line": 727,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "automatic restore failed; run 'row-template rollback'"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 491,
+      "line": 728,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "could not persist the template selection; the previous state was restored"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 496,
+      "line": 733,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "automatic restore failed; run 'row-template rollback'"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 497,
+      "line": 734,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "activation of the new template failed; the previous state was restored"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 502,
+      "line": 739,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "automatic restore failed; run 'row-template rollback'"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 503,
+      "line": 740,
       "fn": "rt_switch_template",
       "level": "FAIL",
       "text": "the switched template failed post-activation validation; the previous state was restored"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 538,
+      "line": 775,
       "fn": "rt_logo_validate",
       "level": "FAIL",
       "text": "logo file not found: $f"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 539,
+      "line": 776,
       "fn": "rt_logo_validate",
       "level": "FAIL",
       "text": "logo path is a symlink; refusing to read it"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 540,
+      "line": 777,
       "fn": "rt_logo_validate",
       "level": "FAIL",
       "text": "logo path is not a regular file"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 541,
+      "line": 778,
       "fn": "rt_logo_validate",
       "level": "FAIL",
       "text": "cannot size logo file"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 542,
+      "line": 779,
       "fn": "rt_logo_validate",
       "level": "FAIL",
       "text": "logo file is empty"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 544,
+      "line": 781,
       "fn": "rt_logo_validate",
       "level": "FAIL",
       "text": "logo too large: ${size} bytes (max ${RT_LOGO_MAX_BYTES})"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 547,
+      "line": 784,
       "fn": "rt_logo_validate",
       "level": "FAIL",
       "text": "unsupported image: only PNG, JPEG or WebP by content"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 575,
+      "line": 812,
       "fn": "rt_generate",
       "level": "FAIL",
       "text": "canonical artifact missing: $dist"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 580,
+      "line": 817,
       "fn": "rt_generate",
       "level": "FAIL",
       "text": "artifact branding markers not found exactly once (open=$nopen close=$nclose)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 591,
+      "line": 828,
       "fn": "rt_generate",
       "level": "FAIL",
       "text": "branding contains control characters; refusing to generate."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 623,
+      "line": 860,
       "fn": "rt_validate_template",
       "level": "FAIL",
       "text": "generated template missing"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 624,
+      "line": 861,
       "fn": "rt_validate_template",
       "level": "FAIL",
       "text": "cannot size generated template"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 626,
+      "line": 863,
       "fn": "rt_validate_template",
       "level": "FAIL",
       "text": "generated template implausibly small (${size} bytes)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 628,
+      "line": 872,
       "fn": "rt_validate_template",
       "level": "FAIL",
       "text": "generated template does not begin with <!doctype html>"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 630,
+      "line": 875,
       "fn": "rt_validate_template",
       "level": "FAIL",
       "text": "generated template does not end with </html>"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 634,
+      "line": 879,
       "fn": "rt_validate_template",
       "level": "FAIL",
       "text": "branding markers not intact in generated template"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 636,
+      "line": 881,
       "fn": "rt_validate_template",
       "level": "FAIL",
       "text": "generated template missing the #sub-data island"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 638,
+      "line": 883,
       "fn": "rt_validate_template",
       "level": "FAIL",
       "text": "generated template missing the BRANDING block"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 640,
+      "line": 885,
       "fn": "rt_validate_template",
       "level": "FAIL",
       "text": "generated template still contains unsubstituted build placeholders"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 655,
+      "line": 900,
       "fn": "rt_sha256",
       "level": "FAIL",
       "text": "no sha256 tool (sha256sum or shasum) found"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 665,
+      "line": 910,
       "fn": "rt_verify_sha256",
       "level": "FAIL",
       "text": "expected checksum is not 64 hex characters"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 666,
+      "line": 911,
       "fn": "rt_verify_sha256",
       "level": "FAIL",
       "text": "cannot checksum missing file: $f"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 670,
+      "line": 915,
       "fn": "rt_verify_sha256",
       "level": "FAIL",
       "text": "checksum mismatch (expected ${expected:0:12}… got ${actual:0:12}…)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 736,
+      "line": 981,
       "fn": "rt_assert_not_symlink",
       "level": "FAIL",
       "text": "refusing to operate on a symlink: $1"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 777,
+      "line": 1022,
       "fn": "rt_safe_rmdir",
       "level": "FAIL",
       "text": "refusing to recursively delete /"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 784,
+      "line": 1029,
       "fn": "rt_safe_rmdir",
       "level": "FAIL",
       "text": "refusing to recursively delete path outside backups: $d"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 809,
+      "line": 1054,
       "fn": "rt_backup_create",
       "level": "FAIL",
       "text": "nothing to back up: $RT_DIST missing"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 866,
+      "line": 1076,
+      "fn": "rt_backup_create",
+      "level": "FAIL",
+      "text": "could not create a new backup directory under $RT_BACKUPS"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1135,
       "fn": "rt_backups_prune",
       "level": "warn",
       "text": "could not prune backup: $d"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1512,
+      "line": 1258,
+      "fn": "rt_backup_format",
+      "level": "FAIL",
+      "text": "snapshot records two different formats (format file '$canon', meta '$legacy')"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1589,
+      "fn": "rt_backup_panel_write",
+      "level": "FAIL",
+      "text": "panel write: no staging directory given"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1590,
+      "fn": "rt_backup_panel_write",
+      "level": "FAIL",
+      "text": "panel write: unknown panel id: $panel"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1593,
+      "fn": "rt_backup_panel_write",
+      "level": "FAIL",
+      "text": "panel write: state must be absent|empty|present, got '$state'"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1597,
+      "fn": "rt_backup_panel_write",
+      "level": "FAIL",
+      "text": "panel write: mechanism must be db|env|api, got '$mech'"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1601,
+      "fn": "rt_backup_panel_write",
+      "level": "FAIL",
+      "text": "panel write: was_running must be 0 or 1, got '$running'"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1604,
+      "fn": "rt_backup_panel_write",
+      "level": "FAIL",
+      "text": "panel write: state=present requires a value"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1608,
+      "fn": "rt_backup_panel_write",
+      "level": "FAIL",
+      "text": "panel write: empty placed-file path"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1610,
+      "fn": "rt_backup_panel_write",
+      "level": "FAIL",
+      "text": "panel write: placed file is not a legal relative path: $p"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1680,
+      "fn": "rt_backup_panel_aux_set",
+      "level": "FAIL",
+      "text": "aux: unknown panel id: $panel"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1681,
+      "fn": "rt_backup_panel_aux_set",
+      "level": "FAIL",
+      "text": "aux: not a legal key: $key"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1683,
+      "fn": "rt_backup_panel_aux_set",
+      "level": "FAIL",
+      "text": "aux: panel $panel is not staged"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1724,
+      "fn": "rt_backup_manifest_write",
+      "level": "FAIL",
+      "text": "refusing to manifest a snapshot containing a symlink"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1734,
+      "fn": "rt_backup_manifest_write",
+      "level": "FAIL",
+      "text": "path cannot be represented in a manifest: $rel"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1757,
+      "fn": "rt_backup_create_v2",
+      "level": "FAIL",
+      "text": "nothing to back up: $RT_DIST missing"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1760,
+      "fn": "rt_backup_create_v2",
+      "level": "FAIL",
+      "text": "refusing to write through a symlink: $RT_BACKUPS_V2"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1766,
+      "fn": "rt_backup_create_v2",
+      "level": "FAIL",
+      "text": "could not create a temporary snapshot"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1802,
+      "fn": "rt_backup_create_v2",
+      "level": "FAIL",
+      "text": "unknown panel id: $panel"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1804,
+      "fn": "rt_backup_create_v2",
+      "level": "FAIL",
+      "text": "no staged state for panel: $panel"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1813,
+      "fn": "rt_backup_create_v2",
+      "level": "FAIL",
+      "text": "panel $panel: staged state has no files list"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1816,
+      "fn": "rt_backup_create_v2",
+      "level": "FAIL",
+      "text": "refusing to stage a symlink: $panel/$f"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1829,
+      "fn": "rt_backup_create_v2",
+      "level": "FAIL",
+      "text": "the new snapshot failed validation and was discarded"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1837,
+      "fn": "rt_backup_create_v2",
+      "level": "FAIL",
+      "text": "snapshot already exists: $final"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 1851,
       "fn": "rt_require_root",
       "level": "FAIL",
       "text": "this operation must run as root (e.g. sudo $RT_NAME ...)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1554,
+      "line": 1893,
       "fn": "rt_check_min_version",
       "level": "FAIL",
       "text": "cannot determine the 3x-ui version; refusing to proceed"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1556,
+      "line": 1895,
       "fn": "rt_check_min_version",
       "level": "FAIL",
       "text": "3x-ui $v is below the required minimum $RT_MIN_XUI; not installing"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1584,
+      "line": 1923,
       "fn": "rt_detect_xui_db",
       "level": "warn",
       "text": "XUI_DB_FOLDER database is not an SQLite database: $c (not falling back to another database)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1594,
+      "line": 1933,
       "fn": "rt_detect_xui_db",
       "level": "warn",
       "text": "panel database is not an SQLite database: $c (not falling back to another database; set XUI_DB_FOLDER to the panel's database folder)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1765,
+      "line": 2126,
       "fn": "rt_payload_companions",
       "level": "FAIL",
       "text": "the release payload declares an invalid companion: $rel"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1768,
+      "line": 2129,
       "fn": "rt_payload_companions",
       "level": "FAIL",
       "text": "the release payload declares an invalid companion: $rel"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1770,
+      "line": 2131,
       "fn": "rt_payload_companions",
       "level": "FAIL",
       "text": "the release payload declares an invalid companion: $rel"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1787,
+      "line": 2148,
       "fn": "rt_payload_companions_ok",
       "level": "FAIL",
       "text": "the release payload is incomplete: $rel is missing."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1791,
+      "line": 2152,
       "fn": "rt_payload_companions_ok",
       "level": "FAIL",
       "text": "payload checksum mismatch: $rel"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1821,
+      "line": 2182,
       "fn": "rt_set_dist",
       "level": "FAIL",
       "text": "refusing to install an invalid artifact"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1892,
+      "line": 2184,
+      "fn": "rt_set_dist",
+      "level": "FAIL",
+      "text": "refusing to install an artifact that is not a ${PANEL} page"
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2209,
+      "fn": "rt_activate",
+      "level": "FAIL",
+      "text": "the installer's panel components are missing; run 'row-template update'."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2226,
+      "fn": "rt_activate",
+      "level": "FAIL",
+      "text": "could not put the previous page back at $RT_LIVE."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2231,
+      "fn": "rt_activate",
+      "level": "FAIL",
+      "text": "could not update the page in ${PANEL}'s template directory."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2292,
       "fn": "rt_config_interactive",
       "level": "FAIL",
       "text": "service name rejected (control chars or too long)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1904,
+      "line": 2304,
       "fn": "rt_config_interactive",
       "level": "warn",
       "text": "Use https://, http://, tg:// or mailto: — or clear it with -"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1908,
+      "line": 2308,
       "fn": "rt_config_interactive",
       "level": "FAIL",
       "text": "support URL rejected"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1914,
+      "line": 2314,
       "fn": "rt_config_interactive",
       "level": "FAIL",
       "text": "logo path became a symlink after validation; aborting."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1924,
+      "line": 2324,
       "fn": "rt_config_interactive",
       "level": "FAIL",
       "text": "logo path became a symlink after validation; aborting."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1965,
+      "line": 2370,
+      "fn": "rt_render_report",
+      "level": "warn",
+      "text": "Live check: the running ${PANEL} does not use the Row-Template page yet; run 'row-template verify'."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2381,
       "fn": "rt_render_report",
       "level": "warn",
       "text": "Live check: the panel served its built-in page. If you just set the theme dir, restart the panel; otherwise run 'row-template verify'."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1967,
+      "line": 2383,
       "fn": "rt_render_report",
       "level": "warn",
       "text": "Live check could not reach the subscription endpoint."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 1972,
+      "line": 2388,
       "fn": "rt_render_report",
       "level": "warn",
       "text": "Live check: a VPN client received HTML instead of subscription content."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2035,
+      "line": 2405,
+      "fn": "rt_print_activation_note",
+      "level": "warn",
+      "text": "Activation did not complete and was rolled back; run 'row-template' and choose Activate to retry."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2466,
       "fn": "rt_tar_extract_safe",
       "level": "FAIL",
       "text": "unsafe path in archive: $entry"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2041,
+      "line": 2472,
       "fn": "rt_tar_extract_safe",
       "level": "FAIL",
       "text": "unsafe member type in archive: '$mtype' (symlink/hardlink/special refused)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2079,
+      "line": 2510,
       "fn": "rt_release_source",
       "level": "warn",
       "text": "the release URL uses http:// (insecure); proceeding because RT_ALLOW_INSECURE_URL is set."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2081,
+      "line": 2512,
       "fn": "rt_release_source",
       "level": "FAIL",
       "text": "the release URL must use https:// (set RT_ALLOW_INSECURE_URL=1 to override for local testing)."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2084,
+      "line": 2515,
       "fn": "rt_release_source",
       "level": "FAIL",
       "text": "the release URL must be an http(s) URL: $base"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2098,
+      "line": 2529,
       "fn": "rt_fetch_release",
       "level": "FAIL",
       "text": "cannot fetch manifest.txt"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2099,
+      "line": 2530,
       "fn": "rt_fetch_release",
       "level": "FAIL",
       "text": "cannot fetch SHA256SUMS"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2101,
+      "line": 2532,
       "fn": "rt_fetch_release",
       "level": "FAIL",
       "text": "manifest has no artifact= entry"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2102,
+      "line": 2533,
       "fn": "rt_fetch_release",
       "level": "FAIL",
       "text": "manifest artifact name is unsafe: $art"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2104,
+      "line": 2535,
       "fn": "rt_fetch_release",
       "level": "FAIL",
       "text": "cannot fetch $art"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2106,
+      "line": 2537,
       "fn": "rt_fetch_release",
       "level": "FAIL",
       "text": "no checksum for $art in SHA256SUMS; aborting (no override exists)"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2107,
+      "line": 2538,
       "fn": "rt_fetch_release",
       "level": "FAIL",
       "text": "release checksum verification failed; aborting"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2139,
+      "line": 2603,
+      "fn": "rt_complete_install",
+      "level": "warn",
+      "text": "this installation is incomplete and its version is unknown; run 'row-template update' to repair it."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2616,
+      "fn": "rt_complete_install",
+      "level": "warn",
+      "text": "could not download Row-Template $ver to complete the installation. It will be retried the next time the manager opens; 'row-template update' also completes it."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2622,
+      "fn": "rt_complete_install",
+      "level": "warn",
+      "text": "the release source offers ${pver:-an unknown version}, not the installed $ver; nothing was changed. Run 'row-template update' to update."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2631,
+      "fn": "rt_complete_install",
+      "level": "warn",
+      "text": "could not install the management library's companions; run 'row-template update' to retry."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2642,
+      "fn": "rt_complete_install",
+      "level": "warn",
+      "text": "the installation is still incomplete; run 'row-template verify' for details."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2657,
       "fn": "rt_restore_from_backup",
       "level": "FAIL",
       "text": "backup failed validation: $dir"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2142,
+      "line": 2662,
       "fn": "rt_restore_from_backup",
       "level": "FAIL",
-      "text": "backup artifact matches no installed template; the template store may be damaged"
+      "text": "backup ${BACKUP} was made for ${PANEL}, not ${PANEL}; refusing to restore it."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2148,
+      "line": 2671,
+      "fn": "rt_restore_from_backup",
+      "level": "warn",
+      "text": "backup artifact has no store match and no recorded template; defaulting to Row."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2673,
+      "fn": "rt_restore_from_backup",
+      "level": "warn",
+      "text": "backup artifact recorded template '$tpl_id' is not installed; defaulting to Row."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2691,
       "fn": "rt_restore_from_backup",
       "level": "warn",
       "text": "could not restore VERSION from the backup."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2150,
+      "line": 2693,
       "fn": "rt_restore_from_backup",
       "level": "FAIL",
       "text": "could not persist the restored template selection"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2179,
+      "line": 2744,
+      "fn": "rt_installed_panel",
+      "level": "warn",
+      "text": "the panel record $RT_PANEL_FILE is not a panel this release knows; treating the install as 3X-UI."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2804,
+      "fn": "rt_existing_root",
+      "level": "FAIL",
+      "text": "Row-Template is installed twice ($found and $r); remove one with 'row-template uninstall' before continuing."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2828,
+      "fn": "rt_panel_choose",
+      "level": "FAIL",
+      "text": "Row-Template is installed for ${PANEL} at $RT_ROOT; uninstall it before installing for ${PANEL}."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2836,
+      "fn": "rt_panel_choose",
+      "level": "FAIL",
+      "text": "RT_PANEL='$RT_PANEL' is not a panel Row-Template supports (3xui, pasarguard, rebecca)."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2838,
+      "fn": "rt_panel_choose",
+      "level": "FAIL",
+      "text": "no 3x-ui installation was detected on this host."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2839,
+      "fn": "rt_panel_choose",
+      "level": "FAIL",
+      "text": "RT_PANEL=$RT_PANEL, but ${PANEL} was not detected on this host."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2848,
+      "fn": "rt_panel_choose",
+      "level": "FAIL",
+      "text": "no supported panel was detected on this host: no 3x-ui installation, and no PasarGuard or Rebecca installation."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2859,
+      "fn": "rt_panel_choose",
+      "level": "FAIL",
+      "text": "no panel was chosen; nothing was changed."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2862,
+      "fn": "rt_panel_choose",
+      "level": "FAIL",
+      "text": "more than one panel is installed here (${PANELS}); choose one with RT_PANEL=3xui|pasarguard|rebecca."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2879,
+      "fn": "rt_panel_report_partial",
+      "level": "warn",
+      "text": "${PANEL} looks partly installed (only one of its files was found); it is not treated as present."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2937,
+      "fn": "rt_panel_activate",
+      "level": "FAIL",
+      "text": "the installer's panel components are missing; run 'row-template update'."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2941,
+      "fn": "rt_panel_activate",
+      "level": "FAIL",
+      "text": "could not place the page for ${PANEL}."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 2961,
+      "fn": "rt_panel_activate",
+      "level": "warn",
+      "text": "${PANEL} was restored exactly to its state before the attempt."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3018,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "internal: install payload directory missing."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2180,
+      "line": 3019,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "install payload has no template.html."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2185,
+      "line": 3024,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "payload artifact checksum mismatch."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2187,
+      "line": 3026,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "install artifact failed structural validation."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2188,
+      "line": 3027,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "the release payload is incomplete; nothing was changed."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2191,
+      "line": 3031,
+      "fn": "rt_cmd_install",
+      "level": "FAIL",
+      "text": "nothing was changed."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3038,
+      "fn": "rt_cmd_install",
+      "level": "FAIL",
+      "text": "nothing was changed."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3045,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "no 3x-ui installation was detected on this host."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2196,
+      "line": 3051,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "install root is a symlink; refusing to proceed."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2219,
+      "line": 3074,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "an existing install was found at $RT_ROOT; re-run interactively or set RT_ASSUME_YES=1 to repair."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2224,
+      "line": 3079,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "could not create the install tree."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2226,
+      "line": 3081,
       "fn": "rt_cmd_install",
       "level": "warn",
       "text": "could not create a pre-install backup."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2230,
+      "line": 3088,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "could not install the canonical artifact."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2231,
+      "line": 3090,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "could not install VERSION."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2234,
+      "line": 3091,
+      "fn": "rt_cmd_install",
+      "level": "FAIL",
+      "text": "could not record the panel this install serves."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3094,
       "fn": "rt_cmd_install",
       "level": "warn",
       "text": "could not install the management library; the CLI may be unavailable."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2237,
+      "line": 3097,
       "fn": "rt_cmd_install",
       "level": "warn",
       "text": "could not install the management library's companions; run 'row-template update' to retry."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2240,
+      "line": 3100,
       "fn": "rt_cmd_install",
       "level": "warn",
       "text": "could not install the row-template CLI to $RT_BIN."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2245,
+      "line": 3109,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "the release template store failed verification; nothing was activated."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2255,
+      "line": 3111,
+      "fn": "rt_cmd_install",
+      "level": "FAIL",
+      "text": "this release carries no ${PANEL} pages; nothing was activated."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3121,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "configuration was not completed; the panel was not changed."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2277,
+      "line": 3143,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "RT_TEMPLATE='$RT_TEMPLATE' is not a template this release offers (available: $RT_TEMPLATES_AVAILABLE)."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2282,
+      "line": 3148,
       "fn": "rt_cmd_install",
       "level": "warn",
       "text": "selected template '$picked' is not in this release's template store; using Row."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2287,
+      "line": 3153,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "template '$picked' is not in this release's template store."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2289,
+      "line": 3155,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "could not stage the selected template."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2291,
+      "line": 3157,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "could not persist the template selection."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2294,
+      "line": 3160,
       "fn": "rt_cmd_install",
       "level": "FAIL",
       "text": "the template failed to generate/validate; the panel was not changed."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2314,
+      "line": 3182,
       "fn": "rt_cmd_install",
       "level": "warn",
       "text": "Could not set subThemeDir automatically; use the manual step below."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2324,
+      "line": 3192,
       "fn": "rt_cmd_install",
       "level": "warn",
       "text": "Could not set subThemeDir automatically; use the manual step below."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2347,
+      "line": 3233,
+      "fn": "rt_install_activate_panel",
+      "level": "warn",
+      "text": "activation on ${PANEL} did not complete; the panel was restored to how it was."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3249,
       "fn": "rt_cmd_config",
       "level": "FAIL",
       "text": "Row-Template is not installed (run the installer first)."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2351,
+      "line": 3256,
       "fn": "rt_cmd_config",
       "level": "FAIL",
       "text": "cannot create a temp file."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2360,
+      "line": 3265,
       "fn": "rt_cmd_config",
       "level": "FAIL",
       "text": "configuration was not changed."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2365,
+      "line": 3270,
       "fn": "rt_cmd_config",
       "level": "FAIL",
       "text": "the template selection could not be reconciled; the previous state is still in place."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2368,
+      "line": 3273,
       "fn": "rt_cmd_config",
       "level": "FAIL",
       "text": "the new branding failed validation; restoring the previous configuration."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2371,
+      "line": 3276,
       "fn": "rt_cmd_config",
       "level": "FAIL",
       "text": "reconfiguration aborted; the previous template is still in place."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2387,
+      "line": 3294,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "install root missing or is a symlink: $RT_ROOT"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2393,
+      "line": 3300,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "canonical artifact missing checksum or does not match it."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2394,
+      "line": 3301,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "canonical artifact missing or unreadable: $RT_DIST"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2407,
+      "line": 3320,
       "fn": "rt_cmd_verify",
-      "level": "FAIL",
-      "text": "a template in the store does not match its checksum."
+      "level": "warn",
+      "text": "templates were found outside the store at $RT_ROOT/$rel; run 'row-template verify' as root to move them."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2414,
+      "line": 3342,
+      "fn": "rt_cmd_verify",
+      "level": "FAIL",
+      "text": "a template in the store does not match its checksum:$corrupt."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3347,
+      "fn": "rt_cmd_verify",
+      "level": "warn",
+      "text": "template store is incomplete (${N_PRESENT} of $n_avail designs); missing:$missing. Run 'row-template update' to restore them."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3355,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "canonical artifact does not match the selected template ($sel_id)."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2417,
+      "line": 3358,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "selected template '$sel_id' is missing from the template store."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2420,
+      "line": 3361,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "template store missing or empty; run 'row-template update' to install it."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2425,
+      "line": 3366,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "live template failed structural validation."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2426,
+      "line": 3367,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "live template missing or unreadable: $RT_LIVE"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2429,
+      "line": 3370,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "VERSION file missing or empty."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2433,
+      "line": 3374,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "config present but not readable."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2436,
+      "line": 3377,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "config.env is other-writable (mode $perm); tighten to 640."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2441,
+      "line": 3382,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "management library not found under the install root."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2444,
+      "line": 3385,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "installer components are missing (lib/transaction.sh, panels/), as after an update from 1.1.0; run 'row-template update' to complete the installation."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2448,
+      "line": 3389,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "CLI not found or not executable at $RT_BIN."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2453,
+      "line": 3397,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "3x-ui $RT_XUI_VERSION is below the minimum $RT_MIN_XUI."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2454,
+      "line": 3398,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "could not determine the 3x-ui version."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2455,
+      "line": 3399,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "3x-ui installation was not detected."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2461,
+      "line": 3405,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "panel subThemeDir is empty; set it to $RT_ROOT."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2462,
+      "line": 3406,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "panel subThemeDir does not point at Row-Template."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2470,
+      "line": 3418,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "leftover staging files found under the install root (possible interrupted update)."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2476,
+      "line": 3428,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "live render check: the panel served its built-in page."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2477,
+      "line": 3429,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "live render check: the subscription endpoint was unreachable."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2483,
+      "line": 3435,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "VPN-client check: HTML was returned instead of subscription content."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2491,
+      "line": 3443,
       "fn": "rt_cmd_verify",
       "level": "FAIL",
       "text": "verification FAILED ($fails hard issue(s), $warns warning(s))."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2492,
+      "line": 3444,
       "fn": "rt_cmd_verify",
       "level": "warn",
       "text": "verification passed with $warns warning(s)."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2506,
+      "line": 3455,
+      "fn": "rt_verify_panel",
+      "level": "FAIL",
+      "text": "the panel components are missing; run 'row-template update'."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3459,
+      "fn": "rt_verify_panel",
+      "level": "warn",
+      "text": "${PANEL} was not detected on this host."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3467,
+      "fn": "rt_verify_panel",
+      "level": "FAIL",
+      "text": "${PANEL}'s Row-Template page is out of step (see above); re-apply it from the manager (Activate)."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3474,
+      "fn": "rt_verify_panel",
+      "level": "warn",
+      "text": "the running ${PANEL} does not use the Row-Template page yet; restart the panel."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3478,
+      "fn": "rt_verify_panel",
+      "level": "warn",
+      "text": "${PANEL} does not select the Row-Template page; activate it from the manager."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3483,
+      "fn": "rt_verify_panel",
+      "level": "warn",
+      "text": "the ${PANEL} configuration could not be read."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3499,
       "fn": "rt_uninstall_files",
       "level": "FAIL",
       "text": "refusing to delete $RT_ROOT: it does not look like a Row-Template install root."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2510,
+      "line": 3503,
       "fn": "rt_uninstall_files",
       "level": "FAIL",
       "text": "refusing to delete a system path: $RT_ROOT"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2523,
+      "line": 3521,
+      "fn": "rt_uninstall_panel",
+      "level": "FAIL",
+      "text": "the panel components are missing, so ${PANEL} cannot be reverted automatically; run 'row-template update' first."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3529,
+      "fn": "rt_uninstall_panel",
+      "level": "warn",
+      "text": "${PANEL}'s selection cannot be changed automatically here."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3534,
+      "fn": "rt_uninstall_panel",
+      "level": "FAIL",
+      "text": "could not revert ${PANEL}."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3541,
       "fn": "rt_cmd_uninstall",
       "level": "FAIL",
       "text": "Row-Template does not appear to be installed at $RT_ROOT."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2530,
+      "line": 3548,
       "fn": "rt_cmd_uninstall",
       "level": "FAIL",
       "text": "refusing to uninstall non-interactively without RT_ASSUME_YES=1."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2542,
+      "line": 3557,
       "fn": "rt_cmd_uninstall",
-      "level": "warn",
-      "text": "could not clear subThemeDir automatically. In the panel, clear Settings -> Subscription -> Sub Theme Directory."
+      "level": "FAIL",
+      "text": "uninstall stopped before removing anything; the panel and Row-Template are unchanged."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2547,
-      "fn": "rt_cmd_uninstall",
-      "level": "warn",
-      "text": "could not read subThemeDir (sqlite3/DB unavailable). If it points at $RT_ROOT, clear it in the panel."
-    },
-    {
-      "file": "installer/lib/row-template.sh",
-      "line": 2554,
+      "line": 3562,
       "fn": "rt_cmd_uninstall",
       "level": "FAIL",
       "text": "uninstall could not complete safely; see the message above. No forced deletion was performed."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2566,
+      "line": 3573,
+      "fn": "rt_cmd_uninstall",
+      "level": "warn",
+      "text": "could not clear subThemeDir automatically. In the panel, clear Settings -> Subscription -> Sub Theme Directory."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3578,
+      "fn": "rt_cmd_uninstall",
+      "level": "warn",
+      "text": "could not read subThemeDir (sqlite3/DB unavailable). If it points at $RT_ROOT, clear it in the panel."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3585,
+      "fn": "rt_cmd_uninstall",
+      "level": "FAIL",
+      "text": "uninstall could not complete safely; see the message above. No forced deletion was performed."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3597,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "Row-Template is not installed; run the installer first."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2569,
+      "line": 3600,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "cannot create a work directory."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2571,
+      "line": 3602,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "could not obtain a verified release."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2572,
+      "line": 3603,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "the release payload has no template.html."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2575,
+      "line": 3606,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "payload artifact checksum mismatch."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2577,
+      "line": 3608,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "the release artifact failed structural validation."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2578,
+      "line": 3609,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "the release payload is incomplete; nothing was changed."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2585,
+      "line": 3621,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "the release template store failed verification."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2590,
+      "line": 3626,
       "fn": "rt_cmd_update",
       "level": "warn",
       "text": "template '$picked' is not in this release; falling back to Row."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2598,
+      "line": 3633,
+      "fn": "rt_cmd_update",
+      "level": "FAIL",
+      "text": "this release carries no ${PANEL} pages; nothing was changed."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 3636,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "the selected template failed structural validation."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2604,
+      "line": 3642,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "could not back up the current install; aborting."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2607,
+      "line": 3645,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "failed to stage the new artifact; the running template is unchanged."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2608,
+      "line": 3646,
       "fn": "rt_cmd_update",
       "level": "warn",
       "text": "could not update the VERSION file."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2611,
+      "line": 3649,
       "fn": "rt_cmd_update",
       "level": "warn",
       "text": "could not update the management library."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2614,
+      "line": 3652,
       "fn": "rt_cmd_update",
       "level": "warn",
       "text": "could not update the management library's companions; run 'row-template update' to retry."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2617,
+      "line": 3655,
       "fn": "rt_cmd_update",
       "level": "warn",
       "text": "could not update the row-template CLI."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2622,
+      "line": 3660,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "could not persist the template selection."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2629,
+      "line": 3667,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "activation of the new version failed; rolling back."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2631,
+      "line": 3669,
       "fn": "rt_cmd_update",
       "level": "warn",
       "text": "rolled back to ${curver:-the previous version}; no changes are live."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2633,
+      "line": 3671,
       "fn": "rt_cmd_update",
       "level": "FAIL",
       "text": "activation failed AND automatic rollback failed; run 'row-template rollback' to recover."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2646,
+      "line": 3684,
       "fn": "rt_cmd_rollback",
       "level": "FAIL",
       "text": "Row-Template is not installed."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2650,
+      "line": 3688,
       "fn": "rt_cmd_rollback",
       "level": "FAIL",
       "text": "--to requires a backup directory."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2652,
+      "line": 3690,
       "fn": "rt_cmd_rollback",
       "level": "FAIL",
       "text": "usage: row-template rollback [--auto | --to <backup-dir>]"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2654,
+      "line": 3692,
       "fn": "rt_cmd_rollback",
       "level": "FAIL",
       "text": "no valid backup is available to roll back to."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2656,
+      "line": 3694,
       "fn": "rt_cmd_rollback",
       "level": "FAIL",
       "text": "refusing to roll back from a path outside the backups tree."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2657,
+      "line": 3695,
       "fn": "rt_cmd_rollback",
       "level": "FAIL",
       "text": "the selected backup failed validation: $target"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2660,
+      "line": 3698,
       "fn": "rt_cmd_rollback",
       "level": "warn",
       "text": "could not snapshot the current version before rollback."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2664,
+      "line": 3702,
       "fn": "rt_cmd_rollback",
       "level": "FAIL",
       "text": "could not stage the backup; the running template is unchanged."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2671,
+      "line": 3709,
       "fn": "rt_cmd_rollback",
       "level": "FAIL",
       "text": "rollback activation failed; attempting to restore the current version."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2673,
+      "line": 3711,
       "fn": "rt_cmd_rollback",
       "level": "warn",
       "text": "restored the previously-running version; nothing changed."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2675,
+      "line": 3713,
       "fn": "rt_cmd_rollback",
       "level": "FAIL",
       "text": "rollback failed and the current version could not be restored automatically."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2774,
+      "line": 3813,
       "fn": "rt_ui_menu_select",
       "level": "warn",
       "text": "Invalid option. Choose a number 0-$max."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2777,
+      "line": 3816,
       "fn": "rt_ui_menu_select",
       "level": "warn",
       "text": "Invalid option. Choose a number 0-$max."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2867,
+      "line": 3938,
       "fn": "rt_manager_update",
       "level": "warn",
       "text": "This installation is incomplete: some installer components are missing, as after an update from 1.1.0."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2878,
+      "line": 3949,
       "fn": "rt_manager_update",
       "level": "warn",
       "text": "Unable to check for updates right now (network or release source unavailable)."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2893,
+      "line": 3968,
       "fn": "rt_manager_activate",
       "level": "warn",
       "text": "Automatic activation is unavailable here (sqlite3 is not installed)."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2917,
+      "line": 3992,
       "fn": "rt_manager_activate",
       "level": "warn",
       "text": "Could not set the theme automatically; the panel service state was preserved."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2959,
+      "line": 4008,
+      "fn": "rt_manager_activate_panel",
+      "level": "warn",
+      "text": "Automatic activation is unavailable here; the page will be placed for you to select."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 4013,
+      "fn": "rt_manager_activate_panel",
+      "level": "FAIL",
+      "text": "the page could not be generated; nothing was changed."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 4022,
+      "fn": "rt_manager_activate_panel",
+      "level": "warn",
+      "text": "Activation did not complete; ${PANEL} was restored to how it was."
+    },
+    {
+      "file": "installer/lib/row-template.sh",
+      "line": 4067,
       "fn": "rt_apply_branding",
       "level": "FAIL",
       "text": "Row-Template is not installed."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2966,
+      "line": 4074,
       "fn": "rt_apply_branding",
       "level": "FAIL",
       "text": "could not write the configuration."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2971,
+      "line": 4079,
       "fn": "rt_apply_branding",
       "level": "FAIL",
       "text": "could not reconcile the template selection; the previous state was restored."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2975,
+      "line": 4083,
       "fn": "rt_apply_branding",
       "level": "FAIL",
       "text": "the new branding failed validation; restoring the previous configuration."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 2992,
+      "line": 4100,
       "fn": "rt_reconfig_service_name",
       "level": "FAIL",
       "text": "Rejected: control characters or too long."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 3019,
+      "line": 4127,
       "fn": "rt_reconfig_support_url",
       "level": "warn",
       "text": "Use https://, http://, tg:// or mailto:."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 3057,
+      "line": 4165,
       "fn": "rt_reconfig_logo",
       "level": "FAIL",
       "text": "Path became a symlink; aborting."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 3079,
+      "line": 4193,
       "fn": "rt_reconfig_template",
       "level": "warn",
-      "text": "No templates are installed. Re-run the installer to restore the template store."
+      "text": "No templates are installed, and they could not be restored automatically (see above)."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 3109,
+      "line": 4224,
       "fn": "rt_reconfig_reset",
       "level": "warn",
       "text": "This clears custom branding (service name, support URL, logo) and"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 3146,
+      "line": 4261,
       "fn": "rt_manager_main",
       "level": "FAIL",
       "text": "Row-Template is not installed at $RT_ROOT; run the installer first."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 3206,
+      "line": 4332,
       "fn": "rt_install_pick_template",
       "level": "warn",
       "text": "Choose 1-${#list[@]}, or press Enter for Row."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 3212,
+      "line": 4338,
       "fn": "rt_install_pick_template",
       "level": "warn",
       "text": "Choose 1-${#list[@]}, or press Enter for Row."
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 3313,
+      "line": 4449,
       "fn": "rt_panels_load",
       "level": "FAIL",
       "text": "could not load panel interface"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 3314,
+      "line": 4450,
       "fn": "rt_panels_load",
       "level": "FAIL",
       "text": "could not load panel registry"
     },
     {
       "file": "installer/lib/row-template.sh",
-      "line": 3354,
+      "line": 4490,
       "fn": "rt_transaction_load",
       "level": "FAIL",
       "text": "could not load the transaction engine"
     },
     {
       "file": "installer/bin/row-template",
-      "line": 18,
+      "line": 27,
       "fn": "(top)",
       "level": "FAIL",
       "text": "management library not found at %s"
     },
     {
       "file": "installer/bin/row-template",
-      "line": 19,
+      "line": 28,
       "fn": "(top)",
       "level": "FAIL",
       "text": "the install may be damaged; re-run the installer."
     },
     {
       "file": "installer/bin/row-template",
-      "line": 26,
+      "line": 35,
       "fn": "(top)",
       "level": "FAIL",
       "text": "unexpected error (line $LINENO); no partial change was committed."
     },
     {
       "file": "installer/bin/row-template",
-      "line": 52,
+      "line": 61,
       "fn": "(top)",
       "level": "FAIL",
       "text": "unknown command: $cmd"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 133,
+      "fn": "rt_transaction_state_set",
+      "level": "FAIL",
+      "text": "transaction: unknown state '$to'"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 137,
+      "fn": "rt_transaction_state_set",
+      "level": "FAIL",
+      "text": "transaction: invalid transition $RT_TXN_STATE -> $to"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 209,
+      "fn": "rt_transaction_lock_acquire",
+      "level": "FAIL",
+      "text": "transaction: RT_ROOT is unset; refusing to lock"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 212,
+      "fn": "rt_transaction_lock_acquire",
+      "level": "FAIL",
+      "text": "transaction: flock is not available; refusing to run without single-flight protection"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 221,
+      "fn": "rt_transaction_lock_acquire",
+      "level": "FAIL",
+      "text": "transaction: refusing a symlinked install root: $RT_ROOT"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 222,
+      "fn": "rt_transaction_lock_acquire",
+      "level": "FAIL",
+      "text": "transaction: could not create the lock directory: $dir"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 224,
+      "fn": "rt_transaction_lock_acquire",
+      "level": "FAIL",
+      "text": "transaction: refusing a symlinked lock directory: $dir"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 225,
+      "fn": "rt_transaction_lock_acquire",
+      "level": "FAIL",
+      "text": "transaction: refusing a symlinked lock file: $file"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 231,
+      "fn": "rt_transaction_lock_acquire",
+      "level": "FAIL",
+      "text": "transaction: fd 9 is already open; refusing to reuse the lock descriptor"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 235,
+      "fn": "rt_transaction_lock_acquire",
+      "level": "FAIL",
+      "text": "transaction: could not open the lock file: $file"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 243,
+      "fn": "rt_transaction_lock_acquire",
+      "level": "FAIL",
+      "text": "transaction: another transaction holds the lock ($file)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 283,
+      "fn": "rt_transaction_stage_reset",
+      "level": "FAIL",
+      "text": "transaction: RT_PANEL_STAGE is unset; refusing to clear it"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 284,
+      "fn": "rt_transaction_stage_reset",
+      "level": "FAIL",
+      "text": "transaction: refusing to clear /"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 285,
+      "fn": "rt_transaction_stage_reset",
+      "level": "FAIL",
+      "text": "transaction: refusing to clear a symlinked stage: $d"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 287,
+      "fn": "rt_transaction_stage_reset",
+      "level": "FAIL",
+      "text": "transaction: unexpected stage path (expected a .panel-stage directory): $d"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 289,
+      "fn": "rt_transaction_stage_reset",
+      "level": "FAIL",
+      "text": "transaction: refusing to clear a stage outside the install root: $d"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 291,
+      "fn": "rt_transaction_stage_reset",
+      "level": "FAIL",
+      "text": "transaction: could not clear the stage: $d"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 397,
+      "fn": "rt_transaction_rollback_report_failure",
+      "level": "FAIL",
+      "text": "transaction: the original failure was status $original"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 398,
+      "fn": "rt_transaction_rollback_report_failure",
+      "level": "FAIL",
+      "text": "transaction: rollback also failed ($why); the panel was left as the failed attempt left it"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 399,
+      "fn": "rt_transaction_rollback_report_failure",
+      "level": "FAIL",
+      "text": "transaction: no further recovery is attempted automatically"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 480,
+      "fn": "rt_transaction_rollback",
+      "level": "warn",
+      "text": "transaction: live verification after rollback was not available (status $rc)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 481,
+      "fn": "rt_transaction_rollback",
+      "level": "warn",
+      "text": "transaction: live verification after rollback did not pass (status $rc)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 499,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: unknown panel id '${panel}' (known: $RT_PANEL_IDS)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 504,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: SOURCE is required"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 523,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: panel '$panel' is not present on this host (status $rc)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 527,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: panel '$panel' cannot be identified in this build (status $rc)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 531,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: detection failed for panel '$panel' (status $rc)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 544,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: capabilities are unavailable for panel '$panel' (status $rc)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 551,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: panel '$panel' reported an unknown capability '$tok'"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 577,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: panel '$panel' does not declare the required capability '$need'"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 584,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: panel '$panel' declares no apply capability (needs one of: $RT_TXN_REQUIRED_APPLY_CAPABILITIES)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 600,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: could not capture the state of panel '$panel' (status $rc)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 615,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: the safety snapshot could not be created; nothing was changed"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 620,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: the safety snapshot did not validate; nothing was changed"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 641,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: template placement failed for panel '$panel' (status $rc)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 657,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: static verification did not pass for panel '$panel' (status $rc)"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 672,
+      "fn": "rt_transaction_body",
+      "level": "warn",
+      "text": "transaction: live verification was unavailable for panel '$panel'; this is not a rollback trigger"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 674,
+      "fn": "rt_transaction_body",
+      "level": "warn",
+      "text": "transaction: live verification does not apply to panel '$panel'"
+    },
+    {
+      "file": "installer/lib/transaction.sh",
+      "line": 676,
+      "fn": "rt_transaction_body",
+      "level": "FAIL",
+      "text": "transaction: live verification failed for panel '$panel' (status $rc)"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 260,
+      "fn": "rt_panel_3xui_backup_state",
+      "level": "FAIL",
+      "text": "panel 3xui: the stored selection contains a newline and cannot be recorded exactly"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 294,
+      "fn": "rt_panel_3xui_install_template",
+      "level": "FAIL",
+      "text": "panel 3xui: SOURCE is required"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 295,
+      "fn": "rt_panel_3xui_install_template",
+      "level": "FAIL",
+      "text": "panel 3xui: refusing a symlinked SOURCE: $src"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 296,
+      "fn": "rt_panel_3xui_install_template",
+      "level": "FAIL",
+      "text": "panel 3xui: SOURCE is not a regular file: $src"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 302,
+      "fn": "rt_panel_3xui_install_template",
+      "level": "FAIL",
+      "text": "panel 3xui: SOURCE is outside the Row-Template root ($RT_ROOT): $src"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 332,
+      "fn": "rt_panel_3xui_verify",
+      "level": "FAIL",
+      "text": "panel 3xui: unknown verification mode '$mode'"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 336,
+      "fn": "rt_panel_3xui_verify",
+      "level": "FAIL",
+      "text": "panel 3xui: the artifact is missing: $RT_DIST"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 338,
+      "fn": "rt_panel_3xui_verify",
+      "level": "FAIL",
+      "text": "panel 3xui: the artifact failed structural validation"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 345,
+      "fn": "rt_panel_3xui_verify",
+      "level": "FAIL",
+      "text": "panel 3xui: the recorded checksum is unreadable"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 347,
+      "fn": "rt_panel_3xui_verify",
+      "level": "FAIL",
+      "text": "panel 3xui: the artifact does not match its recorded checksum"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 352,
+      "fn": "rt_panel_3xui_verify",
+      "level": "FAIL",
+      "text": "panel 3xui: cannot read the panel selection"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 354,
+      "fn": "rt_panel_3xui_verify",
+      "level": "FAIL",
+      "text": "panel 3xui: cannot read the panel selection"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 356,
+      "fn": "rt_panel_3xui_verify",
+      "level": "FAIL",
+      "text": "panel 3xui: subThemeDir is '$cur', expected '$RT_ROOT'"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 375,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: the snapshot's selection.state is malformed"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 378,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: selection.state must be absent|empty|present, got '$st'"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 383,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: the snapshot's panel meta is malformed"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 386,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: mechanism is '$mech', expected 'db'"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 391,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: was_running must be 0|1, got '$was_running'"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 399,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: the snapshot's files record is malformed"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 401,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: refusing to restore: this panel places no file, but the snapshot lists one"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 406,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: state=present but the selection value is unreadable"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 436,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: cannot read the selection back after restoring"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 438,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: after restoring, the selection state is '$now', expected '$st'"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 443,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: cannot read the selection value back after restoring"
+    },
+    {
+      "file": "installer/panels/3xui.sh",
+      "line": 445,
+      "fn": "rt_panel_3xui_restore_state",
+      "level": "FAIL",
+      "text": "panel 3xui: after restoring, subThemeDir is not the recorded value"
+    },
+    {
+      "file": "installer/panels/index.sh",
+      "line": 44,
+      "fn": "(top)",
+      "level": "FAIL",
+      "text": "panel registry: the 3xui adapter exists but could not be loaded"
+    },
+    {
+      "file": "installer/panels/index.sh",
+      "line": 51,
+      "fn": "(top)",
+      "level": "FAIL",
+      "text": "panel registry: the pasarguard adapter exists but could not be loaded"
+    },
+    {
+      "file": "installer/panels/index.sh",
+      "line": 58,
+      "fn": "(top)",
+      "level": "FAIL",
+      "text": "panel registry: the rebecca adapter exists but could not be loaded"
+    },
+    {
+      "file": "installer/panels/index.sh",
+      "line": 156,
+      "fn": "rt_panel_dispatch",
+      "level": "FAIL",
+      "text": "panel dispatch: no dispatch arm for implementation '$impl' verb '$verb'"
+    },
+    {
+      "file": "installer/panels/interface.sh",
+      "line": 130,
+      "fn": "rt_panel_arg_ok",
+      "level": "FAIL",
+      "text": "panel $verb: unknown panel id '${panel}' (known: $RT_PANEL_IDS)"
+    },
+    {
+      "file": "installer/panels/interface.sh",
+      "line": 249,
+      "fn": "rt_panel_install_template",
+      "level": "FAIL",
+      "text": "panel install_template: SOURCE is required"
+    },
+    {
+      "file": "installer/panels/interface.sh",
+      "line": 277,
+      "fn": "rt_panel_verify",
+      "level": "FAIL",
+      "text": "panel verify: takes exactly PANEL MODE, got $# arguments"
+    },
+    {
+      "file": "installer/panels/interface.sh",
+      "line": 281,
+      "fn": "rt_panel_verify",
+      "level": "FAIL",
+      "text": "panel verify: MODE must be static|live, got '${2:-}'"
+    },
+    {
+      "file": "installer/panels/interface.sh",
+      "line": 317,
+      "fn": "rt_panel_restore_state",
+      "level": "FAIL",
+      "text": "panel restore_state: SNAPSHOT is required"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 196,
+      "fn": "rt_panel_pasarguard_env_rewrite",
+      "level": "FAIL",
+      "text": "panel pasarguard: .env is missing or a symlink: $env"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 198,
+      "fn": "rt_panel_pasarguard_env_rewrite",
+      "level": "FAIL",
+      "text": "panel pasarguard: the Row-Template block in $env is damaged; fix or remove it by hand"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 266,
+      "fn": "rt_panel_pasarguard_root",
+      "level": "FAIL",
+      "text": "panel pasarguard: CUSTOM_TEMPLATES_DIRECTORY is not a plain absolute path: $root"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 268,
+      "fn": "rt_panel_pasarguard_root",
+      "level": "FAIL",
+      "text": "panel pasarguard: $root is outside $RT_PG_DATA_DIR, the directory the container shares with the host"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 374,
+      "fn": "rt_panel_pasarguard_db_notes",
+      "level": "warn",
+      "text": "panel pasarguard: $n admin(s) set their own subscription page (sub_template); their users keep that page."
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 379,
+      "fn": "rt_panel_pasarguard_db_notes",
+      "level": "warn",
+      "text": "panel pasarguard: the panel's 'disable subscription template' setting is on, so browsers get the raw subscription instead of any page."
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 424,
+      "fn": "rt_panel_pasarguard_backup_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: the Row-Template block in .env is damaged"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 453,
+      "fn": "rt_panel_pasarguard_place",
+      "level": "FAIL",
+      "text": "panel pasarguard: the templates directory is a symlink: $root"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 454,
+      "fn": "rt_panel_pasarguard_place",
+      "level": "FAIL",
+      "text": "panel pasarguard: $dir is a symlink"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 457,
+      "fn": "rt_panel_pasarguard_place",
+      "level": "FAIL",
+      "text": "panel pasarguard: $dest exists and is not Row-Template's; it was left untouched"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 471,
+      "fn": "rt_panel_pasarguard_install_template",
+      "level": "FAIL",
+      "text": "panel pasarguard: SOURCE is required"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 472,
+      "fn": "rt_panel_pasarguard_install_template",
+      "level": "FAIL",
+      "text": "panel pasarguard: refusing a symlinked SOURCE"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 473,
+      "fn": "rt_panel_pasarguard_install_template",
+      "level": "FAIL",
+      "text": "panel pasarguard: SOURCE is not a regular file: $src"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 474,
+      "fn": "rt_panel_pasarguard_install_template",
+      "level": "FAIL",
+      "text": "panel pasarguard: SOURCE is outside $RT_ROOT"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 476,
+      "fn": "rt_panel_pasarguard_install_template",
+      "level": "FAIL",
+      "text": "panel pasarguard: SOURCE is not a PasarGuard page this release can serve"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 487,
+      "fn": "rt_panel_pasarguard_install_template",
+      "level": "FAIL",
+      "text": "panel pasarguard: the panel could not be restarted"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 511,
+      "fn": "rt_panel_pasarguard_verify",
+      "level": "FAIL",
+      "text": "panel pasarguard: unknown verification mode '$mode'"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 519,
+      "fn": "rt_panel_pasarguard_verify",
+      "level": "FAIL",
+      "text": "panel pasarguard: the running panel does not use the Row-Template page yet (restart it)"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 521,
+      "fn": "rt_panel_pasarguard_verify",
+      "level": "FAIL",
+      "text": "panel pasarguard: the running panel cannot see $root/$RT_PG_PAGE"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 525,
+      "fn": "rt_panel_pasarguard_verify",
+      "level": "FAIL",
+      "text": "panel pasarguard: the artifact is missing: $RT_DIST"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 527,
+      "fn": "rt_panel_pasarguard_verify",
+      "level": "FAIL",
+      "text": "panel pasarguard: the artifact is not a valid PasarGuard page"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 531,
+      "fn": "rt_panel_pasarguard_verify",
+      "level": "FAIL",
+      "text": "panel pasarguard: the artifact does not match its recorded checksum"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 534,
+      "fn": "rt_panel_pasarguard_verify",
+      "level": "FAIL",
+      "text": "panel pasarguard: the generated page is missing or invalid: $RT_LIVE"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 538,
+      "fn": "rt_panel_pasarguard_verify",
+      "level": "FAIL",
+      "text": "panel pasarguard: the page is not in place: $dest"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 540,
+      "fn": "rt_panel_pasarguard_verify",
+      "level": "FAIL",
+      "text": "panel pasarguard: the placed page differs from the generated one"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 542,
+      "fn": "rt_panel_pasarguard_verify",
+      "level": "FAIL",
+      "text": "panel pasarguard: .env does not select the Row-Template page"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 553,
+      "fn": "rt_panel_pasarguard_remove_page",
+      "level": "warn",
+      "text": "panel pasarguard: $dest is not Row-Template's; left in place"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 566,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: malformed selection.state"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 568,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: malformed panel meta"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 570,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: mechanism is '$mech', expected 'env'"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 572,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: malformed files record"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 574,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: refusing to restore: the record lists a file this adapter never places: $f"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 577,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: malformed block record"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 581,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: malformed root record"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 582,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: malformed dir record"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 606,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: after restoring, the Row-Template block is '$now_block', expected '$block'"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 610,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: after restoring, the block's directory is not the recorded value"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 620,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: after restoring, $RT_PG_KEY_PAGE is set, but the record says it was unset"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 624,
+      "fn": "rt_panel_pasarguard_restore_state",
+      "level": "FAIL",
+      "text": "panel pasarguard: after restoring, $RT_PG_KEY_PAGE is not the recorded value"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 643,
+      "fn": "rt_panel_pasarguard_uninstall_template",
+      "level": "FAIL",
+      "text": "panel pasarguard: the Row-Template block in .env is damaged; fix or remove it by hand"
+    },
+    {
+      "file": "installer/panels/pasarguard.sh",
+      "line": 662,
+      "fn": "rt_panel_pasarguard_uninstall_template",
+      "level": "FAIL",
+      "text": "panel pasarguard: the panel could not be restarted"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 138,
+      "fn": "rt_panel_rebecca_edition_ok",
+      "level": "FAIL",
+      "text": "panel rebecca: this is Rebecca 0.0.x, the Python edition (Docker image ${IMAGE}). Row-Template's Rebecca page is built for Rebecca 1.x, the Go edition, which Rebecca publishes for its binary install (rebecca-binary.sh); Rebecca's own 'rebecca migrate-binary' moves a Docker install to it."
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 140,
+      "fn": "rt_panel_rebecca_edition_ok",
+      "level": "FAIL",
+      "text": "panel rebecca: cannot tell which Rebecca edition this is (the Docker image could not be inspected); refusing rather than placing a page Rebecca may not be able to render."
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 248,
+      "fn": "rt_panel_rebecca_root",
+      "level": "FAIL",
+      "text": "panel rebecca: custom_templates_directory is not a usable absolute path"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 250,
+      "fn": "rt_panel_rebecca_root",
+      "level": "FAIL",
+      "text": "panel rebecca: $root is outside $RT_RB_DATA_DIR, the directory the container shares with the host"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 320,
+      "fn": "rt_panel_rebecca_backup_state",
+      "level": "FAIL",
+      "text": "panel rebecca: cannot read subscription_settings"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 322,
+      "fn": "rt_panel_rebecca_backup_state",
+      "level": "FAIL",
+      "text": "panel rebecca: cannot read custom_templates_directory"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 340,
+      "fn": "rt_panel_rebecca_place",
+      "level": "FAIL",
+      "text": "panel rebecca: the templates directory is a symlink: $root"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 341,
+      "fn": "rt_panel_rebecca_place",
+      "level": "FAIL",
+      "text": "panel rebecca: $dir is a symlink"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 344,
+      "fn": "rt_panel_rebecca_place",
+      "level": "FAIL",
+      "text": "panel rebecca: $dest exists and is not Row-Template's; it was left untouched"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 357,
+      "fn": "rt_panel_rebecca_install_template",
+      "level": "FAIL",
+      "text": "panel rebecca: SOURCE is required"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 358,
+      "fn": "rt_panel_rebecca_install_template",
+      "level": "FAIL",
+      "text": "panel rebecca: refusing a symlinked SOURCE"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 359,
+      "fn": "rt_panel_rebecca_install_template",
+      "level": "FAIL",
+      "text": "panel rebecca: SOURCE is not a regular file: $src"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 360,
+      "fn": "rt_panel_rebecca_install_template",
+      "level": "FAIL",
+      "text": "panel rebecca: SOURCE is outside $RT_ROOT"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 361,
+      "fn": "rt_panel_rebecca_install_template",
+      "level": "FAIL",
+      "text": "panel rebecca: SOURCE is not a Rebecca page this release can serve"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 393,
+      "fn": "rt_panel_rebecca_verify",
+      "level": "FAIL",
+      "text": "panel rebecca: unknown verification mode '$mode'"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 395,
+      "fn": "rt_panel_rebecca_verify",
+      "level": "FAIL",
+      "text": "panel rebecca: the artifact is missing: $RT_DIST"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 396,
+      "fn": "rt_panel_rebecca_verify",
+      "level": "FAIL",
+      "text": "panel rebecca: the artifact is not a valid Rebecca page"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 400,
+      "fn": "rt_panel_rebecca_verify",
+      "level": "FAIL",
+      "text": "panel rebecca: the artifact does not match its recorded checksum"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 403,
+      "fn": "rt_panel_rebecca_verify",
+      "level": "FAIL",
+      "text": "panel rebecca: the generated page is missing or invalid: $RT_LIVE"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 405,
+      "fn": "rt_panel_rebecca_verify",
+      "level": "FAIL",
+      "text": "panel rebecca: cannot read the panel selection (sqlite3 and a SQLite database are needed)"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 408,
+      "fn": "rt_panel_rebecca_verify",
+      "level": "FAIL",
+      "text": "panel rebecca: the page is not in place: $dest"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 410,
+      "fn": "rt_panel_rebecca_verify",
+      "level": "FAIL",
+      "text": "panel rebecca: the placed page differs from the generated one"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 411,
+      "fn": "rt_panel_rebecca_verify",
+      "level": "FAIL",
+      "text": "panel rebecca: the panel does not select the Row-Template page"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 413,
+      "fn": "rt_panel_rebecca_verify",
+      "level": "warn",
+      "text": "panel rebecca: $n admin(s) override the subscription page for their own users; those users keep the admin's page."
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 421,
+      "fn": "rt_panel_rebecca_remove_page",
+      "level": "warn",
+      "text": "panel rebecca: $dest is not Row-Template's; left in place"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 445,
+      "fn": "rt_panel_rebecca_restore_record",
+      "level": "FAIL",
+      "text": "panel rebecca: subscription_page_template cannot have been absent (state '$st')"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 449,
+      "fn": "rt_panel_rebecca_restore_record",
+      "level": "FAIL",
+      "text": "panel rebecca: malformed dir_state record"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 453,
+      "fn": "rt_panel_rebecca_restore_record",
+      "level": "FAIL",
+      "text": "panel rebecca: cannot read subscription_page_template back after restoring"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 455,
+      "fn": "rt_panel_rebecca_restore_record",
+      "level": "FAIL",
+      "text": "panel rebecca: after restoring, subscription_page_template is '$nowpage', expected '$page'"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 458,
+      "fn": "rt_panel_rebecca_restore_record",
+      "level": "FAIL",
+      "text": "panel rebecca: cannot read custom_templates_directory back after restoring"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 460,
+      "fn": "rt_panel_rebecca_restore_record",
+      "level": "FAIL",
+      "text": "panel rebecca: after restoring, custom_templates_directory is not the recorded value"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 467,
+      "fn": "rt_panel_rebecca_restore_state",
+      "level": "FAIL",
+      "text": "panel rebecca: malformed selection.state"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 468,
+      "fn": "rt_panel_rebecca_restore_state",
+      "level": "FAIL",
+      "text": "panel rebecca: malformed panel meta"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 470,
+      "fn": "rt_panel_rebecca_restore_state",
+      "level": "FAIL",
+      "text": "panel rebecca: mechanism is '$mech', expected 'db'"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 471,
+      "fn": "rt_panel_rebecca_restore_state",
+      "level": "FAIL",
+      "text": "panel rebecca: malformed files record"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 473,
+      "fn": "rt_panel_rebecca_restore_state",
+      "level": "FAIL",
+      "text": "panel rebecca: refusing to restore: the record lists a file this adapter never places: $f"
+    },
+    {
+      "file": "installer/panels/rebecca.sh",
+      "line": 477,
+      "fn": "rt_panel_rebecca_restore_state",
+      "level": "FAIL",
+      "text": "panel rebecca: malformed root record"
     }
   ]
 }

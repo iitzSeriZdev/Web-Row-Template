@@ -36,6 +36,11 @@ const isDefault = tpl.id === TEMPLATE_META.default;
     : <>The installer lists the templates; enter {tpl.name}'s number{isDefault ? ", or just press Enter — it is the default" : ""}. To install with no questions at all — in a script, for example — pass its ID in <code>RT_TEMPLATE</code>; you can set branding afterwards with <code>row-template config</code>:</>}
 </p>
 <Code lang="bash" code={`RT_ASSUME_NONINTERACTIVE=1 RT_TEMPLATE=${tpl.id} \\\nbash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)`} themes={{ light: "github-light", dark: "github-dark" }} />
+<p>
+  {fa
+    ? <>روی سروری که بیش از یک پنل پشتیبانی‌شده دارد، <code>RT_PANEL</code> را هم اضافه کنید (<code>3xui</code>، <code>pasarguard</code> یا <code>rebecca</code>). این تمپلیت روی هر سه پنل در دسترس است.</>
+    : <>On a server with more than one supported panel, add <code>RT_PANEL</code> as well (<code>3xui</code>, <code>pasarguard</code> or <code>rebecca</code>). This template is available on all three panels.</>}
+</p>
 
 <h3 id="on-an-existing-install">{fa ? "روی نصب موجود" : "On an existing install"}</h3>
 <p>

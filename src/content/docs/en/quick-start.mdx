@@ -1,6 +1,6 @@
 ---
 title: Quick Start
-description: Install Row-Template on a 3X-UI server, make it the active subscription page, and confirm it works — in three steps.
+description: Install Row-Template on a 3X-UI, PasarGuard or Rebecca server, make it the active subscription page, and confirm it works — in three steps.
 ---
 
 This page is the short path. Every step links to the full explanation if you want it.
@@ -9,7 +9,7 @@ This page is the short path. Every step links to the full explanation if you wan
 
 ### Become root on the panel's server
 
-Log in to the server that runs your 3X-UI panel and open a root shell:
+Log in to the server that runs your panel and open a root shell:
 
 ```bash
 sudo -i
@@ -19,11 +19,37 @@ sudo -i
   Use a real root shell. `sudo bash <(curl …)` does not work: `sudo` closes the file descriptor that `<(…)` creates, so bash cannot read the script.
 </Callout>
 
-Check the panel version — it must be **3.6.0 or newer**:
+Check your panel is one Row-Template supports:
+
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
+
+The version must be **3.6.0 or newer**:
 
 ```bash
 /usr/local/x-ui/x-ui -v
 ```
+
+</Tab>
+<Tab>
+
+PasarGuard **5.x**, installed with its official installer (Docker) or from source (`pasarguard.service`):
+
+```bash
+pasarguard status
+```
+
+</Tab>
+<Tab>
+
+Rebecca **1.x**, the Go edition — Rebecca's binary install, which runs as `rebecca.service`. Rebecca's Docker image is still 0.0.x and is refused; Rebecca's own `rebecca migrate-binary` moves a Docker install to 1.x.
+
+```bash
+systemctl status rebecca
+```
+
+</Tab>
+</Tabs>
 
 See [Requirements](/docs/requirements/) for everything the installer needs.
 
@@ -33,23 +59,47 @@ See [Requirements](/docs/requirements/) for everything the installer needs.
 bash <(curl -fsSL https://github.com/iitzSeriZdev/Row-Template/releases/latest/download/install.sh)
 ```
 
-The installer verifies the download, then asks you a few questions:
+The installer verifies the download, finds your panel, then asks you a few questions:
 
+- **Which panel?** — only on a server with more than one supported panel.
 - **Continue installation?** — press Enter.
 - **Choose your Row-Template design** — type a number, or press Enter for Row. You can [preview every design](/docs/templates/) first.
 - **Service name, support URL, logo** — all optional. Press Enter to skip any of them.
 - **Install with these settings?** — press Enter.
-- **Make Row-Template the active 3X-UI subscription theme now?** — press Enter.
+- **Make Row-Template the active subscription page now?** — press Enter. It first shows what activation will change on your panel.
 
-The last question only appears when `sqlite3` is installed and the panel's database was found. Otherwise you set one field in the panel yourself — see the next step. [The installer, prompt by prompt →](/docs/installation/installer/)
+On 3X-UI the last question only appears when `sqlite3` is installed and the panel's database was found; otherwise you set one field in the panel yourself. [The installer, prompt by prompt →](/docs/installation/installer/)
 
 ### Activate and verify
 
-If the installer activated Row-Template for you, skip to `verify`. Otherwise, in the 3X-UI panel open **Panel Settings → Subscription**, set **Sub Theme Directory** to exactly this path, and save:
+If the installer activated Row-Template for you, skip to `verify`. Otherwise:
+
+<Tabs labels={["3X-UI", "PasarGuard", "Rebecca"]} sync="panel">
+<Tab>
+
+In the panel open **Panel Settings → Subscription**, set **Sub Theme Directory** to exactly this path, and save:
 
 ```text
 /etc/3x-ui/sub_templates/row-template
 ```
+
+</Tab>
+<Tab>
+
+Activation is automatic. If you skipped it, run `row-template` and choose **5 — Activate / Re-apply theme**.
+
+</Tab>
+<Tab>
+
+Automatic with Rebecca's default SQLite database and `sqlite3` installed. With MySQL/MariaDB, open **Settings → Subscription → Templates** in the Rebecca dashboard and set:
+
+```text
+Subscription page template:   row-template/index.html
+Custom templates directory:   /var/lib/rebecca/templates
+```
+
+</Tab>
+</Tabs>
 
 Then check the whole installation:
 
@@ -68,7 +118,7 @@ Open any client's subscription link in a browser. You should see the Row-Templat
     Change your service name, support link and logo at any time.
   </Card>
   <Card title="Switch design" href="/docs/templates/choosing/" icon="panels-top-left">
-    Compare the fifteen designs and switch safely.
+    Compare the seventeen designs and switch safely.
   </Card>
   <Card title="The manager" href="/docs/management/manager/" icon="terminal">
     Run `row-template` for an interactive menu.
