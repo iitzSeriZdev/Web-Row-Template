@@ -47,7 +47,7 @@ If `verify` passes but your browser still shows the old page, something between 
 
 ## The installer refuses Rebecca
 
-`panel rebecca: this is Rebecca 0.0.x, the Python edition …` — Docker Hub's `rebeccapanel/rebecca` image is still the 0.0.x Python edition, which cannot render Row-Template's Rebecca page; with it, Rebecca would accept the setting and silently keep serving its own page. The installer refuses it before changing anything. Move to Rebecca **1.x**, the Go edition, with Rebecca's own `rebecca migrate-binary` (or install it with `rebecca-binary.sh`), then run the installer again.
+`panel rebecca: this is Rebecca 0.0.x, the Python edition …` — Docker Hub's `rebeccapanel/rebecca` image is still the 0.0.x Python edition, which cannot render Row-Template's Rebecca page; with it, Rebecca would accept the setting and silently keep serving its own page. The installer refuses it before changing anything. Install Rebecca **1.x**, the Go edition, with Rebecca's binary installer (`rebecca-binary.sh`) — the install Row-Template is tested against — then run the installer again. The refusal message also names Rebecca's `rebecca migrate-binary`; Row-Template has not verified it, and in Rebecca's current scripts that command is not routed by the `rebecca` command, so it may only print its usage text.
 
 ## The installer says more than one panel is installed
 

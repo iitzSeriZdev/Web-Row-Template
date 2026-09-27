@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/branding/row-template-logo.png" alt="Row-Template" width="112" height="112">
+</p>
+
 # Row-Template Docs
 
 The documentation site for [Row-Template](https://github.com/iitzSeriZdev/Row-Template), the self-contained, white-label subscription page for 3X-UI, PasarGuard and Rebecca panels.
@@ -33,6 +37,7 @@ Search needs the Pagefind index, so it works after `npm run build` (in `preview`
 | `src/content/docs/en/`, `src/content/docs/fa/` | The pages, as MDX — one file per page and language, at the same path |
 | `src/data/errors.ts` | The error reference: every installer message, its translation, meaning and fix |
 | `src/data/templates.json`, `public/previews/`, `public/live/` | Synced from Row-Template — never edited here |
+| `public/branding/` | The official Row-Template logo: the symbol (navigation bar), the square logo (landing page, social image) and the app icon (favicon). Copies and downscaled derivatives of the canonical logo files — never redrawn or recoloured |
 | `src/data/installer-messages.json` | Every error and warning in the installer source — the bootstrap, the library, the command and every companion the library declares — extracted by the sync script |
 | `src/components/`, `src/layouts/` | The UI, modelled on the shadcn/ui documentation |
 | `src/lib/nav.ts` | The sidebar, in reading order |

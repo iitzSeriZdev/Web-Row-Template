@@ -47,7 +47,7 @@ row-template verify
 
 ## نصب‌کننده Rebecca را رد می‌کند
 
-`panel rebecca: this is Rebecca 0.0.x, the Python edition …` — ایمیج `rebeccapanel/rebecca` در Docker Hub هنوز نسخهٔ پایتونی 0.0.x است که نمی‌تواند صفحهٔ Rebecca در Row-Template را رندر کند؛ با آن، Rebecca تنظیم را می‌پذیرفت و بی‌صدا همان صفحهٔ خودش را ارائه می‌داد. نصب‌کننده پیش از هر تغییری آن را رد می‌کند. با دستور `rebecca migrate-binary` خود Rebecca (یا نصب با `rebecca-binary.sh`) به Rebecca نسخهٔ **1.x**، یعنی نسخهٔ Go، بروید و نصب‌کننده را دوباره اجرا کنید.
+`panel rebecca: this is Rebecca 0.0.x, the Python edition …` — ایمیج `rebeccapanel/rebecca` در Docker Hub هنوز نسخهٔ پایتونی 0.0.x است که نمی‌تواند صفحهٔ Rebecca در Row-Template را رندر کند؛ با آن، Rebecca تنظیم را می‌پذیرفت و بی‌صدا همان صفحهٔ خودش را ارائه می‌داد. نصب‌کننده پیش از هر تغییری آن را رد می‌کند. Rebecca نسخهٔ **1.x**، یعنی نسخهٔ Go، را با نصب‌کنندهٔ باینری Rebecca (`rebecca-binary.sh`) نصب کنید — نصبی که Row-Template روی آن آزموده شده — و نصب‌کننده را دوباره اجرا کنید. پیام رد، دستور `rebecca migrate-binary` خود Rebecca را هم نام می‌برد؛ Row-Template آن را تأیید نکرده است، و در اسکریپت‌های فعلی Rebecca این دستور به فرمان `rebecca` وصل نیست، پس ممکن است فقط راهنمای استفاده‌اش را چاپ کند.
 
 ## نصب‌کننده می‌گوید بیش از یک پنل نصب است
 

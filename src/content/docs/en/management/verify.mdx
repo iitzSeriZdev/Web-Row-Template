@@ -113,7 +113,7 @@ The last line sums it up:
 |---|---|---|
 | ok | `Rebecca detected.` | — |
 | warn | `Rebecca was not detected on this host.` | Run `verify` on the panel's server, as root. |
-| FAIL | `panel rebecca: this is Rebecca 0.0.x, the Python edition …` | Rebecca's Docker image cannot serve the page: move to 1.x with `rebecca migrate-binary`. |
+| FAIL | `panel rebecca: this is Rebecca 0.0.x, the Python edition …` | Rebecca's Docker image cannot serve the page: install Rebecca 1.x with its binary installer (`rebecca-binary.sh`). |
 | ok | `Rebecca selects the Row-Template page, and the placed page is current.` | — |
 | FAIL | `Rebecca's Row-Template page is out of step (see above); …` | Read the `panel rebecca:` line above it, then re-apply from the manager (**5 — Activate / Re-apply theme**). |
 | — | `Live check skipped (not available for this panel layout).` | Always, on Rebecca: it reads its settings on every request, so the check above is the one that counts. |

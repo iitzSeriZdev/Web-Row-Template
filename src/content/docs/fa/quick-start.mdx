@@ -33,16 +33,17 @@ sudo -i
 </Tab>
 <Tab>
 
-PasarGuard نسخهٔ **5.x**، نصب‌شده با نصب‌کنندهٔ رسمی‌اش (Docker) یا از سورس (`pasarguard.service`):
+PasarGuard نسخهٔ **5.x**، نصب‌شده با نصب‌کنندهٔ رسمی‌اش (Docker) یا از سورس (`pasarguard.service`). نصب‌کنندهٔ رسمی فرمان `pasarguard` را اضافه می‌کند:
 
 ```bash
-pasarguard status
+pasarguard status              # the official (Docker) install
+systemctl status pasarguard    # a source install
 ```
 
 </Tab>
 <Tab>
 
-Rebecca نسخهٔ **1.x**، یعنی نسخهٔ Go — نصب باینری Rebecca که به‌صورت `rebecca.service` اجرا می‌شود. ایمیج Docker مربوط به Rebecca هنوز 0.0.x است و رد می‌شود؛ دستور `rebecca migrate-binary` خود Rebecca نصب Docker را به 1.x منتقل می‌کند.
+Rebecca نسخهٔ **1.x**، یعنی نسخهٔ Go — نصب باینری Rebecca که به‌صورت `rebecca.service` اجرا می‌شود. ایمیج Docker مربوط به Rebecca هنوز 0.0.x است و رد می‌شود؛ Rebecca نسخهٔ 1.x را با نصب‌کنندهٔ باینری‌اش (`rebecca-binary.sh`) نصب کنید.
 
 ```bash
 systemctl status rebecca

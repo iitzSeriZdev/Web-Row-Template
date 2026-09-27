@@ -45,7 +45,9 @@ Row-Template هیچ runtime‌ای به سرور شما اضافه نمی‌کن
 PasarGuard نسخهٔ **5.x**، به همان شکلی که نصب‌کنندهٔ رسمی‌اش نصب می‌کند. نشانه‌هایی که بررسی می‌شوند: `/opt/pasarguard/.env`؛ فایل compose‌ای که PasarGuard را اجرا می‌کند یا سرویس systemd با نام `pasarguard` (نصب از سورس)؛ فرمان `pasarguard` در `/usr/local/bin/pasarguard`؛ و پوشهٔ دادهٔ `/var/lib/pasarguard`.
 
 ```bash
-ls -l /opt/pasarguard/.env && pasarguard status
+ls -l /opt/pasarguard/.env
+pasarguard status              # the official (Docker) install
+systemctl status pasarguard    # a source install
 ```
 
 برای فعال‌سازی خودکار چیز اضافه‌ای لازم نیست: Row-Template فایل `.env` را می‌نویسد و پنلِ در حال اجرا را یک بار ری‌استارت می‌کند.
@@ -59,7 +61,7 @@ Rebecca نسخهٔ **1.x**، یعنی نسخهٔ Go، با نصب باینری R
 systemctl status rebecca
 ```
 
-**ایمیج Docker مربوط به Rebecca پشتیبانی نمی‌شود.** ایمیج `rebeccapanel/rebecca` در Docker Hub هنوز نسخهٔ پایتونی 0.0.x است که صفحه‌ها را از زمینهٔ دیگری رندر می‌کند و نمی‌تواند این صفحه را رندر کند. نصب‌کننده پیش از هر تغییری نسخه را تشخیص می‌دهد و آن را رد می‌کند؛ دستور `rebecca migrate-binary` خود Rebecca نصب Docker را به 1.x منتقل می‌کند.
+**ایمیج Docker مربوط به Rebecca پشتیبانی نمی‌شود.** ایمیج `rebeccapanel/rebecca` در Docker Hub هنوز نسخهٔ پایتونی 0.0.x است که صفحه‌ها را از زمینهٔ دیگری رندر می‌کند و نمی‌تواند این صفحه را رندر کند. نصب‌کننده پیش از هر تغییری نسخه را تشخیص می‌دهد و آن را رد می‌کند؛ به‌جای آن از Rebecca نسخهٔ 1.x با نصب‌کنندهٔ باینری‌اش (`rebecca-binary.sh`) استفاده کنید.
 
 فعال‌سازی خودکار به پایگاه‌دادهٔ پیش‌فرض **SQLite** پنل Rebecca و فرمان `sqlite3` نیاز دارد. با MySQL/MariaDB صفحه همچنان گذاشته می‌شود و خودتان در داشبورد انتخابش می‌کنید.
 

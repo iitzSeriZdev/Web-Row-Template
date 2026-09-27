@@ -1,7 +1,7 @@
 ---
 import Icon from "./Icon.astro";
 import Sidebar from "./Sidebar.astro";
-import { t, docHref, homeHref, switchLocale, LOCALE_META, type Locale } from "../lib/i18n";
+import { t, docHref, homeHref, switchLocale, withBase, LOCALE_META, type Locale } from "../lib/i18n";
 
 interface Props {
   locale: Locale;
@@ -28,7 +28,7 @@ const repo = "https://github.com/iitzSeriZdev/Row-Template";
       <span class="sr-only">{s.toggleMenu}</span>
     </button>
     <a class="brand" href={homeHref(locale)}>
-      <span class="brand-mark"><Icon name="rows-3" /></span>
+      <span class="brand-mark"><img src={withBase("/branding/row-template-mark.png")} alt="" width="28" height="28" /></span>
       <span>Row-Template</span>
     </a>
     <nav class="main-nav" aria-label="Main">

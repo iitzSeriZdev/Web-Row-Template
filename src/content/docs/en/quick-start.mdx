@@ -33,16 +33,17 @@ The version must be **3.6.0 or newer**:
 </Tab>
 <Tab>
 
-PasarGuard **5.x**, installed with its official installer (Docker) or from source (`pasarguard.service`):
+PasarGuard **5.x**, installed with its official installer (Docker) or from source (`pasarguard.service`). The official installer adds the `pasarguard` command:
 
 ```bash
-pasarguard status
+pasarguard status              # the official (Docker) install
+systemctl status pasarguard    # a source install
 ```
 
 </Tab>
 <Tab>
 
-Rebecca **1.x**, the Go edition — Rebecca's binary install, which runs as `rebecca.service`. Rebecca's Docker image is still 0.0.x and is refused; Rebecca's own `rebecca migrate-binary` moves a Docker install to 1.x.
+Rebecca **1.x**, the Go edition — Rebecca's binary install, which runs as `rebecca.service`. Rebecca's Docker image is still 0.0.x and is refused; install Rebecca 1.x with its binary installer (`rebecca-binary.sh`).
 
 ```bash
 systemctl status rebecca

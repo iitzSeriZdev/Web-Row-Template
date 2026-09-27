@@ -43,7 +43,9 @@ The first `X.Y.Z` in the output must be **3.6.0 or newer**. If the version canno
 PasarGuard **5.x**, laid out the way its official installer lays it out. The signs checked: `/opt/pasarguard/.env`; a compose file running PasarGuard, or a `pasarguard` systemd unit (a source install); the `pasarguard` command at `/usr/local/bin/pasarguard`; and the data folder `/var/lib/pasarguard`.
 
 ```bash
-ls -l /opt/pasarguard/.env && pasarguard status
+ls -l /opt/pasarguard/.env
+pasarguard status              # the official (Docker) install
+systemctl status pasarguard    # a source install
 ```
 
 Nothing extra is needed for automatic activation: Row-Template writes `.env` and restarts a running panel once.
@@ -57,7 +59,7 @@ Rebecca **1.x**, the Go edition, from Rebecca's binary install (`rebecca-binary.
 systemctl status rebecca
 ```
 
-**Rebecca's Docker image is not supported.** Docker Hub's `rebeccapanel/rebecca` is still the 0.0.x Python edition, which renders pages from a different context and cannot render this one. The installer identifies the edition before it changes anything and refuses it; Rebecca's own `rebecca migrate-binary` moves a Docker install to 1.x.
+**Rebecca's Docker image is not supported.** Docker Hub's `rebeccapanel/rebecca` is still the 0.0.x Python edition, which renders pages from a different context and cannot render this one. The installer identifies the edition before it changes anything and refuses it; use Rebecca 1.x from its binary installer (`rebecca-binary.sh`) instead.
 
 Automatic activation needs Rebecca's default **SQLite** database and the `sqlite3` command. With MySQL/MariaDB the page is still placed, and you select it in the dashboard.
 

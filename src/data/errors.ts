@@ -2773,7 +2773,7 @@ export const ENTRIES: ErrorEntry[] = [
     en: {
       what: "PasarGuard reads `.env` only when it starts, so after changing it Row-Template restarts a running panel once — with `docker compose up -d` for the Docker install, or `systemctl restart pasarguard` for a source install. That failed. During activation the change is then rolled back; during uninstall the block has already been removed, and the panel picks that up the next time it starts.",
       fix: [
-        "Check the panel: `pasarguard status`, or `docker compose -f /opt/pasarguard/docker-compose.yml ps`, or `systemctl status pasarguard`.",
+        "Check the panel: `pasarguard status` on the official (Docker) install, or `systemctl status pasarguard` on a source install.",
         "Restart it yourself (`pasarguard restart`), then run `row-template verify`.",
       ],
     },
@@ -2781,7 +2781,7 @@ export const ENTRIES: ErrorEntry[] = [
       tr: "پنل pasarguard: پنل ری‌استارت نشد",
       what: "PasarGuard فایل `.env` را فقط هنگام شروع می‌خواند، پس Row-Template پس از تغییر آن، پنلِ در حال اجرا را یک بار ری‌استارت می‌کند — در نصب Docker با `docker compose up -d` و در نصب از سورس با `systemctl restart pasarguard`. این کار شکست خورد. هنگام فعال‌سازی، تغییر سپس بازگردانده می‌شود؛ هنگام حذف، بلوک پیش‌تر حذف شده و پنل دفعهٔ بعد که شروع شود آن را اعمال می‌کند.",
       fix: [
-        "پنل را بررسی کنید: `pasarguard status`، یا `docker compose -f /opt/pasarguard/docker-compose.yml ps`، یا `systemctl status pasarguard`.",
+        "پنل را بررسی کنید: `pasarguard status` در نصب رسمی (Docker)، یا `systemctl status pasarguard` در نصب از سورس.",
         "خودتان آن را ری‌استارت کنید (`pasarguard restart`) و `row-template verify` را اجرا کنید.",
       ],
     },
@@ -2921,16 +2921,18 @@ export const ENTRIES: ErrorEntry[] = [
     en: {
       what: "Row-Template supports Rebecca **1.x**, the Go edition. Docker Hub's `rebeccapanel/rebecca` image is still the **0.0.x Python edition**, which renders pages from a different context: it would accept the setting and silently keep serving its own page. So the installer refuses it before changing anything — the panel is not modified.",
       fix: [
-        "Move Rebecca to 1.x with Rebecca's own `rebecca migrate-binary`, or install Rebecca with its binary installer (`rebecca-binary.sh`).",
+        "Install Rebecca 1.x with Rebecca's binary installer (`rebecca-binary.sh`) — the install Row-Template is tested against.",
         "Then run the Row-Template installer again.",
+        "The refusal message also names Rebecca's `rebecca migrate-binary`; Row-Template has not verified it, and in Rebecca's current scripts that command is not routed by the `rebecca` command, so it may only print its usage text.",
       ],
     },
     fa: {
       tr: "پنل rebecca: این Rebecca نسخهٔ 0.0.x، یعنی نسخهٔ پایتونی است (ایمیج Docker ‹ایمیج›). صفحهٔ Rebecca در Row-Template برای Rebecca 1.x، یعنی نسخهٔ Go ساخته شده که Rebecca برای نصب باینری‌اش (`rebecca-binary.sh`) منتشر می‌کند؛ دستور `rebecca migrate-binary` خود Rebecca نصب Docker را به آن منتقل می‌کند.",
       what: "Row-Template از Rebecca **1.x**، یعنی نسخهٔ Go پشتیبانی می‌کند. ایمیج `rebeccapanel/rebecca` در Docker Hub هنوز **نسخهٔ پایتونی 0.0.x** است که صفحه‌ها را از زمینهٔ دیگری رندر می‌کند: تنظیم را می‌پذیرفت و بی‌صدا همان صفحهٔ خودش را ارائه می‌داد. پس نصب‌کننده پیش از هر تغییری آن را رد می‌کند — پنل تغییری نمی‌کند.",
       fix: [
-        "Rebecca را با دستور `rebecca migrate-binary` خود Rebecca به 1.x منتقل کنید، یا Rebecca را با نصب‌کنندهٔ باینری‌اش (`rebecca-binary.sh`) نصب کنید.",
+        "Rebecca نسخهٔ 1.x را با نصب‌کنندهٔ باینری Rebecca (`rebecca-binary.sh`) نصب کنید — نصبی که Row-Template روی آن آزموده شده.",
         "سپس نصب‌کنندهٔ Row-Template را دوباره اجرا کنید.",
+        "پیام رد، دستور `rebecca migrate-binary` خود Rebecca را هم نام می‌برد؛ Row-Template آن را تأیید نکرده است، و در اسکریپت‌های فعلی Rebecca این دستور به فرمان `rebecca` وصل نیست، پس ممکن است فقط راهنمای استفاده‌اش را چاپ کند.",
       ],
     },
   },
@@ -3313,7 +3315,7 @@ export const ENTRIES: ErrorEntry[] = [
       what: "The panel this installation serves could not be found on the server, or its configuration (PasarGuard's `.env`, or Rebecca's subscription settings) could not be read. The page files are checked anyway.",
       fix: [
         "Run `verify` as root, on the server that runs the panel.",
-        "Check the panel itself: `pasarguard status` or `rebecca status`. If it was removed, remove Row-Template too with `row-template uninstall`.",
+        "Check the panel itself: `rebecca status`, or for PasarGuard `pasarguard status` (official Docker install) or `systemctl status pasarguard` (source install). If it was removed, remove Row-Template too with `row-template uninstall`.",
       ],
     },
     fa: {
@@ -3321,7 +3323,7 @@ export const ENTRIES: ErrorEntry[] = [
       what: "پنلی که این نصب به آن سرویس می‌دهد روی سرور پیدا نشد، یا پیکربندی‌اش (فایل `.env` پنل PasarGuard یا تنظیمات اشتراک Rebecca) خوانده نشد. فایل‌های صفحه به هر حال بررسی می‌شوند.",
       fix: [
         "`verify` را با root و روی سروری که پنل روی آن است اجرا کنید.",
-        "خود پنل را بررسی کنید: `pasarguard status` یا `rebecca status`. اگر پنل حذف شده، Row-Template را هم با `row-template uninstall` حذف کنید.",
+        "خود پنل را بررسی کنید: `rebecca status`، یا برای PasarGuard فرمان `pasarguard status` (نصب رسمی Docker) یا `systemctl status pasarguard` (نصب از سورس). اگر پنل حذف شده، Row-Template را هم با `row-template uninstall` حذف کنید.",
       ],
     },
   },
