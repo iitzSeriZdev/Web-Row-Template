@@ -8,9 +8,11 @@ export const LOCALES = ["en", "fa"] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = "en";
 
-export const LOCALE_META: Record<Locale, { label: string; short: string; dir: "ltr" | "rtl"; lang: string }> = {
-  en: { label: "English", short: "EN", dir: "ltr", lang: "en" },
-  fa: { label: "فارسی", short: "فا", dir: "rtl", lang: "fa" },
+// `flag` is what the language switch shows: the United States flag for
+// English, the Lion and Sun flag for Persian.
+export const LOCALE_META: Record<Locale, { label: string; flag: string; dir: "ltr" | "rtl"; lang: string }> = {
+  en: { label: "English", flag: "/flags/flag-en-us.svg", dir: "ltr", lang: "en" },
+  fa: { label: "فارسی", flag: "/flags/flag-fa-lion-and-sun.png", dir: "rtl", lang: "fa" },
 };
 
 export const UI = {

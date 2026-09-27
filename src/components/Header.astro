@@ -48,7 +48,7 @@ const repo = "https://github.com/iitzSeriZdev/Row-Template";
         <span class="sr-only">{s.github}</span>
       </a>
       <a class="btn btn-ghost btn-icon lang-switch" href={alternate ?? switchLocale(Astro.url.pathname, other)} hreflang={other} lang={other} data-lang-switch title={LOCALE_META[other].label}>
-        <span aria-hidden="true">{LOCALE_META[other].short}</span>
+        <img class="flag" src={withBase(LOCALE_META[other].flag)} alt="" width="22" height="16" />
         <span class="sr-only">{s.language}: {LOCALE_META[other].label}</span>
       </a>
       <button class="btn btn-ghost btn-icon" type="button" data-theme-toggle>

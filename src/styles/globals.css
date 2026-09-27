@@ -467,8 +467,9 @@ a.card:hover { background: var(--accent); }
 .menu-trigger .when-open, .menu-open .menu-trigger .when-closed { display: none; }
 .menu-open .menu-trigger .when-open { display: block; }
 .menu-open body { overflow: hidden; }
-.lang-switch { font-size: .8125rem; font-weight: 600; }
-.lang-switch[lang="fa"] { font-family: "Vazirmatn Variable", var(--font-sans); font-size: .875rem; }
+/* the flag of the language the switch leads to; the hairline keeps its white
+   band visible on the light theme */
+.lang-switch .flag { width: 1.375rem; height: auto; border-radius: 3px; box-shadow: 0 0 0 1px var(--border); }
 .tabs:not([data-ready]) > .tab-panel ~ .tab-panel { display: none; }
 .tab-list button { display: inline-flex; align-items: center; gap: .375rem; }
 .code-frame.titled .copy-btn { top: 2.5rem; }
