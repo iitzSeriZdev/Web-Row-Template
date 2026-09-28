@@ -9,14 +9,18 @@ Everything on this page is the same in all seventeen designs; only where things 
 
 The top of the page shows the subscription's state, the traffic used and remaining, and the expiry date. The panel fills these in when it serves the page, so they are correct the moment it opens.
 
-- **3X-UI:** while the page stays open it **refreshes these figures from your own panel** — about every 15 seconds for an active subscription and every 60 seconds otherwise — and pauses while the tab is hidden. A refresh is used only if the response carries the page's own fields; anything unexpected stops refreshing and leaves the figures the server rendered, rather than showing wrong values.
-- **PasarGuard and Rebecca:** the page shows the figures **as of when it was opened**, and does not refresh them. Both panels serve live status on a path of their own rather than the address the page asks, so reloading the page is how a subscriber sees newer figures.
+While the page stays open it **refreshes these figures from your own panel** — about every 15 seconds for an active subscription and every 60 seconds otherwise — and pauses while the tab is hidden. It asks each panel in its own way:
+
+- **3X-UI:** the page's own address with `?format=info`, answered in the page's own fields;
+- **PasarGuard and Rebecca** (since 1.4.0): the panel's `/<token>/info` address, answered in the panel's own format, which the page reads.
+
+A response the page does not recognise stops refreshing and leaves the figures it already has, rather than showing wrong values.
 
 A subscription that starts counting on first connection (**on hold**) is shown as active. On PasarGuard, which tells the page how long the hold lasts, the expiry reads that it starts on first connection and how many days it is then valid for; on Rebecca, which does not, the expiry is shown as unknown rather than guessed.
 
 ## Connect
 
-**Connect** offers the apps for the subscriber's platform, detected from the browser, with a one-tap import link:
+**Connect** offers the apps for the subscriber's platform, detected from the browser, with a one-tap import link. On PasarGuard, if you list your own applications in the panel, those are shown instead — see [below](#your-own-applications-pasarguard). Otherwise the page offers:
 
 | Platform | Apps |
 |---|---|
@@ -32,6 +36,17 @@ A subscription that starts counting on first connection (**on hold**) is shown a
 - **v2rayN** has no verified import link, so it offers **copy** instead.
 - **Shadowrocket** is marked as a paid app.
 
+### Your own applications (PasarGuard)
+
+PasarGuard lets you list the applications your subscribers should use, in **Settings → Subscription → Applications**. When that list has entries, the Connect card shows them instead of the built-in apps (1.4.0):
+
+- one tab for each platform your list covers — Android, iOS, Windows, macOS, Linux, Android TV and Apple TV — opening on the subscriber's own platform when it is there;
+- your **recommended** application first, marked as recommended, then the rest in your order;
+- your **description** in the subscriber's language (English when there is none in theirs), and a **Download** link — the one you set for their language, else the English one;
+- **Import**, with the link PasarGuard built for this subscriber, and **Copy**. If PasarGuard has no subscription URL prefix set, the address it puts in that link is only a path; the page completes it with its own address.
+
+For a subscription limited to certain devices (HWID), PasarGuard has already left out the applications you did not mark for it. The **icons** you set are not shown: the page loads nothing from another site. With no applications listed, the page offers the built-in apps above.
+
 ## Copy and QR
 
 The subscription link can be copied with one tap or shown as a **QR code** to scan from another device. The QR code is generated on the page itself; the link never leaves the browser.
@@ -40,14 +55,14 @@ The subscription link can be copied with one tap or shown as a **QR code** to sc
 
 The **Configurations** section lists every server in the subscription on its own row:
 
-- a country flag, or a monogram when the name carries no valid country code — the country is never guessed from a host or IP;
+- a country flag — from a flag emoji in the name, or a two-letter country code standing on its own (`TR | Istanbul`, `DE-FRA-2`; `UK` shows the British flag) — or a monogram when the name has neither; the country is never guessed from a host, an IP or a country's name;
 - the configuration's name and a protocol label: VLESS, VMess, Trojan, Shadowsocks, Hysteria/Hysteria2, WireGuard, AmneziaWG or Telegram MTProto;
 - **View** (a local QR code and copy) and **Copy**, for adding a single server by hand.
 
 Long lists get a search box. Exact duplicates are collapsed and malformed links are set aside rather than shown. Links stay masked until **View** is opened and are never written to the browser console.
 
-<Callout type="info" title="Flags on Windows">
-  Windows has no flag emoji, so Chromium-based browsers show two letters (such as `DE`) instead. The flags of Germany, France, the Netherlands, Japan, Sweden and the United States are drawn with CSS so they appear everywhere; other countries use the platform's own flags where available.
+<Callout type="info" title="Flags on every platform">
+  Since 1.4.0 the page carries its own flag font (Twemoji's flags), so every country's flag looks the same on Windows, Android, iOS, macOS and Linux — including Chromium-based browsers on Windows, which have no flags of their own and used to show two letters such as `DE`. The font is used for flags only and is inside the page file, so it adds no request.
 </Callout>
 
 ## Languages and themes
@@ -60,7 +75,7 @@ A subscriber's choices are remembered in their own browser.
 ## What the page never does
 
 - It makes **no third-party requests** — no CDNs, web fonts, analytics, external QR services or geolocation lookups. Fonts, styles, scripts and the QR generator are all inside the one file.
-- It **never sends subscriber data anywhere**. The only network request it makes — on 3X-UI — is the status refresh to the same panel address it was served from.
+- It **never sends subscriber data anywhere**. The only network request it makes is the status refresh to the same panel it was served from.
 - It asks search engines not to index it, and sends no referrer when a link is followed.
 
 ## VPN apps are unaffected

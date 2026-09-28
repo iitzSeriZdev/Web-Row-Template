@@ -1,6 +1,6 @@
 ---
 title: Compatibility
-description: The panels, operating systems, browsers and apps Row-Template 1.3.0 supports, what it changes on each panel, and the limitations of 1.3.0.
+description: The panels, operating systems, browsers and apps Row-Template 1.4.0 supports, what it changes on each panel, and the limitations of 1.4.0.
 ---
 
 ## Panels
@@ -12,7 +12,7 @@ description: The panels, operating systems, browsers and apps Row-Template 1.3.0
 | [Rebecca](https://github.com/rebeccapanel/Rebecca) | **Supported** since 1.3.0 | **1.x**, the Go edition — Rebecca's binary install (`rebecca-binary.sh`, run as `rebecca.service`) |
 | Rebecca Docker image (`rebeccapanel/rebecca`) | **Not supported** | 0.0.x, the Python edition. The installer identifies it and refuses it before changing anything. Use Rebecca 1.x from its binary installer (`rebecca-binary.sh`) instead. |
 
-**Supported** means every capability is in place on that panel — detect, install, activate, verify, back up, restore and uninstall — and each is exercised by Row-Template's test suite, with each panel's pages rendered by that panel's real template engine. Before release, 1.3.0 was also validated on real panels: 3X-UI 3.8.5, PasarGuard 5.4.1 and Rebecca 1.x.
+**Supported** means every capability is in place on that panel — detect, install, activate, verify, back up, restore and uninstall — and each is exercised by Row-Template's test suite, with each panel's pages rendered by that panel's real template engine. Before release, 1.4.0 was also validated on real panels — 3X-UI 3.8.5, PasarGuard 5.4.1 and Rebecca 1.x — including updates from the published 1.3.1 and rollbacks to it.
 
 | | 3X-UI | PasarGuard | Rebecca |
 |---|---|---|---|
@@ -21,20 +21,25 @@ description: The panels, operating systems, browsers and apps Row-Template 1.3.0
 | **What activation changes** | `subThemeDir` | one marked block in `/opt/pasarguard/.env` | two fields of the newest subscription settings row |
 | **Automatic activation needs** | `sqlite3` and the panel database | nothing extra | the default SQLite database and `sqlite3` |
 | **Restart on activation** | yes, briefly | once, only if running | never |
-| **Live status refresh** | yes | no — figures as of page load | no — figures as of page load |
+| **Live status refresh** | yes | yes, since 1.4.0 | yes, since 1.4.0 |
+| **The panel's own application list** | — | yes, since 1.4.0 | — |
+| **Name and support link offered at install** | — | yes, since 1.4.0 (SQLite) | yes, since 1.4.0 (SQLite) |
 
 The installer detects which panel is on the server. A panel counts as installed only when two independent signs of it agree (its configuration, its compose file or service, its command, its data folder); a panel that is only partly there is refused rather than guessed at. On a server with more than one supported panel, an interactive install asks which to serve, and a **scripted fresh install must set `RT_PANEL=3xui|pasarguard|rebecca`** — without it, the installer stops before changing anything. One installation serves one panel; re-runs and updates keep it.
 
 Why each design is built three times: the three panels do not share a template engine, and a page written for one is not valid in another. The visual layer is plain CSS and identical everywhere; for PasarGuard and Rebecca each design is wrapped in a small prelude that maps the panel's own data onto the page, inside an explicit autoescape block, so every value is escaped on every panel.
 
-## Limitations in 1.3.0
+<div id="limitations-in-130" />
 
-- **Live refresh is 3X-UI only.** 3X-UI serves live status at `?format=info`; PasarGuard and Rebecca serve it on a path of their own, so on those panels the page shows usage and expiry as of when it was opened. Wiring that up needs a runtime change, and that decision is deferred.
+## Limitations in 1.4.0
+
 - **Rebecca's Docker image is refused** (0.0.x, the Python edition), as above.
 - **Rebecca on MySQL/MariaDB** — or without `sqlite3` — needs its page selected by hand in **Settings → Subscription → Templates**; the page itself is still placed. 3X-UI without `sqlite3` likewise needs **Sub Theme Directory** set by hand.
 - **Panel settings that still take precedence:** an admin's own subscription template, on PasarGuard and Rebecca, and PasarGuard's **disable subscription template** setting. They are yours to change; `row-template verify` reports them.
 - **PasarGuard's page title** (`subTitle`) and **Clash templates** are not produced — only the subscription page is.
-- **One-tap import** on PasarGuard offers no sing-box or Clash apps (the page is not given those addresses); on Rebecca the Clash apps use its Clash Meta subscription, and sing-box is not offered.
+- **One-tap import** on PasarGuard offers no sing-box or Clash apps from the built-in list (the page is not given those addresses) — list your own in the panel to offer any; on Rebecca the Clash apps use its Clash Meta subscription, and sing-box is not offered.
+- **PasarGuard application icons** are not shown: the page loads nothing from another site.
+- **The name and support link offered at install** are read from a SQLite database only.
 - **On-hold subscriptions** are shown as active. On PasarGuard, which tells the page how long the hold lasts, the expiry says it starts on first connection; on Rebecca, which does not, the expiry is shown as unknown rather than guessed.
 - **One panel per server.** An installation serves the panel it was installed for; serving another means `row-template uninstall` first.
 - **Rollback** restores Row-Template's page and recorded version, not the `row-template` manager itself, and never the panel; only the two newest backups are kept. See [Backups & Rollback](/docs/management/rollback/).
@@ -62,6 +67,8 @@ Why each design is built three times: the three panels do not share a template e
 
 | Row-Template | Panels | Notes |
 |---|---|---|
+| 1.4.0 | 3X-UI ≥ 3.6.0, PasarGuard 5.x, Rebecca 1.x | Every country's flag on every platform; PasarGuard's own applications; live status on PasarGuard and Rebecca; the panel's name and support link offered at install. From 1.3.x: [one update](/docs/management/updating/#upgrading-from-130-or-131). *Upcoming.* |
+| 1.3.1 | 3X-UI ≥ 3.6.0, PasarGuard 5.x, Rebecca 1.x | PasarGuard and Rebecca pages named after the subscriber; flags from ISO codes. |
 | 1.3.0 | 3X-UI ≥ 3.6.0, PasarGuard 5.x, Rebecca 1.x | PasarGuard and Rebecca support; Meter and Notebook — seventeen designs. From 1.1.0 or 1.2.0: [one update](/docs/management/updating/#upgrading-from-110-or-120). |
 | 1.2.0 | 3X-UI ≥ 3.6.0 | Fifteen designs. |
 | 1.1.0 | 3X-UI ≥ 3.6.0 | Configuration Explorer. |

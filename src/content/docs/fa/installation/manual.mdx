@@ -24,7 +24,7 @@ description: نسخه را خودتان دانلود کنید، دستی برر�
 
 | فایل | چیست |
 |---|---|
-| `row-template-1.3.0.tar.gz` | خود نسخه: همهٔ طرح‌ها برای هر پنل، کتابخانهٔ مدیریتی و فرمان `row-template` |
+| `row-template-1.4.0.tar.gz` | خود نسخه: همهٔ طرح‌ها برای هر پنل، کتابخانهٔ مدیریتی و فرمان `row-template` |
 | `SHA256SUMS` | چک‌سام SHA-256 فایل tarball |
 | `manifest.txt` | اطلاعات متنی ساده: `name`، `version`، `artifact`، `min_xui`، `created` |
 | `install.sh` | نصب‌کننده |
@@ -32,9 +32,9 @@ description: نسخه را خودتان دانلود کنید، دستی برر�
 از ترمینال:
 
 ```bash
-mkdir row-template-1.3.0-release && cd row-template-1.3.0-release
-base=https://github.com/iitzSeriZdev/Row-Template/releases/download/v1.3.0
-for f in row-template-1.3.0.tar.gz SHA256SUMS manifest.txt install.sh; do
+mkdir row-template-1.4.0-release && cd row-template-1.4.0-release
+base=https://github.com/iitzSeriZdev/Row-Template/releases/download/v1.4.0
+for f in row-template-1.4.0.tar.gz SHA256SUMS manifest.txt install.sh; do
   curl -fLO "$base/$f"
 done
 ```
@@ -50,7 +50,7 @@ sha256sum -c SHA256SUMS
 باید این را ببینید:
 
 ```text
-row-template-1.3.0.tar.gz: OK
+row-template-1.4.0.tar.gz: OK
 ```
 
 هر چیز دیگری — `FAILED` یا هشدار نبودن فایل — یعنی دانلود ناقص است یا فایل منتشرشده نیست. دوباره دانلود کنید و ادامه ندهید. در macOS از `shasum -a 256 -c SHA256SUMS` استفاده کنید.
@@ -67,8 +67,8 @@ cat manifest.txt
 
 ```text
 name=row-template
-version=1.3.0
-artifact=row-template-1.3.0.tar.gz
+version=1.4.0
+artifact=row-template-1.4.0.tar.gz
 min_xui=3.6.0
 created=…
 ```
@@ -82,14 +82,14 @@ created=…
 tarball فهرست چک‌سام همهٔ فایل‌های داخلش را هم همراه دارد:
 
 ```bash
-tar -xzf row-template-1.3.0.tar.gz
-cd row-template-1.3.0
+tar -xzf row-template-1.4.0.tar.gz
+cd row-template-1.4.0
 sha256sum -c SHA256SUMS --quiet && echo "all files OK"
 cd ..
 ```
 
 <FileTree tree={`
-row-template-1.3.0/
+row-template-1.4.0/
 ├── template.html          # the Row design (3X-UI)
 ├── templates/<id>/        # all seventeen designs for 3X-UI, each with template.html.sha256
 ├── shells/<panel>/<id>/   # every design for each panel (3xui, pasarguard, rebecca),
@@ -109,7 +109,7 @@ row-template-1.3.0/
 ### پوشه را به سرور کپی کنید
 
 ```bash
-scp -r row-template-1.3.0-release root@your-server:/root/
+scp -r row-template-1.4.0-release root@your-server:/root/
 ```
 
 هر روشی کار می‌کند — `scp`، `rsync` یا فلش USB. فقط هر چهار فایل را کنار هم در یک پوشه نگه دارید.
@@ -119,7 +119,7 @@ scp -r row-template-1.3.0-release root@your-server:/root/
 روی سرور، در پوستهٔ root:
 
 ```bash
-RT_RELEASE_DIR=/root/row-template-1.3.0-release bash /root/row-template-1.3.0-release/install.sh
+RT_RELEASE_DIR=/root/row-template-1.4.0-release bash /root/row-template-1.4.0-release/install.sh
 ```
 
 `RT_RELEASE_DIR` به نصب‌کننده می‌گوید `manifest.txt`، `SHA256SUMS` و tarball را به‌جای دانلود، از همین پوشه بخواند. به `curl` هم نیازی نیست. از اینجا به بعد نصب دقیقاً مثل نصب معمولی است: چک‌سام دوباره بررسی می‌شود، آرشیو بررسی و استخراج می‌شود، پنل شما تشخیص داده می‌شود و [همان سؤال‌ها](/docs/installation/installer/#the-questions-it-asks) پرسیده می‌شوند.
@@ -128,7 +128,7 @@ RT_RELEASE_DIR=/root/row-template-1.3.0-release bash /root/row-template-1.3.0-re
 
 ```bash
 RT_ASSUME_NONINTERACTIVE=1 RT_TEMPLATE=row \
-RT_RELEASE_DIR=/root/row-template-1.3.0-release bash /root/row-template-1.3.0-release/install.sh
+RT_RELEASE_DIR=/root/row-template-1.4.0-release bash /root/row-template-1.4.0-release/install.sh
 ```
 
 ### فعال کنید و بررسی کنید
@@ -158,7 +158,7 @@ RT_RELEASE_DIR=/root/row-template-X.Y.Z-release row-template update
 اگر چهار فایل را روی سرور HTTPS خودتان میزبانی می‌کنید، به‌جای آن نصب‌کننده را به نشانی آن پوشه بدهید:
 
 ```bash
-RT_RELEASE_URL=https://mirror.example.com/row-template/1.3.0 bash install.sh
+RT_RELEASE_URL=https://mirror.example.com/row-template/1.4.0 bash install.sh
 ```
 
 نشانی باید از `https://` استفاده کند. `http://` ساده رد می‌شود، مگر اینکه `RT_ALLOW_INSECURE_URL=1` را هم تنظیم کنید که فقط برای آزمایش محلی است.
@@ -175,7 +175,7 @@ RT_RELEASE_URL=https://mirror.example.com/row-template/1.3.0 bash install.sh
 
 ### دانلود، بررسی و استخراج
 
-روش الف را تا مرحلهٔ [دیدن محتوا](#inspect-the-contents-optional) (شامل خود آن) دنبال کنید. در پوشهٔ استخراج‌شدهٔ `row-template-1.3.0` بمانید.
+روش الف را تا مرحلهٔ [دیدن محتوا](#inspect-the-contents-optional) (شامل خود آن) دنبال کنید. در پوشهٔ استخراج‌شدهٔ `row-template-1.4.0` بمانید.
 
 ### طرح دلخواه را بررسی کنید
 

@@ -47,7 +47,7 @@ If `verify` passes but your browser still shows the old page, something between 
 
 ## The installer refuses Rebecca
 
-`panel rebecca: this is Rebecca 0.0.x, the Python edition …` — Docker Hub's `rebeccapanel/rebecca` image is still the 0.0.x Python edition, which cannot render Row-Template's Rebecca page; with it, Rebecca would accept the setting and silently keep serving its own page. The installer refuses it before changing anything. Install Rebecca **1.x**, the Go edition, with Rebecca's binary installer (`rebecca-binary.sh`) — the install Row-Template is tested against — then run the installer again. The refusal message also names Rebecca's `rebecca migrate-binary`; Row-Template has not verified it, and in Rebecca's current scripts that command is not routed by the `rebecca` command, so it may only print its usage text.
+`panel rebecca: this is Rebecca 0.0.x, the Python edition …` — Docker Hub's `rebeccapanel/rebecca` image is still the 0.0.x Python edition, which cannot render Row-Template's Rebecca page; with it, Rebecca would accept the setting and silently keep serving its own page. The installer refuses it before changing anything. Install Rebecca **1.x**, the Go edition, with Rebecca's binary installer (`rebecca-binary.sh`) — the install Row-Template is tested against — then run the installer again.
 
 ## The installer says more than one panel is installed
 
@@ -67,8 +67,7 @@ On PasarGuard and Rebecca, activation is a transaction: if a step fails, the pan
 
 ## The page shows, but the figures never update
 
-- **PasarGuard and Rebecca:** expected. On these panels the page shows the figures as of when it was opened; reloading it shows newer ones. Both panels serve live status on a path of their own, and wiring that up is a decision deferred in 1.3.0.
-- **3X-UI:** the page refreshes by requesting its own address with `?format=info` from your panel. If a reverse proxy strips the query string or blocks that request, the page keeps the figures it was served with. A response the page does not recognise stops refreshing on purpose; reloading the page starts it again.
+The page refreshes by asking your panel for the figures: on 3X-UI its own address with `?format=info`, on PasarGuard and Rebecca the panel's `/<token>/info` address (1.4.0; on 1.3.x those two panels did not refresh at all). If a reverse proxy strips the query string or does not pass that address through, the page keeps the figures it was served with, and its footer says **Live updates stopped.** or **Live updates are not available on this panel**. Let the address through to the panel like the subscription address itself. A response the page does not recognise stops refreshing on purpose; reloading the page starts it again.
 
 ## Automatic activation is unavailable
 
@@ -90,7 +89,7 @@ On PasarGuard and Rebecca, activation is a transaction: if a step fails, the pan
 
 ## Designs are missing after updating from 1.1.0
 
-After `row-template update` from 1.1.0, the next time you open `row-template`, or run `row-template config` or `row-template verify` as root, 1.3.0 downloads the rest of the same release — every design — before doing anything else. If the manager says `No templates are installed, and they could not be restored automatically`, that download failed and the message above it says why: make sure the server can reach the release source, then open the menu again, or run `row-template update`. [Why →](/docs/management/updating/#upgrading-from-110-or-120)
+After `row-template update` from 1.1.0, the next time you open `row-template`, or run `row-template config` or `row-template verify` as root, the new release downloads the rest of the same release — every design — before doing anything else. If the manager says `No templates are installed, and they could not be restored automatically`, that download failed and the message above it says why: make sure the server can reach the release source, then open the menu again, or run `row-template update`. [Why →](/docs/management/updating/#upgrading-from-110-or-120)
 
 ## A branding change does not show
 
@@ -104,7 +103,9 @@ The page is regenerated — and on PasarGuard and Rebecca, copied into the panel
 
 ## Flags show as two letters on Windows
 
-Windows does not display flag emoji, so Chromium-based browsers show a country code such as `DE`. Row-Template draws six common flags itself (Germany, France, the Netherlands, Japan, Sweden, the United States); the rest fall back to letters. This is a platform limitation, not a fault.
+Update to 1.4.0: the page then carries its own flag font, and every country's flag shows on Windows too. In 1.3.x, Chromium-based browsers on Windows showed a code such as `DE` for all but six countries, because Windows has no flags of its own.
+
+A badge with a **single letter** is the monogram: the node's name has no flag emoji and no two-letter country code standing on its own (`TR | Istanbul`, `DE-FRA-2`), or the code is not a country. Country and city names are not read; put the flag or the code in the node's name in your panel.
 
 ## `row-template: command not found`
 

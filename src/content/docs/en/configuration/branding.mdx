@@ -47,6 +47,16 @@ row-template config
 
 It asks for the three fields in turn, showing the current value. Press Enter to keep a value, or type `-` to clear it.
 
+### From your panel's own settings (PasarGuard, Rebecca)
+
+PasarGuard and Rebecca keep a subscription title and a support link in their own settings. Row-Template can use them, so you do not type them twice (1.4.0):
+
+- **On a fresh interactive install** the installer shows them and asks `Use them for this page? [Y/n]`. Answer Enter to use them — the name and link questions are then skipped — or `n` to type your own.
+- **On an existing install**, open `row-template` → **2 — Reconfigure branding** → **7 — Use PasarGuard's (or Rebecca's) name and support link**, or run `RT_PANEL_BRANDING=1 row-template config`.
+- **In a script**, set `RT_PANEL_BRANDING=1`. `RT_SERVICE_NAME` and `RT_SUPPORT_URL` still win for the field they set.
+
+The panels' own defaults — the title `Subscription` and the bare `https://t.me/` — are never offered, nor a PasarGuard title that still carries a per-subscriber placeholder such as `{USERNAME}`, and every value passes the same checks as one you type. The settings are only read, and only from a SQLite database; with MySQL, MariaDB or PostgreSQL nothing is offered.
+
 ### From a script
 
 Give the values as variables. Fields you do not set keep their current values:
