@@ -51,7 +51,7 @@ It does **not**, on its own, prove **who** published it. Someone able to replace
 
 ## Signed tags
 
-A signed git tag would give cryptographic proof of authorship. No Row-Template release tag is signed so far — `v1.3.0` and `v1.3.1` are plain tags, so `git tag -v v1.3.1` reports that there is nothing to verify — and trust rests on HTTPS and on control of the repository, as above. If a later release is tagged with a signature, verify it with `git tag -v` and that tag's name, against a key you already trust.
+A signed git tag would give cryptographic proof of authorship. No Row-Template release tag is signed so far — `v1.3.0`, `v1.3.1` and `v1.4.0` are plain tags, so `git tag -v v1.4.0` reports that there is nothing to verify — and trust rests on HTTPS and on control of the repository, as above. If a later release is tagged with a signature, verify it with `git tag -v` and that tag's name, against a key you already trust.
 
 ## Reproducible builds
 
