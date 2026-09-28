@@ -1,6 +1,6 @@
 ---
 title: Updating
-description: How row-template update works, what it keeps, how a failed update restores itself, and upgrading from 1.1.0 or 1.2.0 to 1.3.0.
+description: How row-template update works, what it keeps, how a failed update restores itself, and upgrading to 1.4.0 from 1.3.x, 1.2.0 or 1.1.0.
 ---
 
 ```bash
@@ -42,8 +42,8 @@ The new page, `VERSION`, the management library, its components and the `row-tem
 A successful update prints:
 
 ```text
-  Updating Row-Template 1.2.0 -> 1.3.0
-  ok   Update complete: now running 1.3.0.
+  Updating Row-Template 1.3.1 -> 1.4.0
+  ok   Update complete: now running 1.4.0.
 ```
 
 followed by the live checks. Old backups are then pruned to the two newest.
@@ -54,30 +54,34 @@ The previous version is restored from the snapshot automatically:
 
 ```text
   FAIL activation of the new version failed; rolling back.
-  warn rolled back to 1.2.0; no changes are live.
+  warn rolled back to 1.3.1; no changes are live.
 ```
 
 The command exits with status `1`. Your subscribers keep seeing the previous page throughout. If the automatic restore also fails — which needs two independent failures — you are told to run `row-template rollback`.
 
+## Upgrading from 1.3.0 or 1.3.1
+
+One `row-template update`, on any panel. Your design, branding and panel wiring are kept, and the 1.4.0 page is in place at once. To take the name and support link PasarGuard or Rebecca already holds, see [Branding](/docs/configuration/branding/#from-your-panels-own-settings-pasarguard-rebecca).
+
 ## Upgrading from 1.1.0 or 1.2.0
 
-The published upgrade paths to 1.3.0 are from **1.1.0** and from **1.2.0**. Both take one command:
+The published upgrade paths from these releases, to 1.3.0 and to 1.4.0 alike, take one command:
 
 ```bash
 row-template update
 ```
 
-- **From 1.2.0**, the 1.2.0 updater installs 1.3.0 completely: every design and every installer file.
-- **From 1.1.0**, the command you run is still 1.1.0's, and its updater copies only part of the new release: the page updates and your branding is kept, but the designs and the installer's companion files are not installed yet. The next time you open `row-template`, or run `row-template config` or `row-template verify` as root, 1.3.0 downloads the rest of **that same release** — every design, checksum-verified — before doing anything else:
+- **From 1.2.0**, the 1.2.0 updater installs the new release completely: every design and every installer file.
+- **From 1.1.0**, the command you run is still 1.1.0's, and its updater copies only part of the new release: the page updates and your branding is kept, but the designs and the installer's companion files are not installed yet. The next time you open `row-template`, or run `row-template config` or `row-template verify` as root, the new release downloads the rest of **that same release** — every design, checksum-verified — before doing anything else:
 
 ```text
-  Completing the Row-Template 1.3.0 installation (designs and installer files)...
+  Completing the Row-Template 1.4.0 installation (designs and installer files)...
   ok   Installation completed: 17 design(s) available.
 ```
 
 It never downloads a newer version this way, and leaves your page, branding, selected design and backups as they are. If the release cannot be reached, it says so and tries again the next time; `row-template update` also completes the installation.
 
-Your design, branding and panel wiring are kept either way. An installation made before 1.3.0 is a 3X-UI installation — earlier releases did not install on PasarGuard or Rebecca, so on those panels you [install](/docs/installation/installer/) 1.3.0 rather than update.
+Your design, branding and panel wiring are kept either way. An installation made before 1.3.0 is a 3X-UI installation — earlier releases did not install on PasarGuard or Rebecca, so on those panels you [install](/docs/installation/installer/) the new release rather than update.
 
 <Callout type="info" title="1.2.1">
   There was no public 1.2.1 release. The fixes prepared under that number — including the one-step upgrade from 1.1.0 above — are included in 1.3.0.

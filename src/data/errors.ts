@@ -2917,22 +2917,20 @@ export const ENTRIES: ErrorEntry[] = [
   // --- Rebecca (1.3.0) ----------------------------------------------------------------
   {
     group: "rebecca",
-    texts: ["panel rebecca: this is Rebecca 0.0.x, the Python edition (Docker image ${IMAGE}). Row-Template's Rebecca page is built for Rebecca 1.x, the Go edition, which Rebecca publishes for its binary install (rebecca-binary.sh); Rebecca's own 'rebecca migrate-binary' moves a Docker install to it."],
+    texts: ["panel rebecca: this is Rebecca 0.0.x, the Python edition (Docker image ${IMAGE}). Row-Template's Rebecca page is built for Rebecca 1.x, the Go edition, which Rebecca publishes for its binary install: install it with Rebecca's rebecca-binary.sh, then run this installer again."],
     en: {
       what: "Row-Template supports Rebecca **1.x**, the Go edition. Docker Hub's `rebeccapanel/rebecca` image is still the **0.0.x Python edition**, which renders pages from a different context: it would accept the setting and silently keep serving its own page. So the installer refuses it before changing anything — the panel is not modified.",
       fix: [
         "Install Rebecca 1.x with Rebecca's binary installer (`rebecca-binary.sh`) — the install Row-Template is tested against.",
         "Then run the Row-Template installer again.",
-        "The refusal message also names Rebecca's `rebecca migrate-binary`; Row-Template has not verified it, and in Rebecca's current scripts that command is not routed by the `rebecca` command, so it may only print its usage text.",
       ],
     },
     fa: {
-      tr: "پنل rebecca: این Rebecca نسخهٔ 0.0.x، یعنی نسخهٔ پایتونی است (ایمیج Docker ‹ایمیج›). صفحهٔ Rebecca در Row-Template برای Rebecca 1.x، یعنی نسخهٔ Go ساخته شده که Rebecca برای نصب باینری‌اش (`rebecca-binary.sh`) منتشر می‌کند؛ دستور `rebecca migrate-binary` خود Rebecca نصب Docker را به آن منتقل می‌کند.",
+      tr: "پنل rebecca: این Rebecca نسخهٔ 0.0.x، یعنی نسخهٔ پایتونی است (ایمیج Docker ‹ایمیج›). صفحهٔ Rebecca در Row-Template برای Rebecca 1.x، یعنی نسخهٔ Go ساخته شده که Rebecca برای نصب باینری‌اش منتشر می‌کند: آن را با `rebecca-binary.sh` خود Rebecca نصب کنید، سپس این نصب‌کننده را دوباره اجرا کنید.",
       what: "Row-Template از Rebecca **1.x**، یعنی نسخهٔ Go پشتیبانی می‌کند. ایمیج `rebeccapanel/rebecca` در Docker Hub هنوز **نسخهٔ پایتونی 0.0.x** است که صفحه‌ها را از زمینهٔ دیگری رندر می‌کند: تنظیم را می‌پذیرفت و بی‌صدا همان صفحهٔ خودش را ارائه می‌داد. پس نصب‌کننده پیش از هر تغییری آن را رد می‌کند — پنل تغییری نمی‌کند.",
       fix: [
         "Rebecca نسخهٔ 1.x را با نصب‌کنندهٔ باینری Rebecca (`rebecca-binary.sh`) نصب کنید — نصبی که Row-Template روی آن آزموده شده.",
         "سپس نصب‌کنندهٔ Row-Template را دوباره اجرا کنید.",
-        "پیام رد، دستور `rebecca migrate-binary` خود Rebecca را هم نام می‌برد؛ Row-Template آن را تأیید نکرده است، و در اسکریپت‌های فعلی Rebecca این دستور به فرمان `rebecca` وصل نیست، پس ممکن است فقط راهنمای استفاده‌اش را چاپ کند.",
       ],
     },
   },

@@ -18,6 +18,7 @@ RT_ASSUME_NONINTERACTIVE=1 RT_TEMPLATE=prism bash install.sh
 | `RT_SUPPORT_URL` | installer, `config` | The support link: `https://`, `http://`, `tg://` or `mailto:`. Empty clears it. |
 | `RT_LOGO_PATH` | installer, `config` | Path to a PNG, JPEG or WebP logo, at most 256 KiB, identified by its content. Symlinks are refused. |
 | `RT_LOGO_REMOVE` | installer, `config` | Any non-empty value removes the logo. Takes precedence over `RT_LOGO_PATH`. |
+| `RT_PANEL_BRANDING` | installer, `config` | PasarGuard and Rebecca (1.4.0): `1` takes the service name and support link from the panel's own subscription settings for any field `RT_SERVICE_NAME` / `RT_SUPPORT_URL` do not set; `0` never offers them. Unset, an interactive fresh install asks. See [Branding](/docs/configuration/branding/#from-your-panels-own-settings-pasarguard-rebecca). |
 
 The design IDs are `row`, `editorial`, `canvas`, `prism`, `terminal`, `pulse`, `brutal`, `arcade`, `sketch`, `signature`, `saffron`, `pulsenova`, `prismnova`, `terminalnova`, `arcadenova`, `meter` and `notebook`.
 

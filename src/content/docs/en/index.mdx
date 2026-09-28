@@ -7,8 +7,8 @@ description: Row-Template is a self-contained, white-label subscription page for
 
 It ships as one self-contained HTML file per design — every style, script, font and the QR code generator are inlined — built once for each panel's own template engine. A single command detects your panel, installs the page next to it, points the panel at it, and gives you a `row-template` manager for branding, updates and rollback.
 
-<Callout type="info" title="This documentation covers Row-Template 1.3.0">
-  Supported panels: **3X-UI** (MHSanaei) **3.6.0 or newer**, **PasarGuard 5.x**, and **Rebecca 1.x** — the Go edition, from Rebecca's binary install. Rebecca's Docker image is still the 0.0.x Python edition, which cannot render this page; the installer refuses it and changes nothing. Commands and messages on this site are taken from the 1.3.0 installer. [Compatibility →](/docs/reference/compatibility/)
+<Callout type="info" title="This documentation covers Row-Template 1.4.0">
+  Supported panels: **3X-UI** (MHSanaei) **3.6.0 or newer**, **PasarGuard 5.x**, and **Rebecca 1.x** — the Go edition, from Rebecca's binary install. Rebecca's Docker image is still the 0.0.x Python edition, which cannot render this page; the installer refuses it and changes nothing. Commands and messages on this site are taken from the 1.4.0 installer. 1.4.0 is **upcoming**: until its release is published, the one-command installer installs 1.3.1. [Compatibility →](/docs/reference/compatibility/)
 </Callout>
 
 ## How it works
@@ -21,7 +21,7 @@ It ships as one self-contained HTML file per design — every style, script, fon
    - **Rebecca:** the page goes into Rebecca's templates directory, and two fields of its subscription settings select it.
 
    On PasarGuard and Rebecca this is a transaction: the panel's settings are snapshotted first, and restored exactly if any step fails.
-4. The panel fills the page with each subscriber's data when it serves it. On 3X-UI the page then keeps its status fresh by asking **your own panel** for updated figures; on PasarGuard and Rebecca it shows the figures as of when it was opened. VPN apps that fetch the same link still receive normal subscription content.
+4. The panel fills the page with each subscriber's data when it serves it. The page then keeps its status fresh by asking **your own panel** for updated figures, on all three panels. VPN apps that fetch the same link still receive normal subscription content.
 
 <FileTree tree={`
 /etc/3x-ui/sub_templates/row-template/   (3X-UI)
@@ -73,7 +73,7 @@ It ships as one self-contained HTML file per design — every style, script, fon
     Live previews of all seventeen designs.
   </Card>
   <Card title="Compatibility" href="/docs/reference/compatibility/" icon="server">
-    The three panels, what changes on each, and the limitations of 1.3.0.
+    The three panels, what changes on each, and the limitations of 1.4.0.
   </Card>
   <Card title="Error reference" href="/docs/help/errors/" icon="circle-alert">
     Every message the installer can print, what it means, and how to fix it.

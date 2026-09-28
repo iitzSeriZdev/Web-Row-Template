@@ -45,7 +45,8 @@ What a checksum does and does not prove is explained in [Release verification](/
 - No third-party requests of any kind; everything is inlined in one file.
 - Subscriber links in the Configuration Explorer stay masked until opened and are never written to the console.
 - The page asks not to be indexed and sends no referrer.
-- Live refresh accepts only a response carrying the page's own fields.
+- Live refresh accepts only a response in the shape the page expects from that panel — the page's own fields on 3X-UI, the panel's account record on PasarGuard and Rebecca — and stops on anything else.
+- A PasarGuard application's import link may not be a `javascript:`, `data:`, `file:` or similar address, and its download link must be a web address; its icon is never loaded.
 
 ## Reporting a vulnerability
 

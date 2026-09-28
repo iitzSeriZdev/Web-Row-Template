@@ -46,7 +46,7 @@ export const UI = {
     notFoundTitle: "Page not found",
     notFoundBody: "The page you are looking for does not exist or has moved.",
     backToDocs: "Back to the documentation",
-    appliesTo: "Applies to Row-Template 1.3.0",
+    appliesTo: "Applies to Row-Template 1.4.0",
   },
   fa: {
     siteTitle: "Row-Template",
@@ -78,7 +78,7 @@ export const UI = {
     notFoundTitle: "صفحه پیدا نشد",
     notFoundBody: "صفحه‌ای که دنبال آن هستید وجود ندارد یا جابه‌جا شده است.",
     backToDocs: "بازگشت به مستندات",
-    appliesTo: "مربوط به Row-Template نسخهٔ 1.3.0",
+    appliesTo: "مربوط به Row-Template نسخهٔ 1.4.0",
   },
 } as const;
 

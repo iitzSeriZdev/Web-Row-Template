@@ -7,7 +7,7 @@ description: When backups are taken, what they contain, how many are kept, and h
 Every change that replaces the page first takes a **backup** of the current state, and `row-template rollback` restores one. A rollback restores Row-Template's **page and the version it records**; it always keeps your **current** branding.
 
 <Callout type="info" title="What a rollback does not restore">
-  - **The manager itself.** The `row-template` command, the management library and its components stay the version you run now. After rolling back to a backup taken under 1.1.0, `row-template version` reports 1.1.0 while the 1.3.0 manager stays in place — and the next `row-template update` returns to the latest release.
+  - **The manager itself.** The `row-template` command, the management library and its components stay the version you run now. After rolling back to a backup taken under 1.1.0, `row-template version` reports 1.1.0 while the 1.4.0 manager stays in place — and the next `row-template update` returns to the latest release.
   - **Your panel.** A rollback never downgrades or restores the panel, and never changes which page the panel selects. On PasarGuard and Rebecca it only replaces the placed copy of the page; nothing is restarted.
   - **Your branding**, which is always the current one.
 </Callout>
@@ -98,6 +98,8 @@ A backup's page is matched, byte for byte, against the designs in the **current*
 ```text
   The backup's page is not one of this release's designs; restoring Row from the installed designs.
 ```
+
+A backup whose page is none of this release's designs — every backup taken before 1.4.0, since every design changed — is restored as the design it records, else as the design its saved settings selected, and only then as Row; the design is restored from the installed designs.
 
 Either way the backup's `VERSION` is restored, so `row-template version` reports the older version, while the page, the manager and the panel stay on what you run now. The next `row-template update` returns everything to the latest release.
 
